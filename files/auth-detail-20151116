@@ -1,0 +1,2066 @@
+Mon Nov 16 00:00:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 00:02:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 00:03:14 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 00:05:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:07:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 00:08:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:09:36 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 00:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 00:16:56 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 00:18:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:18:28 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 00:19:19 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 100Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 00:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 00:20:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:21:39 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 00:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 00:32:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:33:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 00:39:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 00:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 00:40:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:44:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:45:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 00:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 00:52:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 00:56:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:57:46 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 00:57:46 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 00:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 01:01:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 01:07:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:08:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:09:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 01:09:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 01:14:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 01:19:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 01:20:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:20:43 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 01:21:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 01:28:50 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 01:32:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:33:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 01:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 01:44:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:45:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 01:48:48 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:49:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 01:56:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 01:57:59 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 01:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 02:03:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 02:03:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 02:06:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 02:07:19 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 02:08:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 02:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 02:10:02 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 02:17:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 02:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 02:20:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 02:22:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 02:24:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 02:25:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 02:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 02:32:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 02:32:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 02:34:07 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 02:39:16 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 02:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 02:44:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 02:46:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 02:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 02:56:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 02:58:12 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 02:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:03:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:07:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 03:08:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:09:59 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:09:59 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:10:14 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:15:03 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 03:15:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:20:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:21:06 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:22:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:26:07 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:27:18 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:29:33 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Leos-iMac, Access-Accept, MAC:10ddb1c07463, CONNECT Ethernet 1000Mbps Full duplex,Port: 34, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 03:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:29:59 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 03:32:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:34:19 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:44:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 03:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:46:22 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 03:50:05 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:56:08 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 03:56:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 03:57:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 100Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 03:58:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 03:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:03:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:04:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 04:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:08:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:10:27 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 04:16:46 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:18:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 04:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:22:22 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:22:29 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 04:22:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:26:13 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 04:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:32:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:32:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 04:34:32 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 04:36:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:40:15 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 04:44:15 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:46:34 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 04:46:50 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 04:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 04:50:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:55:23 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 04:56:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 04:58:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 04:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 05:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:08:43 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 05:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 05:10:39 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 05:15:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 05:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:22:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 05:28:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 05:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 05:32:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:32:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP DJ 4520 MFP Printer, Access-Accept, MAC:00265514129a, CONNECT Ethernet 1000Mbps Full duplex,Port: 20, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:34:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 05:36:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 05:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:44:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 05:46:47 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 05:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 05:50:46 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:56:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 05:58:50 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 05:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 06:05:39 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 06:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 06:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 06:10:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Ralfs Polis, Access-Accept, MAC:c4346b673ac5, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 06:10:52 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 06:12:47 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 06:13:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 06:19:52 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 06:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 06:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 06:22:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 06:27:53 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "GunitaRoga, Access-Accept, MAC:4437e66b79cc, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 06:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 06:30:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "ValdisVoins_desktop.RBP.lv, Access-Accept, MAC:c4346b5b661a, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 06:32:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 06:33:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IneseVilane, Access-Accept, MAC:d48564030a48, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 06:39:13 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 06:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 06:40:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 06:42:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 06:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 06:48:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JurijsZarins-new.RBP.lv, Access-Accept, MAC:a0d3c12e5628, CONNECT Ethernet 1000Mbps Full duplex,Port: 42, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 06:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 06:51:06 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 06:55:28 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 06:55:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 06:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:00:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AndrisDzenis.RBP.lv, Access-Accept, MAC:64315037cbbb, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:02:35 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 07:03:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:08:20 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OPAN-inspektori.RBP.lv, Access-Accept, MAC:7446a0abdf28, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 07:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:16:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 07:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 07:23:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:23:07 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:23:08 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:25:28 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Aigars-Petersons-new-pc, Access-Accept, MAC:fc4dd43fad81, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 07:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:31:03 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 07:32:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 07:32:35 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "ValdisVoins_desktop.RBP.lv, Access-Accept, MAC:c4346b5b661a, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:33:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:34:35 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 100Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:35:10 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:37:20 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "RIHARDS-AUGUCE.RBP.lv, Access-Accept, MAC:7446a0aa6a2a, CONNECT Ethernet 1000Mbps Full duplex,Port: 24, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:37:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AndrisDzenis.RBP.lv, Access-Accept, MAC:64315037cbbb, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:41:07 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "KarlisFridmanis, Access-Accept, MAC:643150280b0b, CONNECT Ethernet 1000Mbps Full duplex,Port: 30, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:41:22 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "ALEKSANDRS-BUDK.RBP.lv, Access-Accept, MAC:7446a0aa6a20, CONNECT Ethernet 1000Mbps Full duplex,Port: 13, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 07:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 07:46:30 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "jurisrinkmanis.RBP.lv, Access-Accept, MAC:4437e67266ae, CONNECT Ethernet 1000Mbps Full duplex,Port: 13, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:46:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arturs Brokovkis OLD, Access-Accept, MAC:d48564030a68, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 07:47:12 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 07:50:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OPAN-inspektori.RBP.lv, Access-Accept, MAC:7446a0abdf28, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 07:50:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Juris-Dalbins.RBP.lv, Access-Accept, MAC:6451065ac6d5, CONNECT Ethernet 1000Mbps Full duplex,Port: 6, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 07:56:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "autovad-pc, Access-Accept, MAC:3c970e9bfa57, CONNECT Ethernet 1000Mbps Full duplex,Port: 4, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:56:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:58:16 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JurijsZarins-new.RBP.lv, Access-Accept, MAC:a0d3c12e5628, CONNECT Ethernet 1000Mbps Full duplex,Port: 42, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 07:59:15 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 07:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:02:43 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "pro.RBP.lv, Access-Accept, MAC:3c07545ef9ec, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:05:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Valdis-Aldins, Access-Accept, MAC:000ffe842071, CONNECT Ethernet 1000Mbps Full duplex,Port: 16, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 08:05:48 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "KarlisBeikmanis.RBP.lv, Access-Accept, MAC:4437e6aa17e4, CONNECT Ethernet 100Mbps Full duplex,Port: 31, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:05:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Valdis-Aldins, Access-Accept, MAC:000ffe842071, CONNECT Ethernet 1000Mbps Full duplex,Port: 16, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 08:06:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Janis-Slars, Access-Accept, MAC:d48564028482, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 08:06:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OskarsVeidemanis.RBP.lv, Access-Accept, MAC:406186f4fc9a, CONNECT Ethernet 1000Mbps Full duplex,Port: 24, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 08:06:12 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "karlis-kleins-k, Access-Accept, MAC:c8cbb80ec5e6, CONNECT Ethernet 1000Mbps Full duplex,Port: 35, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 08:06:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "LieneMillere.RBP.lv, Access-Accept, MAC:78acc0b7ea7f, CONNECT Ethernet 100Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:07:15 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:07:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Janis-Slars, Access-Accept, MAC:d48564028482, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 08:07:52 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 08:09:06 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:10:20 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IlzePetersone.RBP.lv, Access-Accept, MAC:d48564030a5b, CONNECT Ethernet 100Mbps Full duplex,Port: 27, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 08:10:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Edvards-Ross.RBP.lv, Access-Accept, MAC:7446a0aa688f, CONNECT Ethernet 1000Mbps Full duplex,Port: 29, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:11:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CM2320nf MFP KD, Access-Accept, MAC:0025b3fa9320, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:12:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "DAIGA-SLISANE.RBP.lv, Access-Accept, MAC:4437e6aaf59c, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:12:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OPAN-inspektori.RBP.lv, Access-Accept, MAC:7446a0abdf28, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:12:56 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AiraElksne, Access-Accept, MAC:c4346b5b6db5, CONNECT Ethernet 1000Mbps Full duplex,Port: 10, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:14:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Jana_Mamajeva.RBP.lv, Access-Accept, MAC:4437e66fc845, CONNECT Ethernet 1000Mbps Full duplex,Port: 41, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:14:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arturs Brokovkis, Access-Accept, MAC:c4346b56f6dd, CONNECT Ethernet 1000Mbps Full duplex,Port: 44, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:15:30 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "GunitaRoga, Access-Accept, MAC:4437e66b79cc, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 08:16:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OPAN-inspektori.RBP.lv, Access-Accept, MAC:7446a0abdf28, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:16:30 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "oskars-pavro-nb.RBP.lv, Access-Accept, MAC:b499ba561a65, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:16:53 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Eva-Stala.RBP.lv, Access-Accept, MAC:64315037cbc0, CONNECT Ethernet 100Mbps Full duplex,Port: 31, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:18:10 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:19:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:20:13 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AiraElksne, Access-Accept, MAC:c4346b5b6db5, CONNECT Ethernet 1000Mbps Full duplex,Port: 10, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 08:20:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "KarlisFridmanis, Access-Accept, MAC:643150280b0b, CONNECT Ethernet 1000Mbps Full duplex,Port: 30, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:20:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Viesturs-Silinieks.RBP.lv, Access-Accept, MAC:4437e6aaf550, CONNECT Ethernet 1000Mbps Full duplex,Port: 25, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:22:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "GunitaRoga, Access-Accept, MAC:4437e66b79cc, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 08:23:56 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "arisdirvens, Access-Accept, MAC:78acc0b7ea82, CONNECT Ethernet 1000Mbps Full duplex,Port: 5, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:24:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "pro.RBP.lv, Access-Accept, MAC:3c07545ef9ec, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:25:46 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "FIX.RBP.lv, Access-Accept, MAC:4437e6aaf5f9, CONNECT Ethernet 1000Mbps Full duplex,Port: 16, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:25:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "MartinsSkapars, Access-Accept, MAC:78acc0c12366, CONNECT Ethernet 1000Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 08:27:46 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arturs Brokovkis OLD, Access-Accept, MAC:d48564030a68, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:27:52 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:28:26 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Juris-Dalbins.RBP.lv, Access-Accept, MAC:6451065ac6d5, CONNECT Ethernet 1000Mbps Full duplex,Port: 6, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:28:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Linda Amerika,  Access-Accept, MAC:a0d3c127ab49, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 08:29:05 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "uldisosmanis.RBP.lv, Access-Accept, MAC:78acc0ba5ed8, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:29:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:30:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "LIGA-CERUSA, Access-Accept, MAC:fc4dd44bb446, CONNECT Ethernet 1000Mbps Full duplex,Port: 9, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 08:32:19 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Liva-Sproge.RBP.lv, Access-Accept, MAC:78acc0ba5ed3, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 08:37:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JurijsZarins.RBP.lv, Access-Accept, MAC:1cc1de5fe6d8, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:39:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:41:56 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Modris-Sudrabs.RBP.lv, Access-Accept, MAC:4437e6aaf629, CONNECT Ethernet 1000Mbps Full duplex,Port: 33, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:42:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "karlis-kleins-k, Access-Accept, MAC:c8cbb80ec5e6, CONNECT Ethernet 1000Mbps Full duplex,Port: 35, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 08:43:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arturs Brokovkis, Access-Accept, MAC:c4346b56f6dd, CONNECT Ethernet 1000Mbps Full duplex,Port: 44, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:43:35 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Sarmite-Kalnina.RBP.lv, Access-Accept, MAC:6c3be51fb4c6, CONNECT Ethernet 1000Mbps Full duplex,Port: 21, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:43:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Janis-Berzins.RBP.lv, Access-Accept, MAC:4437e6a3093b, CONNECT Ethernet 1000Mbps Full duplex,Port: 1, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 08:46:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inga-Pole, Access-Accept, MAC:10ddb19bf990, CONNECT Ethernet 1000Mbps Full duplex,Port: 29, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 08:46:36 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inga-Pole, Access-Accept, MAC:10ddb19bf990, CONNECT Ethernet 1000Mbps Full duplex,Port: 29, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 08:48:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:48:59 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "DAIGA-SLISANE.RBP.lv, Access-Accept, MAC:4437e6aaf59c, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:49:50 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IlzePetersone.RBP.lv, Access-Accept, MAC:d48564030a5b, CONNECT Ethernet 100Mbps Full duplex,Port: 27, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 08:49:50 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "KarlisBeikmanis.RBP.lv, Access-Accept, MAC:4437e6aa17e4, CONNECT Ethernet 100Mbps Full duplex,Port: 31, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 08:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:50:03 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Guntis-Rutkis-PC, Access-Accept, MAC:1cc1de5ffdeb, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 08:50:05 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Marcis Fridmanis, Access-Accept, MAC:50e5493bd43b, CONNECT Ethernet 1000Mbps Full duplex,Port: 33, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 08:50:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:51:22 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Guntis-Rutkis-PC, Access-Accept, MAC:1cc1de5ffdeb, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 08:54:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AigarsPecaks, Access-Accept, MAC:d485640309b7, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:55:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Pilsetnieks_jauns, Access-Accept, MAC:ecb1d73ddb2e, CONNECT Ethernet 1000Mbps Full duplex,Port: 10, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 08:55:20 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inguna_Gedrovica, Access-Accept, MAC:643150280d62, CONNECT Ethernet 1000Mbps Full duplex,Port: 25, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 08:55:48 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "SandraMake, Access-Accept, MAC:78acc0a48fdd, CONNECT Ethernet 1000Mbps Full duplex,Port: 25, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 08:55:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Kristine-Rasska.RBP.lv, Access-Accept, MAC:7446a0aa61d9, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 08:56:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Juris-Dalbins.RBP.lv, Access-Accept, MAC:6451065ac6d5, CONNECT Ethernet 1000Mbps Full duplex,Port: 6, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 08:59:05 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Dace-Sile new, Access-Accept, MAC:ecb1d73ca7be, CONNECT Ethernet 1000Mbps Full duplex,Port: 13, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 08:59:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:01:16 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inese-Klavina, Access-Accept, MAC:643150252608, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:03:16 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:05:21 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AnitaLeiskalne-jauns, Access-Accept, MAC:c4346b56f70e, CONNECT Ethernet 1000Mbps Full duplex,Port: 8, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:05:24 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Veronika-Folka, Access-Accept, MAC:4437e6a308b6, CONNECT Ethernet 1000Mbps Full duplex,Port: 36, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:06:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "intsjurjans, Access-Accept, MAC:b499bae101ad, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:07:10 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JurijsZarins-new.RBP.lv, Access-Accept, MAC:a0d3c12e5628, CONNECT Ethernet 1000Mbps Full duplex,Port: 42, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 09:08:19 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Liene-Ulbina-M3.RBP.lv, Access-Accept, MAC:64315037cbd8, CONNECT Ethernet 1000Mbps Full duplex,Port: 33, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 09:09:08 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Kaspars_Broks, Access-Accept, MAC:4437e66b7acd, CONNECT Ethernet 1000Mbps Full duplex,Port: 18, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:09:21 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "FrancisKeirans, Access-Accept, MAC:78acc0a58bc1, CONNECT Ethernet 1000Mbps Full duplex,Port: 11, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:09:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Liva-Sproge.RBP.lv, Access-Accept, MAC:78acc0ba5ed3, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 09:10:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inese-Liepina, Access-Accept, MAC:7446a0abe1f5, CONNECT Ethernet 1000Mbps Full duplex,Port: 11, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:11:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IneseVilane, Access-Accept, MAC:d48564030a48, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:11:59 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "ElinaVirga, Access-Accept, MAC:4437e6a30914, CONNECT Ethernet 1000Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:12:12 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "intsjurjans, Access-Accept, MAC:b499bae101ad, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:12:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:15:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:17:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:17:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AijaKasparane, Access-Accept, MAC:d48564030a63, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:18:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "KarlisBeikmanis.RBP.lv, Access-Accept, MAC:4437e6aa17e4, CONNECT Ethernet 100Mbps Full duplex,Port: 31, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 09:18:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Santa-Sveda, Access-Accept, MAC:4437e6afc7eb, CONNECT Ethernet 1000Mbps Full duplex,Port: 18, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:18:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "SarmiteDreimane, Access-Accept, MAC:d485640b38b4, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:19:21 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "FrancisKeirans, Access-Accept, MAC:78acc0a58bc1, CONNECT Ethernet 1000Mbps Full duplex,Port: 11, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:19:22 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:19:26 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:19:26 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "VilmaBaltina, Access-Accept, MAC:1cc1de5fe570, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:19:29 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:19:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:19:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "LivijaAndersone, Access-Accept, MAC:ecb1d73ca7c3, CONNECT Ethernet 1000Mbps Full duplex,Port: 10, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 09:20:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inga-Pole, Access-Accept, MAC:10ddb19bf990, CONNECT Ethernet 1000Mbps Full duplex,Port: 29, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:21:27 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inga-Pole, Access-Accept, MAC:10ddb19bf990, CONNECT Ethernet 1000Mbps Full duplex,Port: 29, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:21:59 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IntaDuda, Access-Accept, MAC:d485640b38a0, CONNECT Ethernet 1000Mbps Full duplex,Port: 16, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:22:43 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arturs Brokovkis, Access-Accept, MAC:c4346b56f6dd, CONNECT Ethernet 1000Mbps Full duplex,Port: 44, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 09:23:23 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IntaDuda, Access-Accept, MAC:d485640b38a0, CONNECT Ethernet 1000Mbps Full duplex,Port: 16, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:23:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:23:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Zane-Kalnina_new, Access-Accept, MAC:ecb1d73f5efd, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:24:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:24:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:24:13 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:24:29 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Janis-Slars, Access-Accept, MAC:d48564028482, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 09:24:43 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:24:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:25:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "JulijaRimare.RBP.lv, Access-Accept, MAC:64315037cbb5, CONNECT Ethernet 1000Mbps Full duplex,Port: 43, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:25:13 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Leos-iMac, Access-Accept, MAC:10ddb1c07463, CONNECT Ethernet 1000Mbps Full duplex,Port: 34, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:26:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Sarmite-Kalnina.RBP.lv, Access-Accept, MAC:6c3be51fb4c6, CONNECT Ethernet 1000Mbps Full duplex,Port: 21, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:27:12 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "DailonisKivlins, Access-Accept, MAC:ecb1d73ca7cb, CONNECT Ethernet 1000Mbps Full duplex,Port: 33, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:27:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 100Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:28:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "SandraLizuma.RBP.lv, Access-Accept, MAC:78acc0b93dae, CONNECT Ethernet 100Mbps Full duplex,Port: 16, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 09:29:28 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AigarsPecaks, Access-Accept, MAC:d485640309b7, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:29:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:30:21 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inita-Luna, Access-Accept, MAC:c4346b5b4480, CONNECT Ethernet 1000Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:30:32 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "edvinsritovs.RBP.lv, Access-Accept, MAC:7446a0aa68b2, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 09:32:12 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:32:36 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "MD Praktikants, Access-Accept, MAC:7446a0abe71b, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:32:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inga-Skrastina, Access-Accept, MAC:ecb1d73ddaee, CONNECT Ethernet 1000Mbps Full duplex,Port: 5, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:33:23 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Aigars-Petersons-new-pc, Access-Accept, MAC:fc4dd43fad81, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 09:33:39 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "EriksJaunozols.RBP.lv, Access-Accept, MAC:78acc0a48fe5, CONNECT Ethernet 1000Mbps Full duplex,Port: 4, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 09:34:06 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Kristine-Rasska.RBP.lv, Access-Accept, MAC:7446a0aa61d9, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 09:34:56 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Jana-Javoisa, Access-Accept, MAC:d485640fa945, CONNECT Ethernet 1000Mbps Full duplex,Port: 34, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:36:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Liga-Auguste, Access-Accept, MAC:4437e6aaf5db, CONNECT Ethernet 1000Mbps Full duplex,Port: 11, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:37:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "LauraKristiana, Access-Accept, MAC:4437e6aaf619, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:37:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Ilona-Eiduka, Access-Accept, MAC:4437e6a30942, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:38:08 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inese-Klavina, Access-Accept, MAC:643150252608, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:38:38 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AnitaValle, Access-Accept, MAC:78acc0ba6bfb, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:38:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:39:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 09:39:39 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "GunaSmilga, Access-Accept, MAC:4437e6aaf62a, CONNECT Ethernet 1000Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:41:07 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IneseVilane, Access-Accept, MAC:d48564030a48, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:41:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "antons-vjaters.RBP.lv, Access-Accept, MAC:6c3be51eee65, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 09:41:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:42:15 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 09:42:22 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ Pro 200 MFP Auto, Access-Accept, MAC:2c59e5d752a8, CONNECT Ethernet 100Mbps Full duplex,Port: 6, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:42:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Andris-Purmali.RBP.lv, Access-Accept, MAC:7446a0abe8db, CONNECT Ethernet 100Mbps Full duplex,Port: 25, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 09:43:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Toms-Sakne-Note, Access-Accept, MAC:3c970e44c995, CONNECT Ethernet 1000Mbps Full duplex,Port: 3, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:45:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "SandraMake, Access-Accept, MAC:78acc0a48fdd, CONNECT Ethernet 1000Mbps Full duplex,Port: 25, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:46:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "LieneMillere.RBP.lv, Access-Accept, MAC:78acc0b7ea7f, CONNECT Ethernet 100Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 09:46:19 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Kristiana-Esta, Access-Accept, MAC:1cc1de5fe617, CONNECT Ethernet 1000Mbps Full duplex,Port: 15, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 09:52:08 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 09:52:34 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Zanna-Abele, Access-Accept, MAC:78acc0a58b9e, CONNECT Ethernet 100Mbps Full duplex,Port: 7, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:54:02 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Juris-Dalbins.RBP.lv, Access-Accept, MAC:6451065ac6d5, CONNECT Ethernet 1000Mbps Full duplex,Port: 6, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 09:54:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Inguna_Gedrovica, Access-Accept, MAC:643150280d62, CONNECT Ethernet 1000Mbps Full duplex,Port: 25, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 09:55:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "ALEKSANDRS-BUDK.RBP.lv, Access-Accept, MAC:7446a0aa6a20, CONNECT Ethernet 1000Mbps Full duplex,Port: 13, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 09:56:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Ralfs Polis, Access-Accept, MAC:c4346b673ac5, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 09:56:39 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 09:57:13 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Liene-Ulbina-M3.RBP.lv, Access-Accept, MAC:64315037cbd8, CONNECT Ethernet 1000Mbps Full duplex,Port: 33, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 10:00:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AigarsPecaks, Access-Accept, MAC:d485640309b7, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 10:01:35 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 1, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 10:05:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Liene-Ulbina-M3.RBP.lv, Access-Accept, MAC:64315037cbd8, CONNECT Ethernet 1000Mbps Full duplex,Port: 33, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 10:05:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "KarlisFridmanis, Access-Accept, MAC:643150280b0b, CONNECT Ethernet 1000Mbps Full duplex,Port: 30, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 10:06:34 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "VilmaBaltina, Access-Accept, MAC:1cc1de5fe570, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 10:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 10:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:11:18 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:11:47 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "VitaGerhararde, Access-Accept, MAC:78acc0a58bb1, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 10:14:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arija-Apoga, Access-Accept, MAC:4437e6a30958, CONNECT Ethernet 1000Mbps Full duplex,Port: 9, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:14:30 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "MD Praktikants, Access-Accept, MAC:7446a0abe71b, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 10:16:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Dace-Sile new, Access-Accept, MAC:ecb1d73ca7be, CONNECT Ethernet 1000Mbps Full duplex,Port: 13, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 10:18:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IrinaGorbatikov, Access-Accept, MAC:c82a1423cac3, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 10:20:23 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Janis-Slars, Access-Accept, MAC:d48564028482, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 10:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 10:21:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Haralds-Apogs, Access-Accept, MAC:10ddb1b306c7, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 10:24:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Dace-Sile new, Access-Accept, MAC:ecb1d73ca7be, CONNECT Ethernet 1000Mbps Full duplex,Port: 13, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 10:26:33 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Edvards-Ross.RBP.lv, Access-Accept, MAC:7446a0aa688f, CONNECT Ethernet 1000Mbps Full duplex,Port: 29, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 10:27:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:28:50 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Modris-Sudrabs.RBP.lv, Access-Accept, MAC:4437e6aaf629, CONNECT Ethernet 1000Mbps Full duplex,Port: 33, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 10:32:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 10:37:36 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:39:10 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP-LaserJet-9040dn, Access-Accept, MAC:00237d8c2a8a, CONNECT Ethernet 100Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 10:43:38 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Juris-Dalbins.RBP.lv, Access-Accept, MAC:6451065ac6d5, CONNECT Ethernet 1000Mbps Full duplex,Port: 6, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 10:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 10:45:00 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IrinaGorbatikov, Access-Accept, MAC:c82a1423cac3, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 10:47:33 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:51:19 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arija-Apoga, Access-Accept, MAC:4437e6a30958, CONNECT Ethernet 1000Mbps Full duplex,Port: 9, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:51:30 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OPAN-inspektori.RBP.lv, Access-Accept, MAC:7446a0abdf28, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 10:52:28 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 10:55:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "AnitaValle, Access-Accept, MAC:78acc0ba6bfb, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 10:56:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 10:58:41 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 10:59:13 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:00:15 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:00:42 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Sanita Kaire Laptop,  Access-Accept, MAC:3863bbb87180, CONNECT Ethernet 1000Mbps Full duplex,Port: 30, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 11:01:17 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:02:19 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:03:20 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:04:22 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:04:33 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 11:05:24 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:05:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 11:06:26 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:07:28 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:08:29 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:09:31 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:10:33 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:11:35 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors2, Access-Accept, MAC:d48564030a61, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:11:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors2, Access-Accept, MAC:d48564030a61, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:15:29 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 11:15:44 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Sigizmunds-Labu.RBP.lv, Access-Accept, MAC:001cc46f4b3d, CONNECT Ethernet 1000Mbps Full duplex,Port: 21, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 11:17:55 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors2, Access-Accept, MAC:d48564030a61, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:20:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:21:43 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Jana_Mamajeva.RBP.lv, Access-Accept, MAC:4437e66fc845, CONNECT Ethernet 1000Mbps Full duplex,Port: 41, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 11:21:53 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Haralds-Apogs, Access-Accept, MAC:10ddb1b306c7, CONNECT Ethernet 1000Mbps Full duplex,Port: 31, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 11:23:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OskarsVeidemanis.RBP.lv, Access-Accept, MAC:406186f4fc9a, CONNECT Ethernet 1000Mbps Full duplex,Port: 24, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:26:24 2015
+	Packet-Type = Access-Reject
+
+Mon Nov 16 11:26:52 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 11:27:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors2, Access-Accept, MAC:d48564030a61, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:29:07 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Ralfs Polis, Access-Accept, MAC:c4346b673ac5, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.33.49, Switch Name: ProCurve 2910al-48G Switch 2"
+
+Mon Nov 16 11:29:38 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Didzis-Megers-PC, Access-Accept, MAC:a0d3c127b9ad, CONNECT Ethernet 1000Mbps Full duplex,Port: 32, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 11:30:13 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 11:30:33 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Andris-Purmali.RBP.lv, Access-Accept, MAC:7446a0abe8db, CONNECT Ethernet 100Mbps Full duplex,Port: 25, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:31:27 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Arturs Brokovkis OLD, Access-Accept, MAC:d48564030a68, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 11:32:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:32:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 11:33:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "KarlisFridmanis, Access-Accept, MAC:643150280b0b, CONNECT Ethernet 1000Mbps Full duplex,Port: 30, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:35:46 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Andris-Purmali.RBP.lv, Access-Accept, MAC:7446a0abe8db, CONNECT Ethernet 100Mbps Full duplex,Port: 25, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:37:05 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors2, Access-Accept, MAC:d48564030a61, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:40:27 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 11:43:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Ieva_Dzintare, Access-Accept, MAC:78acc0ba6dc8, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 11:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:48:26 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OPAN-inspektori.RBP.lv, Access-Accept, MAC:7446a0abdf28, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 11:50:58 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors3, Access-Accept, MAC:5820b17c75ea, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:52:49 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 11:53:12 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors3, Access-Accept, MAC:5820b17c75ea, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:54:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 11:55:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors2, Access-Accept, MAC:d48564030a61, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 11:57:02 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Aigars-Petersons-new-pc, Access-Accept, MAC:fc4dd43fad81, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 11:58:47 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors3, Access-Accept, MAC:5820b17c75ea, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:00:31 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors3, Access-Accept, MAC:5820b17c75ea, CONNECT Ethernet 1000Mbps Full duplex,Port: 27, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:03:07 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "auditors2, Access-Accept, MAC:d48564030a61, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.33.48, Switch Name: ProCurve 2910al-48G Switch 1"
+
+Mon Nov 16 12:06:50 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Aigars-Petersons-new-pc, Access-Accept, MAC:fc4dd43fad81, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 12:08:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 12:08:45 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Aigars-Petersons-new-pc, Access-Accept, MAC:fc4dd43fad81, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 12:09:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:14:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:17:23 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Andris-Purmali.RBP.lv, Access-Accept, MAC:7446a0abe8db, CONNECT Ethernet 100Mbps Full duplex,Port: 25, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 12:24:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:26:53 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:32:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 12:34:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:36:33 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:44:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 12:44:40 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:45:34 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "uldisosmanis.RBP.lv, Access-Accept, MAC:78acc0ba5ed8, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:45:37 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "OPAN-inspektori.RBP.lv, Access-Accept, MAC:7446a0abdf28, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:49:57 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "IntaDuda, Access-Accept, MAC:d485640b38a0, CONNECT Ethernet 1000Mbps Full duplex,Port: 16, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:50:01 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:50:16 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:50:24 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:50:28 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "avl-OVN-gps, Access-Accept, MAC:94de80039ab6, CONNECT Ethernet 1000Mbps Full duplex,Port: 28, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 12:50:53 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP LJ 2055dn Inzenieru, Access-Accept, MAC:3cd92ba399d4, CONNECT Ethernet 1000Mbps Full duplex,Port: 1, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 12:51:04 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "uldisosmanis.RBP.lv, Access-Accept, MAC:78acc0ba5ed8, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:51:29 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Janis-Slars, Access-Accept, MAC:d48564028482, CONNECT Ethernet 1000Mbps Full duplex,Port: 26, Siwtch IP: 192.168.133.49, Switch Name: 2920-48G-Sw4-Meldru3"
+
+Mon Nov 16 12:52:03 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 40, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:53:04 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 40, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:53:09 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Time capsule OP, Access-Accept, MAC:9072400516fb, CONNECT Ethernet 1000Mbps Full duplex,Port: 23, Siwtch IP: 192.168.133.46, Switch Name: ProCurve 2920-48G Sw1 Meldru3"
+
+Mon Nov 16 12:54:14 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 40, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:54:37 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 40, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:55:43 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Pilsetnieks_jauns, Access-Accept, MAC:ecb1d73ddb2e, CONNECT Ethernet 1000Mbps Full duplex,Port: 10, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 12:55:50 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 40, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:56:28 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:56:54 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "HP CLJ CP5225 Juristi, Access-Accept, MAC:80c16e907a0c, CONNECT Ethernet 100Mbps Full duplex,Port: 12, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 12:56:55 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:58:08 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 12:59:12 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:00:22 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:01:11 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Kristiana-Esta, Access-Accept, MAC:1cc1de5fe617, CONNECT Ethernet 1000Mbps Full duplex,Port: 15, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 13:01:14 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Sigizmunds-Labu.RBP.lv, Access-Accept, MAC:001cc46f4b3d, CONNECT Ethernet 1000Mbps Full duplex,Port: 21, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:01:25 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:01:28 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "Xerox 6121 MFP, Access-Accept, MAC:0000aad08b17, CONNECT Ethernet 100Mbps Full duplex,Port: 20, Siwtch IP: 192.168.33.60, Switch Name: ProCurve 2920-48G Switch 4"
+
+Mon Nov 16 13:01:29 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:01:35 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "pro.RBP.lv, Access-Accept, MAC:3c07545ef9ec, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:02:25 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "DAIGA-SLISANE.RBP.lv, Access-Accept, MAC:4437e6aaf59c, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.47, Switch Name: 2920-48G-Sw2-Meldru3"
+
+Mon Nov 16 13:02:43 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:03:26 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:03:57 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:04:17 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 1000Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:04:41 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "pro.RBP.lv, Access-Accept, MAC:3c07545ef9ec, CONNECT Ethernet 1000Mbps Full duplex,Port: 22, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:05:02 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "EDUARDSDELVERS.RBP.lv, Access-Accept, MAC:78acc0c2930a, CONNECT Ethernet 1000Mbps Full duplex,Port: 14, Siwtch IP: 192.168.133.50, Switch Name: 2920-48G-Sw5-Meldru5"
+
+Mon Nov 16 13:05:10 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "sefs007s-iMac.RBP.lv, Access-Accept, MAC:10ddb1e54c52, CONNECT Ethernet 100Mbps Full duplex,Port: 17, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:05:11 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:06:08 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:06:51 2015
+	Packet-Type = Access-Accept
+	Reply-Message = "MD Praktikants, Access-Accept, MAC:7446a0abe71b, CONNECT Ethernet 1000Mbps Full duplex,Port: 19, Siwtch IP: 192.168.33.50, Switch Name: ProCurve 2910al-48G Switch 3"
+
+Mon Nov 16 13:07:21 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
+Mon Nov 16 13:08:24 2015
+	Packet-Type = Access-Reject
+	Reply-Message = "Access-Reject, MAC:001dec0a1b7f, CONNECT Ethernet 100Mbps Full duplex,Port: 36, Siwtch IP: 192.168.133.48, Switch Name: 2920-48G-Sw3-Meldru3"
+
