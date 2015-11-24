@@ -1,7 +1,7 @@
 package database;
 
 import domain.AccessObject;
-import database.jdbc.DAOImpl;
+import database.jdbc.mysql.DAOImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,6 +1,6 @@
 package database;
 
-import database.jdbc.DAOImpl;
+import database.jdbc.mysql.DAOImpl;
 import domain.LogEntry;
 
 import java.sql.Connection;
