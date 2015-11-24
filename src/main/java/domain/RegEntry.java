@@ -3,19 +3,16 @@ package domain;
 import java.time.LocalDateTime;
 
 /**
- * Created by daniels on 24.11.2015.
+ * Created by Dan on 24.11.2015.
  */
-public class Device {
+public class RegEntry {
     private int id;
     private String mac;
-    private String name;
-    private String description;
     private int onSwitch;
     private int onPort;
     private int speed;
     private LocalDateTime timeOfRegistration;
-    private LocalDateTime lastSeen;
-    private int access;
+    private int status;
 
     public int getId() {
         return id;
@@ -31,22 +28,6 @@ public class Device {
 
     public void setMac(String mac) {
         this.mac = mac;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getOnSwitch() {
@@ -81,20 +62,12 @@ public class Device {
         this.timeOfRegistration = timeOfRegistration;
     }
 
-    public LocalDateTime getLastSeen() {
-        return lastSeen;
+    public int getStatus() {
+        return status;
     }
 
-    public void setLastSeen(LocalDateTime lastSeen) {
-        this.lastSeen = lastSeen;
-    }
-
-    public int getAccess() {
-        return access;
-    }
-
-    public void setAccess(int access) {
-        this.access = access;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override
@@ -102,9 +75,9 @@ public class Device {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Device device = (Device) o;
+        RegEntry regEntry = (RegEntry) o;
 
-        return !(getMac() != null ? !getMac().equals(device.getMac()) : device.getMac() != null);
+        return !(getMac() != null ? !getMac().equals(regEntry.getMac()) : regEntry.getMac() != null);
 
     }
 

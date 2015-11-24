@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `status` (
   `speed` INTEGER NOT NULL,
   `tor` INTEGER NOT NULL,
   `status` INTEGER NOT NULL
-)
+);
 
 -- -----------------------------------------------------
 -- Table `devices`
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `devices` (
   `tor` INTEGER NOT NULL,
   `lastseen` INTEGER NOT NULL,
   `access` INTEGER NOT NULL
-)
+);
 
 -- -----------------------------------------------------
 -- Table `switches`
