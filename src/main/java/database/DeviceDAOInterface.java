@@ -13,9 +13,9 @@ public interface DeviceDAOInterface {
 
     void create(Device device) throws DBException;
 
-    Device getById(Long id) throws DBException;
+    Device getById(Integer id) throws DBException;
 
-    void delete(Long id) throws DBException;
+    void delete(Integer id) throws DBException;
 
     void deleteAll() throws DBException;
 

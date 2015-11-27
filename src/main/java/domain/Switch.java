@@ -1,7 +1,5 @@
 package domain;
 
-import java.time.LocalDateTime;
-
 /**
  * Created by Dan on 24.11.2015.
  */
@@ -11,6 +9,7 @@ public class Switch {
     private String name;
     private String description;
     private String ip;
+    //TODO: additional fields like numberOfPorts, vendor, model, year
 
     public int getId() {
         return id;

@@ -1,14 +1,14 @@
-package database;
+package database.jdbc.sqlite;
 
-import database.jdbc.sqlite.DAOImpl;
-import domain.Device;
+import database.DBException;
+import database.SwitchDAOInterface;
+import domain.Switch;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +16,13 @@ import java.util.List;
  * Created by Daniels on 25.11.2015..
  */
 @Component
-public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
+public class SwitchDAOImpl extends DAOImpl implements SwitchDAOInterface {
 
-    public static final String DB_NAME = "devices";
+    public static final String DB_NAME = "switches";
+    public static final String DB_FIELDS = "id = ?, mac = ?, name = ?, descr = ?, ip = ?";
 
-    public void create(Device device) throws DBException {
-        if (device == null) {
+    public void create(Switch aSwitch) throws DBException {
+        if (aSwitch == null) {
             return;
         }
 
@@ -29,16 +30,16 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         try {
             connection = getConnection();
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("INSERT INTO " + DB_NAME + " VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
-            prepareStatement(device, preparedStatement);
+                    connection.prepareStatement("INSERT INTO " + DB_NAME + " VALUES (default, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+            prepareStatement(aSwitch, preparedStatement);
 
             preparedStatement.executeUpdate();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             if (rs.next()){
-                device.setId(rs.getInt(1));
+                aSwitch.setId(rs.getInt(1));
             }
         } catch (Throwable e) {
-            System.out.println("Exception while execute logEntryDAOImpl.create()");
+            System.out.println("Exception while execute SwitchDAOImpl.create()");
             e.printStackTrace();
             throw new DBException(e);
         } finally {
@@ -46,22 +47,22 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         }
     }
 
-    public Device getById(Long id) throws DBException {
+    public Switch getById(Integer id) throws DBException {
         Connection connection = null;
 
         try {
             connection = getConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("SELECT * FROM " + DB_NAME + " WHERE LogID = ?");
-            preparedStatement.setLong(1, id);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            Device device = null;
+            Switch aSwitch = null;
             if (resultSet.next()) {
-                device = setLogEntry(resultSet);
+                aSwitch = setLogEntry(resultSet);
             }
-            return device;
+            return aSwitch;
         } catch (Throwable e) {
-            System.out.println("Exception while execute DeviceDAOSQLiteImpl.getById()");
+            System.out.println("Exception while execute SwitchDAOImpl.getById()");
             e.printStackTrace();
             throw new DBException(e);
         } finally {
@@ -69,16 +70,16 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         }
     }
 
-    public void delete(Long id) throws DBException {
+    public void delete(Integer id) throws DBException {
         Connection connection = null;
         try {
             connection = getConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("DELETE FROM " + DB_NAME + " WHERE LogID = ?");
-            preparedStatement.setLong(1, id);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (Throwable e) {
-            System.out.println("Exception while execute DeviceDAOSQLiteImpl.delete()");
+            System.out.println("Exception while execute SwitchDAOImpl.delete()");
             e.printStackTrace();
             throw new DBException(e);
         } finally {
@@ -95,7 +96,7 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
                     .prepareStatement("DELETE FROM " + DB_NAME);
             preparedStatement.executeUpdate();
         } catch (Throwable e) {
-            System.out.println("Exception while execute DeviceDAOSQLiteImpl.deleteAll()");
+            System.out.println("Exception while execute SwitchDAOImpl.deleteAll()");
             e.printStackTrace();
             throw new DBException(e);
         } finally {
@@ -103,21 +104,21 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         }
     }
 
-    public void update(Device device) throws DBException {
-        if (device == null) {
+    public void update(Switch aSwitch) throws DBException {
+        if (aSwitch == null) {
             return;
         }
         Connection connection = null;
         try {
             connection = getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE " + DB_NAME + " SET UserID = ?, IP = ?, Command = ?, Value = ?, Date = ? WHERE LogID = ?");
-            prepareStatement(device, preparedStatement);
-            preparedStatement.setLong(6, device.getId());
+                    .prepareStatement("UPDATE " + DB_NAME + " SET " + DB_FIELDS + " WHERE LogID = ?");
+            prepareStatement(aSwitch, preparedStatement);
+            preparedStatement.setInt(6, aSwitch.getId());
 
             preparedStatement.executeUpdate();
         } catch (Throwable e) {
-            System.out.println("Exception while execute DeviceDAOSQLiteImpl.update()");
+            System.out.println("Exception while execute SwitchDAOImpl.update()");
             e.printStackTrace();
             throw new DBException(e);
         } finally {
@@ -125,22 +126,20 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         }
     }
 
-    public List<Device> getAll(boolean sortOrder) throws DBException {
-        List<Device> list = new ArrayList<Device>();
+    public List<Switch> getAll(boolean sortOrder) throws DBException {
+        List<Switch> list = new ArrayList<Switch>();
         Connection connection = null;
-        String sortStr;
-        if (sortOrder == SORT_ASCENDING) sortStr = "ASC"; else sortStr = "DESC";
         try {
             connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + DB_NAME + " ORDER BY Date " + sortStr);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + DB_NAME);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Device device = setLogEntry(resultSet);
-                list.add(device);
+                Switch aSwitch = setLogEntry(resultSet);
+                list.add(aSwitch);
             }
         } catch (Throwable e) {
-            System.out.println("Exception while getting customer list DeviceDAOSQLiteImpl.getAll()");
+            System.out.println("Exception while getting customer list SwitchDAOImpl.getAll()");
             e.printStackTrace();
             throw new DBException(e);
         } finally {
@@ -149,8 +148,8 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         return list;
     }
 
-    private List<Device> filter(String criteria) throws DBException {
-        List<Device> list = new ArrayList<Device>();
+    private List<Switch> filter(String criteria) throws DBException {
+        List<Switch> list = new ArrayList<Switch>();
         Connection connection = null;
 
         try {
@@ -159,8 +158,8 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Device device = setLogEntry(resultSet);
-                list.add(device);
+                Switch aSwitch = setLogEntry(resultSet);
+                list.add(aSwitch);
             }
         } catch (Throwable e) {
             System.out.println("Exception while getting customer list LogEntrysDAOImpl.filter()");
@@ -172,8 +171,8 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         return list;
     }
 
-    private List<Device> runQuery(String query) throws DBException {
-        List<Device> list = new ArrayList<Device>();
+    private List<Switch> runQuery(String query) throws DBException {
+        List<Switch> list = new ArrayList<Switch>();
         Connection connection = null;
 
         try {
@@ -182,8 +181,8 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Device device = setLogEntry(resultSet);
-                list.add(device);
+                Switch aSwitch = setLogEntry(resultSet);
+                list.add(aSwitch);
             }
         } catch (Throwable e) {
             System.out.println("Exception while getting customer list LogEntrysDAOImpl.runQuery()");
@@ -200,7 +199,7 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         try {
             connection = getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT COUNT(*) FROM " + DB_NAME + "");
+                    .prepareStatement("SELECT COUNT(*) FROM " + DB_NAME);
             ResultSet resultSet = preparedStatement.executeQuery();
             int count = 0;
             while (resultSet.next()) {
@@ -208,7 +207,7 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
             }
             return count;
         } catch (Throwable e) {
-            System.out.println("Exception while execute DeviceDAOSQLiteImpl.getCount()");
+            System.out.println("Exception while execute SwitchDAOImpl.getCount()");
             e.printStackTrace();
             throw new DBException(e);
         } finally {
@@ -216,32 +215,21 @@ public class DeviceDAOSQLiteImpl extends DAOImpl implements DeviceDAOInterface {
         }
     }
 
-
-    private Device setLogEntry(ResultSet resultSet) throws SQLException {
-        Device device = new Device();
-        device.setId(resultSet.getInt("id"));
-        device.setMac(resultSet.getString("mac"));
-        device.setName(resultSet.getString("name"));
-        device.setDescription(resultSet.getString("descr"));
-        device.setOnSwitch(resultSet.getInt("switch"));
-        device.setOnPort(resultSet.getInt("port"));
-        device.setSpeed(resultSet.getInt("speed"));
-        device.setTimeOfRegistration(resultSet.getTimestamp("tor").toLocalDateTime());
-        device.setLastSeen(resultSet.getTimestamp("lastseen").toLocalDateTime());
-        device.setAccess(resultSet.getInt("access"));
-        return device;
+    private Switch setLogEntry(ResultSet resultSet) throws SQLException {
+        Switch aSwitch = new Switch();
+        aSwitch.setId(resultSet.getInt("id"));
+        aSwitch.setMac(resultSet.getString("mac"));
+        aSwitch.setName(resultSet.getString("name"));
+        aSwitch.setDescription(resultSet.getString("descr"));
+        aSwitch.setIp(resultSet.getString("ip"));
+        return aSwitch;
     }
 
-    private void prepareStatement(Device device, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setLong(1, device.getId());
-        preparedStatement.setString(2, device.getMac());
-        preparedStatement.setString(3, device.getName());
-        preparedStatement.setString(4, device.getDescription());
-        preparedStatement.setInt(5, device.getOnSwitch());
-        preparedStatement.setInt(6, device.getOnPort());
-        preparedStatement.setInt(7, device.getSpeed());
-        preparedStatement.setTimestamp(8, java.sql.Timestamp.valueOf(device.getTimeOfRegistration()));
-        preparedStatement.setTimestamp(8, java.sql.Timestamp.valueOf(device.getLastSeen()));
-        preparedStatement.setInt(5, device.getAccess());
+    private void prepareStatement(Switch aSwitch, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setInt(1, aSwitch.getId());
+        preparedStatement.setString(2, aSwitch.getMac());
+        preparedStatement.setString(3, aSwitch.getName());
+        preparedStatement.setString(4, aSwitch.getDescription());
+        preparedStatement.setString(5, aSwitch.getIp());
     }
 }

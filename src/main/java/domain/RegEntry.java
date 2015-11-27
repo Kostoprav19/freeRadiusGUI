@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 public class RegEntry {
     private int id;
     private String mac;
-    private int onSwitch;
-    private int onPort;
-    private int speed;
+    private Switch aSwitch;
+    private int switchPort;
+    private int portSpeed;
     private LocalDateTime timeOfRegistration;
     private int status;
 
@@ -30,28 +30,28 @@ public class RegEntry {
         this.mac = mac;
     }
 
-    public int getOnSwitch() {
-        return onSwitch;
+    public Switch getSwitch() {
+        return aSwitch;
     }
 
-    public void setOnSwitch(int onSwitch) {
-        this.onSwitch = onSwitch;
+    public void setSwitch(Switch aSwitch) {
+        this.aSwitch = aSwitch;
     }
 
-    public int getOnPort() {
-        return onPort;
+    public int getSwitchPort() {
+        return switchPort;
     }
 
-    public void setOnPort(int onPort) {
-        this.onPort = onPort;
+    public void setSwitchPort(int switchPort) {
+        this.switchPort = switchPort;
     }
 
-    public int getSpeed() {
-        return speed;
+    public int getPortSpeed() {
+        return portSpeed;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
+    public void setPortSpeed(int portSpeed) {
+        this.portSpeed = portSpeed;
     }
 
     public LocalDateTime getTimeOfRegistration() {

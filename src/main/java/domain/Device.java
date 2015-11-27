@@ -10,9 +10,9 @@ public class Device {
     private String mac;
     private String name;
     private String description;
-    private int onSwitch;
-    private int onPort;
-    private int speed;
+    private Switch aSwitch;
+    private int switchPort;
+    private int portSpeed;
     private LocalDateTime timeOfRegistration;
     private LocalDateTime lastSeen;
     private int access;
@@ -49,28 +49,28 @@ public class Device {
         this.description = description;
     }
 
-    public int getOnSwitch() {
-        return onSwitch;
+    public Switch getSwitch() {
+        return aSwitch;
     }
 
-    public void setOnSwitch(int onSwitch) {
-        this.onSwitch = onSwitch;
+    public void setSwitch(Switch aSwitch) {
+        this.aSwitch = aSwitch;
     }
 
-    public int getOnPort() {
-        return onPort;
+    public int getSwitchPort() {
+        return switchPort;
     }
 
-    public void setOnPort(int onPort) {
-        this.onPort = onPort;
+    public void setSwitchPort(int switchPort) {
+        this.switchPort = switchPort;
     }
 
-    public int getSpeed() {
-        return speed;
+    public int getPortSpeed() {
+        return portSpeed;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
+    public void setPortSpeed(int portSpeed) {
+        this.portSpeed = portSpeed;
     }
 
     public LocalDateTime getTimeOfRegistration() {
