@@ -1,4 +1,4 @@
-package domain;
+package lv.freeradiusgui.domain;
 
 /**
  * Created by Dan on 24.11.2015.

@@ -27,7 +27,7 @@
 #	matches the login-request will stop processing unless you use
 #	the Fall-Through variable.
 #
-#	If you use the database support to turn this file into a .db or .dbm
+#	If you use the lv.freeradiusgui.config.database support to turn this file into a .db or .dbm
 #	file, the DEFAULT entries _have_ to be at the end of this file and
 #	you can't have multiple entries for one username.
 #
@@ -53,7 +53,7 @@
 # being authenticated.
 #
 # Note that there is NO 'Fall-Through' attribute, so the user will not
-# be given any additional resources.
+# be given any additional lv.freeradiusgui.config.resources.
 #
 #lameuser	Auth-Type := Reject
 #		Reply-Message = "Your account has been disabled."
@@ -62,7 +62,7 @@
 # Deny access for a group of users.
 #
 # Note that there is NO 'Fall-Through' attribute, so the user will not
-# be given any additional resources.
+# be given any additional lv.freeradiusgui.config.resources.
 #
 #DEFAULT	Group == "disabled", Auth-Type := Reject
 #		Reply-Message = "Your account has been disabled."

@@ -1,4 +1,4 @@
-package domain;
+package lv.freeradiusgui.domain;
 
 import java.time.LocalDateTime;
 
