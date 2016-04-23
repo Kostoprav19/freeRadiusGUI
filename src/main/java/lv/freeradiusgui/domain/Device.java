@@ -1,21 +1,59 @@
 package lv.freeradiusgui.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 /**
  * Created by daniels on 24.11.2015.
  */
+@Entity
+@Table(name = "devices")
 public class Device {
+    @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "mac", unique = true)
     private String mac;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "descr")
     private String description;
+
+    @Column(name = "switch")
     private Switch aSwitch;
+
+    @Column(name = "port")
     private int switchPort;
+
+    @Column(name = "speed")
     private int portSpeed;
+
+    @Column(name = "tor")
     private LocalDateTime timeOfRegistration;
+
+    @Column(name = "lastseen")
     private LocalDateTime lastSeen;
+
+    @Column(name = "access")
     private int access;
+
+    public Device(String mac, String name, String description, Switch aSwitch, int switchPort, int portSpeed, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, int access) {
+        this.mac = mac;
+        this.name = name;
+        this.description = description;
+        this.aSwitch = aSwitch;
+        this.switchPort = switchPort;
+        this.portSpeed = portSpeed;
+        this.timeOfRegistration = timeOfRegistration;
+        this.lastSeen = lastSeen;
+        this.access = access;
+    }
 
     public int getId() {
         return id;
@@ -111,5 +149,66 @@ public class Device {
     @Override
     public int hashCode() {
         return getMac() != null ? getMac().hashCode() : 0;
+    }
+
+    public static class DeviceBuilder {
+
+        private String mac;
+
+        private String name;
+        private String description;
+        private Switch aSwitch;
+        private int switchPort;
+        private int portSpeed;
+        private LocalDateTime timeOfRegistration;
+        private LocalDateTime lastSeen;
+        private int access;
+
+        private DeviceBuilder() {
+        }
+
+        public DeviceBuilder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public DeviceBuilder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public DeviceBuilder onSwitch(Switch aSwitch) {
+            this.aSwitch = aSwitch;
+            return this;
+        }
+
+        public DeviceBuilder onPort(int switchPort) {
+            this.switchPort = switchPort;
+            return this;
+        }
+
+        public DeviceBuilder withPortSpeed(int portSpeed) {
+            this.portSpeed = portSpeed;
+            return this;
+        }
+
+        public DeviceBuilder withTOR(LocalDateTime timeOfRegistration) {
+            this.timeOfRegistration = timeOfRegistration;
+            return this;
+        }
+
+        public DeviceBuilder lastSeen(LocalDateTime lastSeen) {
+            this.lastSeen = lastSeen;
+            return this;
+        }
+
+        public DeviceBuilder withAccess(int access) {
+            this.access = access;
+            return this;
+        }
+
+        public Device build() {
+            return new Device(mac, name, description, aSwitch, switchPort, portSpeed, timeOfRegistration, lastSeen, access);
+        }
     }
 }

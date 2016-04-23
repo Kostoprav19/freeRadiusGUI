@@ -1,4 +1,4 @@
-package lv.freeradiusgui.database;
+package lv.freeradiusgui.dao;
 
 public class DBException extends Exception {
 

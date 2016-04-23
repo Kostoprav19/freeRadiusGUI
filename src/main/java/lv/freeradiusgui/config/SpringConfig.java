@@ -25,7 +25,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableTransactionManagement
 public class SpringConfig extends WebMvcConfigurerAdapter{
-    private static final String DATABASE_PROPERTIES_FILE = "database.properties";
+    private static final String DATABASE_PROPERTIES_FILE = "dao-sqlite.properties";
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer prodPropertiesPlaceholderConfigurer() {
@@ -43,26 +43,37 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
     }
 
     @Bean
-    public Properties hibernateProperties() {
+    public Properties hibernateProperties(
+            @Value("${hibernate.dialect}") String dialect,
+            @Value("${hibernate.show_sql}") boolean showSql,
+            @Value("${hibernate.format_sql}") boolean formatSql,
+            @Value("${hibernate.hbm2ddl.auto}") String hbm2ddl) {
 
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
-        properties.put("hibernate.show_sql", "true");
-        properties.put("hibernate.format_sql", "true");
+        properties.put("hibernate.dialect", dialect);
+        properties.put("hibernate.show_sql", showSql);
+        properties.put("hibernate.format_sql", formatSql);
+        properties.put("hibernate.hbm2ddl.auto", hbm2ddl);
 
         return properties;
     }
 
     @Bean(destroyMethod = "close")
-    public DataSource dataSource() throws PropertyVetoException {
+    public DataSource dataSource(
+            @Value("${driverClass}") String driver,
+            @Value("${dbUrl}") String url,
+            @Value("${dao.userName}") String user,
+            @Value("${password}") String password) throws PropertyVetoException {
 
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("org.sqlite.JDBC");
-        dataSource.setUrl("jdbc:sqlite:mydb.db");
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
+        dataSource.setDefaultAutoCommit(false);
 
         return dataSource;
     }
-
 
     @Bean
     public SessionFactory sessionFactory(DataSource dataSource,

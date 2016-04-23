@@ -1,7 +1,7 @@
-package database;
+package lv.freeradiusgui.dao.switchDAO;
 
-import database.DBException;
-import domain.Switch;
+import lv.freeradiusgui.dao.DBException;
+import lv.freeradiusgui.domain.Switch;
 
 import java.util.List;
 
