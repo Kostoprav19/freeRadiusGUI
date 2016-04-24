@@ -9,7 +9,7 @@ import java.util.Optional;
  * Created by Daniels on 25.11.2015..
  */
 
-public interface DeviceDAOInterface {
+public interface DeviceDAO {
 
     boolean store(Optional<Device> deviceOptional);
 

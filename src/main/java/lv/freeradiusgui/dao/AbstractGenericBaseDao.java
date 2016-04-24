@@ -30,16 +30,17 @@ public abstract class AbstractGenericBaseDao<T> {
 
     public boolean store(Optional<T> entityOptional) {
         if (!entityOptional.isPresent()) {
-
             return false;
         }
         try {
             Session session = sessionFactory.getCurrentSession();
             session.saveOrUpdate(entityOptional.get());
-
             return true;
         } catch (Exception e) {
-            System.out.println(e.getStackTrace());
+            System.out.println("Exception while execute AbstractGenericBaseDao.store()");
+            System.out.println("------------------------------------------------------------------------");
+            e.printStackTrace();
+            System.out.println("------------------------------------------------------------------------");
            // logger.error(e.getStackTrace());
             return false;
         }

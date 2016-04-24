@@ -58,11 +58,7 @@ public class Switch {
 
         Switch aSwitch = (Switch) o;
 
-        if (!getMac().equals(aSwitch.getMac())) return false;
-        if (!getName().equals(aSwitch.getName())) return false;
-        if (getDescription() != null ? !getDescription().equals(aSwitch.getDescription()) : aSwitch.getDescription() != null)
-            return false;
-        return !(getIp() != null ? !getIp().equals(aSwitch.getIp()) : aSwitch.getIp() != null);
+        return !(getMac() != null ? !getMac().equals(aSwitch.getMac()) : aSwitch.getMac() != null);
 
     }
 

@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -25,7 +25,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableTransactionManagement
 public class SpringConfig extends WebMvcConfigurerAdapter{
-    private static final String DATABASE_PROPERTIES_FILE = "dao-sqlite.properties";
+    private static final String DATABASE_PROPERTIES_FILE = "database-sqlite.properties";
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer prodPropertiesPlaceholderConfigurer() {
@@ -62,7 +62,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
     public DataSource dataSource(
             @Value("${driverClass}") String driver,
             @Value("${dbUrl}") String url,
-            @Value("${dao.userName}") String user,
+            @Value("${userName}") String user,
             @Value("${password}") String password) throws PropertyVetoException {
 
         BasicDataSource dataSource = new BasicDataSource();

@@ -1,9 +1,6 @@
 package lv.freeradiusgui.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -13,8 +10,9 @@ import java.time.LocalDateTime;
 @Table(name = "devices")
 public class Device {
     @Id
+    @GeneratedValue
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "mac", unique = true)
     private String mac;
@@ -25,6 +23,7 @@ public class Device {
     @Column(name = "descr")
     private String description;
 
+    @Transient
     @Column(name = "switch")
     private Switch aSwitch;
 
@@ -55,11 +54,11 @@ public class Device {
         this.access = access;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -154,7 +153,6 @@ public class Device {
     public static class DeviceBuilder {
 
         private String mac;
-
         private String name;
         private String description;
         private Switch aSwitch;
@@ -164,7 +162,12 @@ public class Device {
         private LocalDateTime lastSeen;
         private int access;
 
-        private DeviceBuilder() {
+        public DeviceBuilder() {
+        }
+
+        public DeviceBuilder withMac(String mac) {
+            this.mac = mac;
+            return this;
         }
 
         public DeviceBuilder withName(String name) {
