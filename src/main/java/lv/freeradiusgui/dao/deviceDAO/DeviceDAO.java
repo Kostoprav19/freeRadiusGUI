@@ -17,6 +17,6 @@ public interface DeviceDAO {
 
     void delete(Optional<Device> deviceOptional);
 
-    int getCount() throws DBException;
+    Long getCount() throws DBException;
 
 }

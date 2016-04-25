@@ -8,6 +8,7 @@ package lv.freeradiusgui.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,8 +88,10 @@ public abstract class AbstractGenericBaseDao<T> {
         session.delete(entityOptional.get());
     }
 
-    public int getCount(){
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(persistentClass);
-        return criteria.list().size();
+    public Long getCount(){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(persistentClass);
+        criteria.setProjection(Projections.rowCount());
+        return (Long) criteria.uniqueResult();
     }
 }

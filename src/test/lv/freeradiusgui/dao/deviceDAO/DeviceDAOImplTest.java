@@ -34,8 +34,10 @@ public class DeviceDAOImplTest {
 
     private Device device1;
     private Device device2;
+    private Device device3;
     private Optional<Device> deviceOptional1;
     private Optional<Device> deviceOptional2;
+    private Optional<Device> deviceOptional3;
 
 
     @Before
@@ -67,9 +69,21 @@ public class DeviceDAOImplTest {
                 .lastSeen(LocalDateTime.of(2016, 4, 1, 12, 40))
                 .withAccess(1)
                 .build();
+        device3 = new Device.DeviceBuilder()
+                .withMac("0000000000000003")
+                .withName("Test device 3")
+                .withDescription("Test device")
+                .onSwitch(new Switch())
+                .onPort(3)
+                .withPortSpeed(1000)
+                .withTOR(LocalDateTime.of(2016, 1, 1, 10, 02))
+                .lastSeen(LocalDateTime.of(2016, 4, 1, 12, 50))
+                .withAccess(1)
+                .build();
 
         deviceOptional1 = Optional.of(device1);
         deviceOptional2 = Optional.of(device2);
+        deviceOptional3 = Optional.of(device3);
     }
 
     @After
@@ -78,8 +92,9 @@ public class DeviceDAOImplTest {
     }
 
     @Test
-    public void store() throws Exception {
+    public void testStoreAndGet() throws Exception {
         assertTrue(deviceDAO.store(deviceOptional1));
+        assertTrue(deviceDAO.store(deviceOptional2));
 
         Device stored = deviceDAO.getById(device1.getId()).get();
 
@@ -95,8 +110,48 @@ public class DeviceDAOImplTest {
     }
 
     @Test
-    public void getById() throws Exception {
+    public void testGetById() throws Exception {
+        assertTrue(deviceDAO.store(deviceOptional1));
+        assertTrue(deviceDAO.store(deviceOptional2));
 
+        Device stored = deviceDAO.getById(device1.getId()).get();
+        assertEquals(stored, device1);
+        assertNotEquals(stored, device2);
     }
 
+    @Test
+    public void testGetByWrongId() throws Exception {
+        assertTrue(deviceDAO.store(deviceOptional1));
+        assertTrue(deviceDAO.store(deviceOptional2));
+
+        Optional<Device> storedOptional = deviceDAO.getById(Long.MAX_VALUE);
+        assertFalse(storedOptional.isPresent());
+    }
+
+    @Test
+    public void testCount() throws Exception {
+        assertEquals(new Long(0), deviceDAO.getCount());
+        assertTrue(deviceDAO.store(deviceOptional1));
+        assertEquals(new Long(1), deviceDAO.getCount());
+        assertTrue(deviceDAO.store(deviceOptional2));
+        assertEquals(new Long(2), deviceDAO.getCount());
+        assertTrue(deviceDAO.store(deviceOptional2));
+        assertEquals(new Long(2), deviceDAO.getCount());
+        assertTrue(deviceDAO.store(deviceOptional3));
+        assertEquals(new Long(3), deviceDAO.getCount());
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        assertEquals(new Long(0), deviceDAO.getCount());
+        assertTrue(deviceDAO.store(deviceOptional1));
+        assertTrue(deviceDAO.store(deviceOptional2));
+        assertTrue(deviceDAO.store(deviceOptional3));
+        assertEquals(new Long(3), deviceDAO.getCount());
+
+        deviceDAO.delete(deviceOptional1);
+        Optional<Device> storedDevice = deviceDAO.getById(device1.getId());
+        assertFalse(storedDevice.isPresent());
+        assertEquals(new Long(2), deviceDAO.getCount());
+    }
 }

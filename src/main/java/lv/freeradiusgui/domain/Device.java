@@ -1,5 +1,7 @@
 package lv.freeradiusgui.domain;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "devices")
 public class Device {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -34,13 +36,19 @@ public class Device {
     private int portSpeed;
 
     @Column(name = "tor")
+    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
     private LocalDateTime timeOfRegistration;
 
     @Column(name = "lastseen")
+    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
     private LocalDateTime lastSeen;
 
     @Column(name = "access")
     private int access;
+
+    public Device(){
+
+    }
 
     public Device(String mac, String name, String description, Switch aSwitch, int switchPort, int portSpeed, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, int access) {
         this.mac = mac;
@@ -141,13 +149,16 @@ public class Device {
 
         Device device = (Device) o;
 
-        return !(getMac() != null ? !getMac().equals(device.getMac()) : device.getMac() != null);
+        if (!id.equals(device.id)) return false;
+        return mac.equals(device.mac);
 
     }
 
     @Override
     public int hashCode() {
-        return getMac() != null ? getMac().hashCode() : 0;
+        int result = id.hashCode();
+        result = 31 * result + mac.hashCode();
+        return result;
     }
 
     public static class DeviceBuilder {
