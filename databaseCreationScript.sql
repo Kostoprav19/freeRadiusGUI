@@ -11,14 +11,14 @@ USE `freeradiusGUI` ;
 DROP TABLE IF EXISTS `freeradiusGUI`.`registrations` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`registrations` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `reg_id` BIGINT NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(16) NOT NULL,
-  `switch` BIGINT NOT NULL,
+  `switch_id` BIGINT NOT NULL,
   `port` INT NOT NULL,
   `speed` INT NOT NULL,
   `tor` DATETIME NOT NULL,
   `status` INT NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`reg_id`)
 )
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;
@@ -29,17 +29,17 @@ DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `freeradiusGUI`.`devices` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `device_id` BIGINT NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(16) NOT NULL,
   `name` VARCHAR(30) NOT NULL,
   `descr` VARCHAR(100) NOT NULL,
-  `switch` BIGINT,
+  `switch_id` BIGINT,
   `port` INT NOT NULL,
   `speed` INT NOT NULL,
   `tor` DATETIME NOT NULL,
   `lastseen` DATETIME NOT NULL,
   `access` INT NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`device_id`)
 )
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;
@@ -51,12 +51,12 @@ DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `freeradiusGUI`.`switches` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `switch_id` BIGINT NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(16) NOT NULL,
   `name` VARCHAR(30) NOT NULL,
   `descr` VARCHAR(100) NOT NULL,
   `ip` VARCHAR(16) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`switch_id`)
 )
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;

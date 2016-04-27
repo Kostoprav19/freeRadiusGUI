@@ -1,6 +1,7 @@
 package lv.freeradiusgui.dao.deviceDAO;
 
 import lv.freeradiusgui.config.WebMVCConfig;
+import lv.freeradiusgui.dao.switchDAO.SwitchDAO;
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Switch;
 import org.junit.After;
@@ -15,6 +16,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -26,18 +29,22 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @ContextConfiguration(classes = WebMVCConfig.class)
 @Transactional
-@Rollback
+//@Rollback
 public class DeviceDAOImplTest {
 
     @Autowired
     private DeviceDAO deviceDAO;
+    @Autowired
+    private SwitchDAO switchDAO;
 
     private Device device1;
     private Device device2;
     private Device device3;
+    private Switch aSwitch1;
     private Optional<Device> deviceOptional1;
     private Optional<Device> deviceOptional2;
     private Optional<Device> deviceOptional3;
+    private Optional<Switch> switchOptional1;
 
 
     @Before
@@ -45,12 +52,20 @@ public class DeviceDAOImplTest {
 
         //setForeignKeyCheckTo(0);
 
+        aSwitch1 = new Switch.SwitchBuilder()
+                .withMac("0000000000001001")
+                .withName("Test switch 1")
+                .withDescription("Test switch")
+                .withIp("192.168.0.20")
+                .build();
+        switchOptional1 = Optional.of(aSwitch1);
+        switchDAO.store(switchOptional1);
 
         device1 = new Device.DeviceBuilder()
                 .withMac("0000000000000001")
                 .withName("Test device 1")
                 .withDescription("Test device")
-                .onSwitch(new Switch())
+                .onSwitch(aSwitch1)
                 .onPort(1)
                 .withPortSpeed(100)
                 .withTOR(LocalDateTime.of(2016, 1, 1, 10, 00))
@@ -62,7 +77,7 @@ public class DeviceDAOImplTest {
                 .withMac("0000000000000002")
                 .withName("Test device 2")
                 .withDescription("Test device")
-                .onSwitch(new Switch())
+                .onSwitch(aSwitch1)
                 .onPort(2)
                 .withPortSpeed(1000)
                 .withTOR(LocalDateTime.of(2016, 1, 1, 10, 01))
@@ -73,7 +88,7 @@ public class DeviceDAOImplTest {
                 .withMac("0000000000000003")
                 .withName("Test device 3")
                 .withDescription("Test device")
-                .onSwitch(new Switch())
+                .onSwitch(aSwitch1)
                 .onPort(3)
                 .withPortSpeed(1000)
                 .withTOR(LocalDateTime.of(2016, 1, 1, 10, 02))
@@ -130,28 +145,61 @@ public class DeviceDAOImplTest {
 
     @Test
     public void testCount() throws Exception {
-        assertEquals(new Long(0), deviceDAO.getCount());
+        Long startCount = deviceDAO.getCount();
+
         assertTrue(deviceDAO.store(deviceOptional1));
-        assertEquals(new Long(1), deviceDAO.getCount());
+        assertEquals(new Long(startCount + 1), deviceDAO.getCount());
         assertTrue(deviceDAO.store(deviceOptional2));
-        assertEquals(new Long(2), deviceDAO.getCount());
+        assertEquals(new Long(startCount + 2), deviceDAO.getCount());
         assertTrue(deviceDAO.store(deviceOptional2));
-        assertEquals(new Long(2), deviceDAO.getCount());
+        assertEquals(new Long(startCount + 2), deviceDAO.getCount());
         assertTrue(deviceDAO.store(deviceOptional3));
-        assertEquals(new Long(3), deviceDAO.getCount());
+        assertEquals(new Long(startCount + 3), deviceDAO.getCount());
     }
 
     @Test
     public void testDelete() throws Exception {
-        assertEquals(new Long(0), deviceDAO.getCount());
+        Long startCount = deviceDAO.getCount();
         assertTrue(deviceDAO.store(deviceOptional1));
         assertTrue(deviceDAO.store(deviceOptional2));
         assertTrue(deviceDAO.store(deviceOptional3));
-        assertEquals(new Long(3), deviceDAO.getCount());
+        assertEquals(new Long(startCount + 3), deviceDAO.getCount());
 
         deviceDAO.delete(deviceOptional1);
         Optional<Device> storedDevice = deviceDAO.getById(device1.getId());
         assertFalse(storedDevice.isPresent());
-        assertEquals(new Long(2), deviceDAO.getCount());
+        assertEquals(new Long(startCount + 2), deviceDAO.getCount());
+
+        deviceDAO.delete(deviceOptional2);
+        assertEquals(new Long(startCount + 1), deviceDAO.getCount());
+    }
+
+    @Test
+    public void testGetAll() throws Exception {
+        assertTrue(deviceDAO.store(deviceOptional1));
+        assertTrue(deviceDAO.store(deviceOptional2));
+        assertTrue(deviceDAO.store(deviceOptional3));
+
+        List<Device> list = new ArrayList<>();
+        list.add(device1);
+        list.add(device2);
+        list.add(device3);
+
+        List<Device> storedList = deviceDAO.getAll();
+        assertEquals(storedList, list);
+    }
+
+    @Test
+    public void testGetAllByCriteria() throws Exception {
+        assertTrue(deviceDAO.store(deviceOptional1));
+        assertTrue(deviceDAO.store(deviceOptional2));
+        assertTrue(deviceDAO.store(deviceOptional3));
+
+        List<Device> list = new ArrayList<>();
+        list.add(device2);
+        list.add(device3);
+
+        List<Device> storedList = deviceDAO.getAllByCriteria("portSpeed", 1000);
+        assertEquals(storedList, list);
     }
 }

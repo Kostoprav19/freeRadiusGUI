@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "device_id")
     private Long id;
 
     @Column(name = "mac", unique = true)
@@ -25,8 +25,9 @@ public class Device {
     @Column(name = "descr")
     private String description;
 
-    @Transient
-    @Column(name = "switch")
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+//    @ManyToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name="switch_id")
     private Switch aSwitch;
 
     @Column(name = "port")

@@ -63,7 +63,7 @@ public abstract class AbstractGenericBaseDao<T> {
         return Optional.ofNullable(obj);
     }
 
-    protected List<T> getAllByCriteria(String fieldName, Object object) {
+    public List<T> getAllByCriteria(String fieldName, Object object) {
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(persistentClass);

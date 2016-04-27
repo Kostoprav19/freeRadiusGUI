@@ -1,15 +1,40 @@
 package lv.freeradiusgui.domain;
 
+import javax.persistence.*;
+import java.lang.invoke.SwitchPoint;
+import java.time.LocalDateTime;
+
 /**
  * Created by Dan on 24.11.2015.
  */
+@Entity
+@Table(name = "switches")
 public class Switch {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "switch_id")
     private int id;
+
+    @Column(name = "mac", unique = true)
     private String mac;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "descr")
     private String description;
+
+    @Column(name = "ip")
     private String ip;
     //TODO: additional fields like numberOfPorts, vendor, model, year
+
+
+    public Switch(String mac, String name, String description, String ip) {
+        this.mac = mac;
+        this.name = name;
+        this.description = description;
+        this.ip = ip;
+    }
 
     public int getId() {
         return id;
@@ -58,16 +83,48 @@ public class Switch {
 
         Switch aSwitch = (Switch) o;
 
-        return !(getMac() != null ? !getMac().equals(aSwitch.getMac()) : aSwitch.getMac() != null);
+        return mac.equals(aSwitch.mac);
 
     }
 
     @Override
     public int hashCode() {
-        int result = getMac().hashCode();
-        result = 31 * result + getName().hashCode();
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        result = 31 * result + (getIp() != null ? getIp().hashCode() : 0);
-        return result;
+        return mac.hashCode();
+    }
+
+    public static class SwitchBuilder {
+
+        private String mac;
+        private String name;
+        private String description;
+        private String ip;
+        
+        public SwitchBuilder() {
+        }
+
+        public SwitchBuilder withMac(String mac) {
+            this.mac = mac;
+            return this;
+        }
+
+        public SwitchBuilder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public SwitchBuilder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public SwitchBuilder withIp(String ip) {
+            this.ip = ip;
+            return this;
+        }
+
+
+        public Switch build() {
+            return new Switch(mac, name, description, ip);
+        }
     }
 }
