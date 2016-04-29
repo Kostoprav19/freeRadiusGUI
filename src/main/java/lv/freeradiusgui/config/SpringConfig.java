@@ -9,8 +9,6 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
@@ -19,12 +17,8 @@ import java.util.Properties;
 @Configuration
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableTransactionManagement
-public class SpringConfig extends WebMvcConfigurerAdapter{
+public class SpringConfig{
 
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
 
     @Bean(destroyMethod = "close")
     public DataSource dataSource() throws PropertyVetoException {

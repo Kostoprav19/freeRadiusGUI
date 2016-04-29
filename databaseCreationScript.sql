@@ -61,3 +61,20 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;
 
+-- -----------------------------------------------------
+-- Table `freeradiusGUI`.`users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `freeradiusGUI`.`users` ;
+
+CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`users` (
+  `user_id` BIGINT NOT NULL AUTO_INCREMENT,
+  `login` VARCHAR(30) NOT NULL,
+  `password` VARCHAR(30) NOT NULL,
+  `name` VARCHAR(50),
+  `surname` VARCHAR(50),
+  `email` VARCHAR(50),
+  `created` DATETIME NOT NULL,
+  PRIMARY KEY (`user_id`)
+)
+  ENGINE = InnoDB
+DEFAULT CHARSET=utf8;

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 public abstract class AbstractGenericBaseDao<T> {
@@ -29,13 +28,13 @@ public abstract class AbstractGenericBaseDao<T> {
                 getActualTypeArguments()[0];
     }
 
-    public boolean store(Optional<T> entityOptional) {
-        if (!entityOptional.isPresent()) {
+    public boolean store(T obj) {
+        if (obj == null) {
             return false;
         }
         try {
             Session session = sessionFactory.getCurrentSession();
-            session.saveOrUpdate(entityOptional.get());
+            session.saveOrUpdate(obj);
             return true;
         } catch (Exception e) {
             System.out.println("Exception while execute AbstractGenericBaseDao.store()");
@@ -47,20 +46,20 @@ public abstract class AbstractGenericBaseDao<T> {
         }
     }
 
-    public Optional<T> getById(String fieldName, Object object) {
+    public T getById(String fieldName, Object object) {
 
         return getOneByCriteria(fieldName, object);
     }
 
     @SuppressWarnings("unchecked")
-    protected Optional<T> getOneByCriteria(String fieldName, Object object) {
+    protected T getOneByCriteria(String fieldName, Object object) {
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(persistentClass);
         criteria.add(Restrictions.eq(fieldName, object));
         T obj = (T) criteria.uniqueResult();
 
-        return Optional.ofNullable(obj);
+        return obj;
     }
 
     public List<T> getAllByCriteria(String fieldName, Object object) {
@@ -80,12 +79,12 @@ public abstract class AbstractGenericBaseDao<T> {
         return criteria.list();
     }
 
-    public void delete(Optional<T> entityOptional) {
-        if (!entityOptional.isPresent()) {
+    public void delete(T obj) {
+        if (obj == null) {
             return;
         }
         Session session = sessionFactory.getCurrentSession();
-        session.delete(entityOptional.get());
+        session.delete(obj);
     }
 
     public Long getCount(){

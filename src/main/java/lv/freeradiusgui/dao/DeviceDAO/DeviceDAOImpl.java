@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 /**
  * Created by Dan on 23.04.2016.
  */
+
 @Transactional
 @Repository
 public class DeviceDAOImpl extends AbstractGenericBaseDao<Device> implements DeviceDAO {
@@ -22,9 +21,9 @@ public class DeviceDAOImpl extends AbstractGenericBaseDao<Device> implements Dev
     }
 
     @Override
-    public Optional<Device> getById(Long id) {
+    public Device getById(Long id) {
         if (id == null || id < 0) {
-            return Optional.empty();
+            return null;
         }
         return getOneByCriteria("id", id);
     }

@@ -1,13 +1,13 @@
-package lv.freeradiusgui.dao.deviceDAO;
+package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Device;
+
 import java.util.List;
 
 /**
- * Created by Daniels on 25.11.2015..
+ * Created by Dan on 29.04.2016.
  */
-
-public interface DeviceDAO {
+public interface DeviceService {
 
     boolean store(Device device);
 
@@ -20,5 +20,4 @@ public interface DeviceDAO {
     void delete(Device device);
 
     Long getCount();
-
 }

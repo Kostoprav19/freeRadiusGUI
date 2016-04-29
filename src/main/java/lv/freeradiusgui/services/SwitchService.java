@@ -1,13 +1,13 @@
-package lv.freeradiusgui.dao.switchDAO;
+package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Switch;
+
 import java.util.List;
 
 /**
- * Created by Daniels on 25.11.2015..
+ * Created by Dan on 29.04.2016.
  */
-
-public interface SwitchDAO {
+public interface SwitchService {
 
     boolean store(Switch sSwitch);
 
@@ -20,5 +20,4 @@ public interface SwitchDAO {
     void delete(Switch aSwitch);
 
     Long getCount();
-
 }

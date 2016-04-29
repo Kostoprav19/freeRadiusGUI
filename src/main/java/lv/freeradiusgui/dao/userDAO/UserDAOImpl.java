@@ -1,7 +1,8 @@
-package lv.freeradiusgui.dao.switchDAO;
+package lv.freeradiusgui.dao.userDAO;
 
 import lv.freeradiusgui.dao.AbstractGenericBaseDao;
-import lv.freeradiusgui.domain.Switch;
+import lv.freeradiusgui.domain.Device;
+import lv.freeradiusgui.domain.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,15 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public class SwitchDAOImpl extends AbstractGenericBaseDao<Switch> implements SwitchDAO {
+public class UserDAOImpl extends AbstractGenericBaseDao<User> implements UserDAO {
 
     @Autowired
-    public SwitchDAOImpl(SessionFactory sessionFactory) {
+    public UserDAOImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public Switch getById(Long id) {
+    public User getById(Long id) {
         if (id == null || id < 0) {
             return null;
         }
