@@ -1,0 +1,182 @@
+/* -------------------
+    Main styles
+   -------------------*/
+body{
+    background-color: #fcfcfc;
+    font-family: Arial;
+    font-size: medium;
+}
+
+#header a{
+    color: beige;
+}
+#header a:hover {
+    background-color: beige;
+    color: navy;
+
+}
+
+div#dialog {
+    background: beige;
+    min-height: 54.5em;
+    width: 56.5em;
+    border: 1px solid #111e24;
+    display: none;
+    position: absolute;
+    z-index: 100;
+}
+
+/* -------------------
+    Header styles
+   -------------------*/
+div#header {
+    position:relative;
+    height: 31px;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+    background-color: navy;
+    color: beige;
+    font-size: large;
+}
+
+div#header-name{
+    color:darkorange;
+    display: inline;
+    font-size: large;
+}
+
+div#header-username{
+    position:absolute;
+    right:140px;
+    top:7px;
+    color: lightgreen;
+    font-size: medium;
+}
+
+div#header-logout{
+    position:absolute;
+    right:5px;
+    top:7px;
+    font-size: medium;
+}
+/* -------------------
+    Div styles
+   -------------------*/
+div#container{
+    overflow:auto;
+ /*   width: 600px;*/
+    margin: 2em auto;
+}
+div#left{
+    float: left;
+    margin-right:5px;
+    padding: 1em;
+    border: 1px solid darkgrey;
+    background: #F8F8F8;
+}
+
+div#right{
+    float: left;
+    margin-left:5px;
+    padding: 1em;
+    border: 1px solid darkgrey;
+}
+div#footer {
+    clear: both;
+}
+
+
+/* -------------------
+    Table styles
+   -------------------*/
+
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid darkgrey;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    text-align: left;
+}
+th{
+    font-weight: normal;
+}
+td {cursor: pointer;}
+
+table th	{
+    background-color: lightslategray;
+    color: white;
+}
+
+/* Used for marking selected row in tables. Use in combination with select-row-in-table.js */
+tr.selected {
+    color: white;
+    background-color: orange;
+}
+
+
+/* -------------------
+    Login page styles
+   -------------------*/
+
+div#login {
+    width: 400px;
+    height: 400px;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+
+input#loginButton{
+    width: 300px;
+    height: 32px;
+    margin-bottom: 25px;
+    padding: 5px;
+}
+
+input#loginInput{
+    width: 287px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+/* -------------------
+    Input styles
+   -------------------*/
+
+input{
+    width: 300px;
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: medium;
+}
+select{
+    width: 300px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+button{
+    width: 100px;
+    margin: 10px 0px 25px;
+    padding: 5px;
+}
+
+button#button200{
+    width: 200px;
+}
+
+#editaccesses{
+    margin-left: 150px;
+    width: 150px;
+}

@@ -17,7 +17,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableTransactionManagement
-public class SpringConfig{
+public class HybernateConfig {
 
 
     @Bean(destroyMethod = "close")

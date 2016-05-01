@@ -1,7 +1,6 @@
 package lv.freeradiusgui.dao.userDAO;
 
 import lv.freeradiusgui.dao.AbstractGenericBaseDao;
-import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

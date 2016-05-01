@@ -1,4 +1,6 @@
 package lv.freeradiusgui.domain;
+import org.hibernate.annotations.Type;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -28,7 +30,8 @@ public class User {
     @Column(name = "enail")
     private String email;
 
-    @Column(name = "created", columnDefinition="DATETIME")
+    @Column(name = "created")
+    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
     private LocalDateTime creationDate;
 
     public Long getId() {

@@ -26,7 +26,6 @@ public class Device {
     private String description;
 
     @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-//    @ManyToOne(cascade={CascadeType.ALL})
     @JoinColumn(name="switch_id")
     private Switch aSwitch;
 
