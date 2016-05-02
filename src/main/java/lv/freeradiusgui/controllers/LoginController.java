@@ -18,14 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(@RequestParam(value = "error", required = false) String error) {
-        if (error != null) {
-            System.out.println("Error" + error);
-        }
-        System.out.println("here");
-        return "redirect:/";
-       // return Views.HOME;
+    @RequestMapping(value = {Views.LOGIN, "/"}, method = RequestMethod.GET)
+    public String login() {
+        return Views.LOGIN;
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

@@ -16,9 +16,8 @@ public class HomeController {
 
    // private final Logger logger = LogManager.getLogger(IndexController.class);
 
-    @RequestMapping(value = "/")
-    public String index(Model model) {
-    //    model.addAttribute("name", name);
+    @RequestMapping(Views.HOME)
+    public String home() {
         return Views.HOME;
     }
 

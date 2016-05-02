@@ -16,7 +16,7 @@
     <p>
         Admin
     </p>
-    <div th:replace="fragments/footer :: ${#authentication.principal.isAdmin()} ? 'footer-admin' : 'footer'">&copy; 2013 The Static Templates</div>
+    <div th:replace="fragments/footer :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'footer-admin' : 'footer'">&copy; 2013 The Static Templates</div>
 </div>
 </body>
 </html>
