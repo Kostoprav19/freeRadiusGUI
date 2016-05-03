@@ -2,17 +2,18 @@ package lv.freeradiusgui.domain;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "accounts")
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "account_id")
     private Long id;
 
     @Column(name = "login")
@@ -27,12 +28,22 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "enail")
+    @Column(name = "email")
     private String email;
 
     @Column(name = "created")
     @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
     private LocalDateTime creationDate;
+
+    @Column(name = "enabled", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean enabled;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "accounts_roles",
+            joinColumns = {@JoinColumn(name = "account_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<Role> role = new HashSet<Role>();
 
     public Long getId() {
         return id;
@@ -90,13 +101,30 @@ public class User {
         this.creationDate = creationDate;
     }
 
-    public User(String login, String password, String name, String surname, String email, LocalDateTime creationDate) {
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public Set<Role> getRole() {
+        return role;
+    }
+
+    public void setRole(Set<Role> role) {
+        this.role = role;
+    }
+
+    public Account(String login, String password, String name, String surname, String email, LocalDateTime creationDate, boolean enabled) {
         this.login = login;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.creationDate = creationDate;
+        this.enabled = enabled;
     }
 
     @Override
@@ -104,9 +132,9 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        Account account = (Account) o;
 
-        return login.equals(user.login);
+        return login.equals(account.login);
 
     }
 
@@ -115,7 +143,7 @@ public class User {
         return login.hashCode();
     }
 
-    public static class UserBuilder {
+    public static class AccountBuilder {
 
         private String login;
         private String password;
@@ -123,45 +151,50 @@ public class User {
         private String surname;
         private String email;
         private LocalDateTime creationDate;
+        private boolean enabled;
 
-        private UserBuilder(){
+        private AccountBuilder(){
 
         }
 
-        public static UserBuilder createUser(){
-            return new UserBuilder();
+        public static AccountBuilder createUser(){
+            return new AccountBuilder();
         }
 
 
-        public User build(){
-            return new User(login, password, name, surname, email, creationDate);
+        public Account build(){
+            return new Account(login, password, name, surname, email, creationDate, enabled);
         }
 
 
-        public UserBuilder withLogin(String login){
+        public AccountBuilder withLogin(String login){
             this.login = login;
             return this;
         }
-        public UserBuilder withPassword(String password){
+        public AccountBuilder withPassword(String password){
             this.password = password;
             return this;
         }
 
-        public UserBuilder withName(String name){
+        public AccountBuilder withName(String name){
             this.name = name;
             return this;
         }
-        public UserBuilder withSurname(String surname){
+        public AccountBuilder withSurname(String surname){
             this.surname = surname;
             return this;
         }
 
-        public UserBuilder withEmail(String email){
+        public AccountBuilder withEmail(String email){
             this.email = email;
             return this;
         }
-        public UserBuilder withCreationDate(LocalDateTime creationDate){
+        public AccountBuilder withCreationDate(LocalDateTime creationDate){
             this.creationDate = creationDate;
+            return this;
+        }
+        public AccountBuilder withEnabled(boolean enabled){
+            this.enabled = enabled;
             return this;
         }
 
