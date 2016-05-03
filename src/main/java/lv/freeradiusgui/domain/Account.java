@@ -117,6 +117,9 @@ public class Account {
         this.role = role;
     }
 
+    public Account() {
+    }
+
     public Account(String login, String password, String name, String surname, String email, LocalDateTime creationDate, boolean enabled) {
         this.login = login;
         this.password = password;

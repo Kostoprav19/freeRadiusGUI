@@ -30,6 +30,7 @@
         <mysql-connector-version>5.1.38</mysql-connector-version>
         <thymeleaf-version>2.1.4.RELEASE</thymeleaf-version>
         <thymeleaf-security>2.1.2.RELEASE</thymeleaf-security>
+        <log4j-version>2.5</log4j-version>
 
     </properties>
 
@@ -157,6 +158,32 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-version}</version>
         </dependency>
+
+        <!--LOG4J-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jcl</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+
 
     </dependencies>
 

@@ -116,3 +116,24 @@ CONSTRAINT `FK_to_accounts`
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+
+-- -----------------------------------------------------
+-- Fill data. Default password is 123456
+-- -----------------------------------------------------
+
+INSERT INTO accounts(account_id, login,password,enabled, created)
+VALUES (1, 'admin','$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y', true, '2016-03-05 10:00:00');
+INSERT INTO accounts(account_id, login,password,enabled, created)
+VALUES (2, 'user','$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y', true, '2016-03-05 11:00:00');
+
+
+INSERT INTO roles (role_id, role)
+VALUES (1, 'ROLE_ADMIN');
+INSERT INTO roles (role_id, role)
+VALUES (2, 'ROLE_USER');
+
+
+INSERT INTO accounts_roles (account_id, role_id)
+VALUES ('1', '1');
+INSERT INTO accounts_roles (account_id, role_id)
+VALUES ('2', '2');
