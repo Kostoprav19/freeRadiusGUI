@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpSession;
 
 /**
@@ -18,12 +20,6 @@ public class HomeController {
     @RequestMapping(Views.HOME)
     public String home() {
         return Views.HOME;
-    }
-
-  @RequestMapping(Views.ADMIN)
-    public String gambling() {
-
-        return Views.ADMIN;
     }
 
 }

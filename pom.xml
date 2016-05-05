@@ -30,6 +30,7 @@
         <mysql-connector-version>5.1.38</mysql-connector-version>
         <thymeleaf-version>2.1.4.RELEASE</thymeleaf-version>
         <thymeleaf-security>2.1.2.RELEASE</thymeleaf-security>
+        <thymeleaf-extras-java8time>2.1.0.RELEASE</thymeleaf-extras-java8time>
         <log4j-version>2.5</log4j-version>
 
     </properties>
@@ -150,6 +151,12 @@
             <artifactId>thymeleaf-extras-springsecurity4</artifactId>
             <version>${thymeleaf-security}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-java8time</artifactId>
+            <version>${thymeleaf-extras-java8time}</version>
         </dependency>
 
         <!--HIBERNATE-->

@@ -11,12 +11,12 @@
     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div th:replace="fragments/header :: header">&nbsp;</div>
+<div th:replace="fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'">&nbsp;</div>
 <div class="container">
     <p>
         Welcome to the Spring MVC + Thymeleaf application!
     </p>
-    <div th:replace="fragments/footer :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'footer-admin' : 'footer'">&copy; 2013 The Static Templates</div>
+    <div th:replace="fragments/footer :: footer"></div>
 </div>
 </body>
 </html>

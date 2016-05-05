@@ -5,6 +5,7 @@ package lv.freeradiusgui.config;
  */
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -16,6 +17,11 @@ import java.util.Set;
 
 @Configuration
 public class ThymeleafConfig {
+
+    @Bean
+    public Java8TimeDialect java8TimeDialect() {
+        return new Java8TimeDialect();
+    }
 
     @Bean
     public ThymeleafViewResolver viewResolver() {
@@ -34,6 +40,7 @@ public class ThymeleafConfig {
         resolvers.add(createResolver("/WEB-INF/views/", 1));
         engine.setTemplateResolvers(resolvers);
 
+        engine.addDialect(new Java8TimeDialect());
         engine.addDialect(new SpringSecurityDialect());
 
         return engine;

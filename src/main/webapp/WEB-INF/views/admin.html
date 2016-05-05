@@ -11,12 +11,39 @@
     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div th:replace="fragments/header :: header">&nbsp;</div>
+<div th:replace="fragments/header :: header-admin">&nbsp;</div>
 <div class="container">
-    <p>
-        Admin
-    </p>
-    <div th:replace="fragments/footer :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'footer-admin' : 'footer'">&copy; 2013 The Static Templates</div>
+    <div class="page-header">
+        <h1>User administration</h1>
+    </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Login</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>E-mail</th>
+                <th>Creation date</th>
+                <th>Enabled</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.id}"></td>
+                <td th:text="${account.login}"></td>
+                <td th:text="${account.name}"></td>
+                <td th:text="${account.surname}"></td>
+                <td th:text="${account.email}"></td>
+                <td th:text="${#temporals.format(account.creationDate, 'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${account.enabled}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    <div th:replace="fragments/footer :: footer"></div>
 </div>
+
 </body>
 </html>
