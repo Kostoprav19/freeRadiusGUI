@@ -1,6 +1,9 @@
 /**
  * Created by Dan on 14.11.2015.
  */
+
+contextPath = '/freeRadiusGui'
+
 function goToUrl(url) {
     location.href = url;
 }
@@ -12,9 +15,11 @@ function goToUrlIfSure(url, text) {
     }
 }
 
-function goToUrlWithId(url){
-    var id = $("tr.selected td:first").html();
-    location.href=url + id;
+function goToUrlWithId(url, id){
+  //  alert(url + id);
+    location.href=window.location.pathname + url + "/" + id;
+  //  location.href=contextPath + url + id;
+
 }
 
 function openModalWindow(str) {

@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Admin</title>
+    <title th:text="${account.login}">Account - </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
@@ -15,7 +15,7 @@
 <div th:replace="fragments/header :: header-admin">&nbsp;</div>
 <div class="container">
     <div class="page-header">
-        <h1>User administration</h1>
+        <h1 th:text="${account.login}">User - </h1>
     </div>
     <button type="button" class="btn btn-success">Add <span class="glyphicon glyphicon-plus"></span></button>
         <table class="table table-striped">
@@ -28,11 +28,10 @@
                 <th>E-mail</th>
                 <th>Creation date</th>
                 <th>Enabled</th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="account : ${accounts}">
+            <tr>
                 <td th:text="${account.id}"></td>
                 <td th:text="${account.login}"></td>
                 <td th:text="${account.name}"></td>
@@ -40,7 +39,6 @@
                 <td th:text="${account.email}"></td>
                 <td th:text="${#temporals.format(account.creationDate, 'dd.MM.yyyy HH:mm')}"></td>
                 <td th:text="${account.enabled}"></td>
-                <td><button type="button" class="btn btn-info btn-xs" th:onclick="'goToUrlWithId(\'/account\',' + ${account.id} + ');'"><span class="glyphicon glyphicon-edit"></span> Edit</button></td>
             </tr>
             </tbody>
         </table>

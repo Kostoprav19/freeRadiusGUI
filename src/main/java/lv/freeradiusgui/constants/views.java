@@ -7,5 +7,6 @@ public final class Views {
     public static final String HOME = "home";
     public static final String LOGIN = "login";
     public static final String ADMIN = "admin";
+    public static final String ACCOUNT_EDIT = "account";
 
 }
