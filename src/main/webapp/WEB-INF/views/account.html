@@ -3,46 +3,62 @@
       xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title th:text="${account.login}">Account - </title>
+    <title th:text="'Account: ' + ${account.login}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
+    <link rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
-    <script src="../../../resources/js/buttons-functions.js" th:src="@{/resources/js/buttons-functions.js}"></script>
+    <script th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/buttons-functions.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: header-admin">&nbsp;</div>
 <div class="container">
+
     <div class="page-header">
-        <h1 th:text="${account.login}">User - </h1>
+        <h1 th:text="'Edit account: ' + ${account.login}"> </h1>
     </div>
-    <button type="button" class="btn btn-success">Add <span class="glyphicon glyphicon-plus"></span></button>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Login</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>E-mail</th>
-                <th>Creation date</th>
-                <th>Enabled</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td th:text="${account.id}"></td>
-                <td th:text="${account.login}"></td>
-                <td th:text="${account.name}"></td>
-                <td th:text="${account.surname}"></td>
-                <td th:text="${account.email}"></td>
-                <td th:text="${#temporals.format(account.creationDate, 'dd.MM.yyyy HH:mm')}"></td>
-                <td th:text="${account.enabled}"></td>
-            </tr>
-            </tbody>
-        </table>
-    <button type="button" class="btn btn-success" >Add <span class="glyphicon glyphicon-plus"></span></button>
+
+    <div class="forms-200px">
+    <form action="#" th:action="@{/admin/account?action=store}" th:object="${account}" method="post">
+        <div class="form-group">
+            <input id="id" class="form-control" type="hidden" th:field="*{id}" />
+        </div>
+        <div class="form-group">
+            <label for="login">Login</label>
+            <input id="login" class="form-control" type="text" th:field="*{login}" placeholder="Login" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" class="form-control" type="password" th:field="*{password}" placeholder="Password" />
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" class="form-control" type="text" th:field="*{name}" placeholder="Name"/>
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname</label>
+            <input id="surname" class="form-control" type="text" th:field="*{surname}" placeholder="Surname"/>
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input id="email" class="form-control" type="text" th:field="*{email}" placeholder="Email"/>
+        </div>
+        <div class="form-group">
+            <div class="checkbox">
+            <label>
+            <input id="enabled" type="checkbox" th:field="*{enabled}" />Enabled
+            </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-info" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+            <button type="button" class="btn btn-danger" th:onclick="'goToUrlWithIdAndAction(\'\', ' + ${account.id} + ', \'delete\');'"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+            <button type="button" class="btn" th:onclick="'goToUrl(\'\\admin\');'"><span class="glyphicon glyphicon-arrow-left"></span> Back</button>
+        </div>
+    </form>
+</div>
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 

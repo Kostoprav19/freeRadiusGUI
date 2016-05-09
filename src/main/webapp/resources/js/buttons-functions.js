@@ -2,10 +2,10 @@
  * Created by Dan on 14.11.2015.
  */
 
-contextPath = '/freeRadiusGui'
+rootPath = '/freeRadiusGui';
 
 function goToUrl(url) {
-    location.href = url;
+    location.href = rootPath + url;
 }
 
 function goToUrlIfSure(url, text) {
@@ -16,10 +16,15 @@ function goToUrlIfSure(url, text) {
 }
 
 function goToUrlWithId(url, id){
-  //  alert(url + id);
-    location.href=window.location.pathname + url + "/" + id;
-  //  location.href=contextPath + url + id;
+    location.href=window.location.pathname + url + "?id=" + id;
+}
 
+function goToUrlWithIdAndAction(url, id, action){
+    location.href=window.location.pathname + url + "?id=" + id + "&action=" + action;
+}
+
+function goToUrlWithAction(url, action){
+    location.href=window.location.pathname + url + "?action=" + action;
 }
 
 function openModalWindow(str) {

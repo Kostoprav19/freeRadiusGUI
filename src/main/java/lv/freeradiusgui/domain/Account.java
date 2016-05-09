@@ -141,9 +141,21 @@ public class Account {
 
     }
 
+    
+
     @Override
-    public int hashCode() {
-        return login.hashCode();
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", creationDate=" + creationDate +
+                ", enabled=" + enabled +
+                ", role=" + role +
+                '}';
     }
 
     public static class AccountBuilder {

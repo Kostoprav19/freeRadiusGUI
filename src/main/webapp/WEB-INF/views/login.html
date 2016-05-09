@@ -3,7 +3,8 @@
       xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>Sign In</title>
+    <title>freeRadiusGUI</title>
+    <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
@@ -16,7 +17,8 @@
         <div th:replace="fragments/alert :: alert (type='danger', message='Sign in error. Please try again.')">Alert</div>
     </th:block>
     <fieldset>
-        <legend>Please Sign In</legend>
+        <legend><h2 class="logo"><img class="logo-img-48px" th:src="@{/resources/img/favico.png}"/> freeRadiusGUI</h2></legend>
+        <p><strong>Please Sign In:</strong></p>
         <div class="form-group">
             <label for="inputEmail" class="col-lg-2 control-label">Username</label>
             <div class="col-lg-10">
