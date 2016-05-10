@@ -137,11 +137,14 @@ public class Account {
 
         Account account = (Account) o;
 
-        return login.equals(account.login);
+        return login != null ? login.equals(account.login) : account.login == null;
 
     }
 
-    
+    @Override
+    public int hashCode() {
+        return login != null ? login.hashCode() : 0;
+    }
 
     @Override
     public String toString() {

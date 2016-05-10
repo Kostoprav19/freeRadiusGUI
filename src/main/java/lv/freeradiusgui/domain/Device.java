@@ -149,16 +149,13 @@ public class Device {
 
         Device device = (Device) o;
 
-        if (!id.equals(device.id)) return false;
-        return mac.equals(device.mac);
+        return mac != null ? mac.equals(device.mac) : device.mac == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + mac.hashCode();
-        return result;
+        return mac != null ? mac.hashCode() : 0;
     }
 
     public static class DeviceBuilder {

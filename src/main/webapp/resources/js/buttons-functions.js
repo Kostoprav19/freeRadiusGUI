@@ -16,15 +16,15 @@ function goToUrlIfSure(url, text) {
 }
 
 function goToUrlWithId(url, id){
-    location.href=window.location.pathname + url + "?id=" + id;
+    location.href=rootPath + url + "?id=" + id;
 }
 
 function goToUrlWithIdAndAction(url, id, action){
-    location.href=window.location.pathname + url + "?id=" + id + "&action=" + action;
+    location.href=rootPath + url + "?id=" + id + "&action=" + action;
 }
 
 function goToUrlWithAction(url, action){
-    location.href=window.location.pathname + url + "?action=" + action;
+    location.href=rootPath + url + "?action=" + action;
 }
 
 function openModalWindow(str) {
