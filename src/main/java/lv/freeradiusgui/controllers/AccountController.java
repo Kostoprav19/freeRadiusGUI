@@ -2,7 +2,9 @@ package lv.freeradiusgui.controllers;
 
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Account;
+import lv.freeradiusgui.domain.Role;
 import lv.freeradiusgui.services.AccountService;
+import lv.freeradiusgui.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Dan on 30.04.2016.
@@ -24,6 +28,13 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    RoleService roleService;
+
+    @ModelAttribute("allRoles")
+    public List<Role> populateRoles() {
+        return roleService.getAll();
+    }
 
     @RequestMapping(value = Views.ACCOUNT, params = { "id" })
     public ModelAndView showAccount(@RequestParam("id") Long accountId) {

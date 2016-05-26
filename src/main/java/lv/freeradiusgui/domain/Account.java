@@ -39,11 +39,11 @@ public class Account {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean enabled;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "accounts_roles",
             joinColumns = {@JoinColumn(name = "account_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<Role> role = new HashSet<Role>();
+    private Set<Role> roles = new HashSet<Role>();
 
     public Long getId() {
         return id;
@@ -109,12 +109,12 @@ public class Account {
         return this.enabled;
     }
 
-    public Set<Role> getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Set<Role> role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public Account() {
@@ -157,7 +157,7 @@ public class Account {
                 ", email='" + email + '\'' +
                 ", creationDate=" + creationDate +
                 ", enabled=" + enabled +
-                ", role=" + role +
+                ", roles=" + roles +
                 '}';
     }
 

@@ -34,7 +34,7 @@ public class SecurityUserDetailsServiceImpl implements UserDetailsService {
         if (account == null){
             throw new UsernameNotFoundException(login);
         }
-        List<GrantedAuthority> authorities = buildUserAuthority(account.getRole());
+        List<GrantedAuthority> authorities = buildUserAuthority(account.getRoles());
 
         return buildUserForAuthentication(account, authorities);
     }
@@ -44,7 +44,7 @@ public class SecurityUserDetailsServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> auth = new HashSet<GrantedAuthority>();
 
         for (Role role : roles) {
-            auth.add(new SimpleGrantedAuthority(role.getRole()));
+            auth.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
 
         return new ArrayList<GrantedAuthority>(auth);

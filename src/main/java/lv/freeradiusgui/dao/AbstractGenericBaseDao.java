@@ -8,6 +8,7 @@ package lv.freeradiusgui.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +75,7 @@ public abstract class AbstractGenericBaseDao<T> {
     public List<T> getAll() {
 
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(persistentClass);
+        Criteria criteria = session.createCriteria(persistentClass).addOrder(Order.asc("id"));
 
         return criteria.list();
     }

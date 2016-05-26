@@ -9,22 +9,23 @@ import javax.persistence.*;
 @Table(name = "roles")
 public class Role {
 
-    public static final String ROLE_USER = "USER";
-    public static final String ROLE_MODERATOR = "MODERATOR";
-    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
+    public static final String[] ALL = { ROLE_ADMIN, ROLE_USER };
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Integer id;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+    @Column(name = "roleName", nullable = false)
+    private String roleName;
 
     public Role() {}
 
     public Role(String role) {
-        this.role = role;
+        this.roleName = role;
     }
 
     public Integer getId() {
@@ -35,11 +36,32 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Role role = (Role) o;
+
+        return id != null ? id.equals(role.id) : role.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return this.getRoleName();
     }
 }
