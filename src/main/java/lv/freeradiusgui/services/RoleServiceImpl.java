@@ -19,14 +19,16 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getAll() {
-        /*List<Role> list = new ArrayList<>();
-        list.add(new Role(Role.ROLE_ADMIN));
-        list.add(new Role(Role.ROLE_USER));
-        or
-        List<String> list = new ArrayList<>();
-        list.add(Role.ROLE_ADMIN);
-        list.add(Role.ROLE_USER);*/
-
         return roleDAO.getAll();
+    }
+
+    @Override
+    public Role getByName(String name) {
+        return roleDAO.getByName(name);
+    }
+
+    @Override
+    public Role getById(Integer id) {
+        return roleDAO.getById(id);
     }
 }

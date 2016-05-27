@@ -68,7 +68,7 @@ public abstract class AbstractGenericBaseDao<T> {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(persistentClass);
         criteria.add(Restrictions.eq(fieldName, object));
-
+        //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria.list();
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractGenericBaseDao<T> {
 
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(persistentClass).addOrder(Order.asc("id"));
-
+        //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria.list();
     }
 
@@ -91,6 +91,7 @@ public abstract class AbstractGenericBaseDao<T> {
     public Long getCount(){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(persistentClass);
+        //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.setProjection(Projections.rowCount());
         return (Long) criteria.uniqueResult();
     }

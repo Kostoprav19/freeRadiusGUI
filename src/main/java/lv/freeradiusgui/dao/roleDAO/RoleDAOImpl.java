@@ -21,11 +21,19 @@ public class RoleDAOImpl extends AbstractGenericBaseDao<Role> implements RoleDAO
 
 
     @Override
-    public Role getById(Long id) {
+    public Role getById(Integer id) {
         if (id == null || id < 0) {
             return null;
         }
         return getOneByCriteria("id", id);
+    }
+
+    @Override
+    public Role getByName(String name) {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+        return getOneByCriteria("name", name);
     }
 
 }

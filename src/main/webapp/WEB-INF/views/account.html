@@ -17,17 +17,22 @@
 <div class="container">
 
     <div class="page-header">
-        <h1 th:text="'Edit account: ' + ${account.login}"> </h1>
+        <th:block th:if="${account.login != null}">
+            <h1 th:text="'Edit account: ' + ${account.login}"> </h1>
+        </th:block>
+        <th:block th:if="${account.login == null}">
+            <h1 th:text="'Create new account'"> </h1>
+        </th:block>
     </div>
 
     <div class="forms-200px">
-    <form action="#" th:action="@{/account?action=store}" th:object="${account}" method="post">
+    <form action="#" th:action="@{/account/submit}" th:object="${account}" method="post">
         <div class="form-group">
             <input id="id" class="form-control" type="hidden" th:field="*{id}" />
         </div>
         <div class="form-group">
             <label for="login">Login</label>
-            <input id="login" class="form-control" type="text" th:field="*{login}" placeholder="Login" />
+            <input id="login" class="form-control" type="text" th:field="*{login}" placeholder="Login" th:autofocus="true"/>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
@@ -45,6 +50,10 @@
             <label for="email">Email address</label>
             <input id="email" class="form-control" type="text" th:field="*{email}" placeholder="Email"/>
         </div>
+        <div class="form-group">
+            <label for="created">Creation date</label>
+            <input th:attr="type=${(account.creationDate == null) ? 'hidden' : 'text'}" id="created" class="form-control" th:field="*{creationDate}" th:disabled="true"/>
+        </div>
         <div class="checkbox">
             <label th:for="${#ids.next('enabled')}">
                 <input type="checkbox" th:field="*{enabled}" />
@@ -56,10 +65,9 @@
             <div class="checkbox" th:each="r : ${allRoles}">
                 <label>
                     <input type="checkbox" th:field="*{roles}" th:value="${r}" />
-                    <label th:text="${r.getRoleName()}">Role name goes here</label>
+                    <label th:for="${#ids.prev('roles')}" th:text="${r.name}">Role name goes here</label>
                 </label>
             </div>
-
 
         </div>
         <div class="form-group">

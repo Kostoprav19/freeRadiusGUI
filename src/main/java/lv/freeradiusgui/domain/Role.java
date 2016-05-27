@@ -12,7 +12,6 @@ public class Role {
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
-    public static final String[] ALL = { ROLE_ADMIN, ROLE_USER };
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +19,12 @@ public class Role {
     private Integer id;
 
     @Column(name = "roleName", nullable = false)
-    private String roleName;
+    private String name;
 
     public Role() {}
 
     public Role(String role) {
-        this.roleName = role;
+        this.name = role;
     }
 
     public Integer getId() {
@@ -36,32 +35,31 @@ public class Role {
         this.id = id;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof Role)) return false;
 
         Role role = (Role) o;
-
-        return id != null ? id.equals(role.id) : role.id == null;
+        return name != null ? name.equals(role.name) : role.name == null;
 
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return name != null ? name.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        return this.getRoleName();
+        return name;
     }
 }

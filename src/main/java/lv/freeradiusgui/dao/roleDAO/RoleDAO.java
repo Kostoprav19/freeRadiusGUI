@@ -12,7 +12,9 @@ public interface RoleDAO {
 
     boolean store(Role role);
 
-    Role getById(Long id);
+    Role getById(Integer id);
+
+    Role getByName(String name);
 
     List<Role> getAll();
 

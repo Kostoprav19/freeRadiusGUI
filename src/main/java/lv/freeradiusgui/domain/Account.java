@@ -1,10 +1,11 @@
 package lv.freeradiusgui.domain;
-import org.hibernate.annotations.Type;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.*;
 
 @Entity
@@ -43,6 +44,7 @@ public class Account {
     @JoinTable(name = "accounts_roles",
             joinColumns = {@JoinColumn(name = "account_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @Fetch(FetchMode.SUBSELECT)
     private Set<Role> roles = new HashSet<Role>();
 
     public Long getId() {
@@ -133,7 +135,7 @@ public class Account {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof Account)) return false;
 
         Account account = (Account) o;
 
@@ -148,6 +150,12 @@ public class Account {
 
     @Override
     public String toString() {
+        StringBuilder rolesStr = new StringBuilder();
+        if (roles != null) {
+            for (Role role : this.roles) {
+                if (role != null) rolesStr.append("[ id:" + role.getId() + " | name:" + role.getName() + "]");
+            }
+        }
         return "Account{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
@@ -157,7 +165,7 @@ public class Account {
                 ", email='" + email + '\'' +
                 ", creationDate=" + creationDate +
                 ", enabled=" + enabled +
-                ", roles=" + roles +
+                ", roles=" + rolesStr.toString() +
                 '}';
     }
 
