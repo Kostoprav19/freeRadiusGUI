@@ -10,7 +10,6 @@
     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
-    <script src="../../../resources/js/buttons-functions.js" th:src="@{/resources/js/buttons-functions.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: header-admin">&nbsp;</div>
@@ -40,12 +39,14 @@
                 <td th:text="${account.email}"></td>
                 <td th:text="${#temporals.format(account.creationDate, 'dd.MM.yyyy HH:mm')}"></td>
                 <td th:text="${account.enabled}"></td>
-                <td><button type="button" class="btn btn-info btn-xs" th:onclick="'goToUrlWithId(\'\\account\', ' + ${account.id} + ');'"><span class="glyphicon glyphicon-edit"></span> Edit</button>
-                <button type="button" class="btn btn-danger btn-xs" th:onclick="'goToUrlWithIdAndAction(\'\\account\', ' + ${account.id} + ', \'delete\');'"><span class="glyphicon glyphicon-remove"></span> Delete</button></td>
+                <td>
+                    <a role="button" class="btn btn-info btn-xs" th:href="@{/account/{id}(id=${account.id})}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                    <a role="button" class="btn btn-danger btn-xs" th:href="@{/account/delete/{id}(id=${account.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                </td>
             </tr>
             </tbody>
         </table>
-    <button type="button" class="btn btn-success" th:onclick="'goToUrlWithAction(\'\\account\', \'add\');'">Add <span class="glyphicon glyphicon-plus"></span></button>
+    <a role="button" class="btn btn-success" th:href="@{/account/add}">Add <span class="glyphicon glyphicon-plus"></span></a>
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 

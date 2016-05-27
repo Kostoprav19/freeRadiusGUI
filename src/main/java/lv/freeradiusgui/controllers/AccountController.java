@@ -54,8 +54,8 @@ public class AccountController {
         return roleService.getAll();
     }
 
-    @RequestMapping(value = Views.ACCOUNT, params = { "id" })
-    public ModelAndView showAccount(@RequestParam("id") Long accountId) {
+    @RequestMapping(value = Views.ACCOUNT + "/{id}")
+    public ModelAndView showAccount(@PathVariable("id") Long accountId) {
 
         Account account = accountService.getById(accountId);
         System.out.println("VIEW-----------------------------------------");
@@ -67,8 +67,8 @@ public class AccountController {
         return mav;
     }
 
-    @RequestMapping(value = Views.ACCOUNT, params = { "id", "action=delete" })
-    public ModelAndView deleteAccount(@RequestParam("id") Long accountId) {
+    @RequestMapping(value = Views.ACCOUNT + "/delete/{id}")
+    public ModelAndView deleteAccount(@PathVariable("id") Long accountId) {
 
         Account account = accountService.getById(accountId);
         accountService.delete(account);
@@ -90,7 +90,6 @@ public class AccountController {
                 role.setId(roleService.getByName(role.getName()).getId());
             }
         }
-        if (account.getCreationDate() == null) account.setCreationDate(LocalDateTime.now());
 
         System.out.println("SUBMIT -----------------------------------------");
         System.out.println(account);
@@ -103,9 +102,10 @@ public class AccountController {
         return mav;
     }
 
-    @RequestMapping(value = Views.ACCOUNT, params = {"action=add" }, method=RequestMethod.GET)
+    @RequestMapping(value = Views.ACCOUNT + "/add", method=RequestMethod.GET)
     public ModelAndView addAccount() {
         Account account = new Account();
+        account.setCreationDate(LocalDateTime.now());
 
         ModelAndView mav = new ModelAndView(Views.ACCOUNT);
         mav.addObject("account", account);
