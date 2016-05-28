@@ -12,6 +12,7 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditorSupport;
@@ -56,12 +57,7 @@ public class AccountController {
 
     @RequestMapping(value = Views.ACCOUNT + "/{id}")
     public ModelAndView showAccount(@PathVariable("id") Long accountId) {
-
         Account account = accountService.getById(accountId);
-        System.out.println("VIEW-----------------------------------------");
-        System.out.println(account);
-        System.out.println("VIEW-----------------------------------------");
-
         ModelAndView mav = new ModelAndView(Views.ACCOUNT);
         mav.addObject("account", accountService.getById(accountId));
         return mav;
@@ -75,30 +71,24 @@ public class AccountController {
 
         ModelAndView mav = new ModelAndView("redirect:/" + Views.ADMIN);
         mav.addObject("accounts", accountService.getAll());
+        mav.addObject("msg", "Account '" + account.getLogin() + "' successfully deleted.");
+        mav.addObject("msgType", "success");
         return mav;
     }
 
     @RequestMapping(value = Views.ACCOUNT + "/submit", method=RequestMethod.POST)
     public ModelAndView storeAccount(@ModelAttribute("account") Account account, SessionStatus status) {
-
-        System.out.println("SUBMIT -----------------------------------------");
-        System.out.println(account);
-        System.out.println("SUBMIT -----------------------------------------");
-
         for (Role role: account.getRoles()){
             if (role.getId() == null) {
                 role.setId(roleService.getByName(role.getName()).getId());
             }
         }
-
-        System.out.println("SUBMIT -----------------------------------------");
-        System.out.println(account);
-        System.out.println("SUBMIT -----------------------------------------");
-
         accountService.store(account);
         status.setComplete();
         ModelAndView mav = new ModelAndView("redirect:/" + Views.ADMIN);
         mav.addObject("accounts", accountService.getAll());
+        mav.addObject("msg", "Account '" + account.getLogin() + "' successfully saved.");
+        mav.addObject("msgType", "success");
         return mav;
     }
 
