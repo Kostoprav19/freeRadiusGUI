@@ -5,19 +5,16 @@ import lv.freeradiusgui.domain.Account;
 import lv.freeradiusgui.domain.Role;
 import lv.freeradiusgui.services.AccountService;
 import lv.freeradiusgui.services.RoleService;
+import lv.freeradiusgui.validators.AccountFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.beans.PropertyEditorSupport;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,21 +32,15 @@ public class AccountController {
     @Autowired
     RoleService roleService;
 
-   /* @InitBinder
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-        binder.registerCustomEditor(Role.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                System.out.println("BINDER LOG-----------------------------------------");
-                System.out.println(text);
-                System.out.println("BINDER LOG-----------------------------------------");
-                Integer id = new Integer(text);
-                Role role = roleService.getById(id);
-                setValue(role);
-            }
-        });
+    @Autowired
+    AccountFormValidator accountFormValidator;
+
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(accountFormValidator);
     }
-*/
+
     @ModelAttribute("allRoles")
     public List<Role> populateRoles() {
         return roleService.getAll();
@@ -77,12 +68,17 @@ public class AccountController {
     }
 
     @RequestMapping(value = Views.ACCOUNT + "/submit", method=RequestMethod.POST)
-    public ModelAndView storeAccount(@ModelAttribute("account") Account account, SessionStatus status) {
-        for (Role role: account.getRoles()){
-            if (role.getId() == null) {
-                role.setId(roleService.getByName(role.getName()).getId());
-            }
+    public ModelAndView storeAccount(@ModelAttribute("account") @Validated Account account,
+                                     BindingResult result,
+                                     SessionStatus status) {
+
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView(Views.ACCOUNT);
+            mav.addObject("accounts", account);
+            return mav;
         }
+
+        accountService.fixRolesWithOutId(account);
         accountService.store(account);
         status.setComplete();
         ModelAndView mav = new ModelAndView("redirect:/" + Views.ADMIN);
@@ -94,9 +90,7 @@ public class AccountController {
 
     @RequestMapping(value = Views.ACCOUNT + "/add", method=RequestMethod.GET)
     public ModelAndView addAccount() {
-        Account account = new Account();
-        account.setCreationDate(LocalDateTime.now());
-
+        Account account = accountService.prepareNewAccount();
         ModelAndView mav = new ModelAndView(Views.ACCOUNT);
         mav.addObject("account", account);
         return mav;

@@ -22,10 +22,16 @@
         <th:block th:if="${account.login == null}">
             <h1 th:text="'Create new account'"> </h1>
         </th:block>
+        <th:block th:if="${param.msg != null}">
+            <div th:replace="fragments/alert :: alert (type=${param.msgType[0]}, message=${param.msg[0]})">Alert</div>
+        </th:block>
     </div>
 
     <div class="forms-200px">
     <form action="#" th:action="@{/account/submit}" th:object="${account}" method="post">
+        <div th:object="${account}" class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+        </div>
         <div class="form-group">
             <input id="id" class="form-control" type="hidden" th:field="*{id}" />
         </div>

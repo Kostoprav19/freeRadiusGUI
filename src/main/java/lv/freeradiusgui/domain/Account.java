@@ -3,6 +3,8 @@ package lv.freeradiusgui.domain;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +36,7 @@ public class Account {
 
     @Column(name = "created")
     @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
     private LocalDateTime creationDate;
 
     @Column(name = "enabled", nullable = false)
@@ -130,6 +133,10 @@ public class Account {
         this.email = email;
         this.creationDate = creationDate;
         this.enabled = enabled;
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 
     @Override

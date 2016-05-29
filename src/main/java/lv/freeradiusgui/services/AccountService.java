@@ -20,6 +20,10 @@ public interface AccountService {
 
     Long getCount();
 
+    Account prepareNewAccount();
+
+    void fixRolesWithOutId(Account account);
+
 }
 
 
