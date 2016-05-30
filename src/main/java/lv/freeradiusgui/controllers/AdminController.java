@@ -19,12 +19,15 @@ import java.time.LocalDateTime;
 @Controller
 public class AdminController {
 
-    // private final Logger logger = LogManager.getLogger(IndexController.class);
-
     @Autowired
     AccountService accountService;
 
-    @RequestMapping(Views.ADMIN)
+    @ModelAttribute("page")
+    public String module() {
+        return "admin";
+    }
+
+    @RequestMapping(value = Views.ADMIN, method = RequestMethod.GET)
     public ModelAndView adminView() {
         ModelAndView mav = new ModelAndView(Views.ADMIN);
         mav.addObject("accounts", accountService.getAll());

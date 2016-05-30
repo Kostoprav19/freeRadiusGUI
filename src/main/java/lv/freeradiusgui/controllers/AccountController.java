@@ -41,21 +41,26 @@ public class AccountController {
         binder.setValidator(accountFormValidator);
     }
 
+    @ModelAttribute("page")
+    public String module() {
+        return "admin";
+    }
+
     @ModelAttribute("allRoles")
     public List<Role> populateRoles() {
         return roleService.getAll();
     }
 
-    @RequestMapping(value = Views.ACCOUNT + "/{id}")
-    public ModelAndView showAccount(@PathVariable("id") Long accountId) {
+    @RequestMapping(value = Views.ACCOUNT + "/{id}", method = RequestMethod.GET)
+    public ModelAndView showAccount(@PathVariable("id") Integer accountId) {
         Account account = accountService.getById(accountId);
-        ModelAndView mav = new ModelAndView(Views.ACCOUNT);
+        ModelAndView mav = new ModelAndView(Views.ACCOUNT_VIEW);
         mav.addObject("account", accountService.getById(accountId));
         return mav;
     }
 
-    @RequestMapping(value = Views.ACCOUNT + "/delete/{id}")
-    public ModelAndView deleteAccount(@PathVariable("id") Long accountId) {
+    @RequestMapping(value = Views.ACCOUNT + "/delete/{id}", method = RequestMethod.GET)
+    public ModelAndView deleteAccount(@PathVariable("id") Integer accountId) {
 
         Account account = accountService.getById(accountId);
         accountService.delete(account);
@@ -67,13 +72,13 @@ public class AccountController {
         return mav;
     }
 
-    @RequestMapping(value = Views.ACCOUNT + "/submit", method=RequestMethod.POST)
+    @RequestMapping(value = Views.ACCOUNT + "/submit", method = RequestMethod.POST)
     public ModelAndView storeAccount(@ModelAttribute("account") @Validated Account account,
                                      BindingResult result,
                                      SessionStatus status) {
 
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView(Views.ACCOUNT);
+            ModelAndView mav = new ModelAndView(Views.ACCOUNT_VIEW);
             mav.addObject("accounts", account);
             return mav;
         }
@@ -88,10 +93,10 @@ public class AccountController {
         return mav;
     }
 
-    @RequestMapping(value = Views.ACCOUNT + "/add", method=RequestMethod.GET)
+    @RequestMapping(value = Views.ACCOUNT + "/add", method = RequestMethod.GET)
     public ModelAndView addAccount() {
         Account account = accountService.prepareNewAccount();
-        ModelAndView mav = new ModelAndView(Views.ACCOUNT);
+        ModelAndView mav = new ModelAndView(Views.ACCOUNT_VIEW);
         mav.addObject("account", account);
         return mav;
     }

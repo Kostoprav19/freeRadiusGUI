@@ -21,7 +21,7 @@ public class AccountDAOImpl extends AbstractGenericBaseDao<Account> implements A
     }
 
     @Override
-    public Account getById(Long id) {
+    public Account getById(Integer id) {
         if (id == null || id < 0) {
             return null;
         }

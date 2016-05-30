@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title th:text="'Account: ' + ${account.login}"></title>
+    <title th:text="${account.login != null} ? 'Account: ' + ${account.login} : 'New account'"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
     <link rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>

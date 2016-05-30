@@ -11,7 +11,7 @@ public interface SwitchService {
 
     boolean store(Switch sSwitch);
 
-    Switch getById(Long id);
+    Switch getById(Integer id);
 
     List<Switch> getAll();
 
@@ -20,4 +20,6 @@ public interface SwitchService {
     void delete(Switch aSwitch);
 
     Long getCount();
+
+    Switch prepareNewSwitch();
 }

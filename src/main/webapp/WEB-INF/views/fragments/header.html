@@ -23,16 +23,16 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active" th:classappend="${page == 'home' ? 'active' : ''}"><a href="#" th:href="@{/home}">Home</a></li>
-                <li th:classappend="${page == 'reg' ? 'active' : ''}"><a href="#" th:href="@{/reg}">Registrations</a></li>
-                <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/task}">Devices</a></li>
-                <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/task}">Switches</a></li>
+                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs}">Radius logs</a></li>
+                <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/devices}">Devices</a></li>
+                <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
+                <li th:classappend="${page == 'server' ? 'active' : ''}"><a href="#" th:href="@{/server}">Server status</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}">Logout</a></li>
             </ul>
         </div>
         <!--/.nav-collapse -->
-        <script src="../../../resources/js/navbar-activate-link.js" th:src="@{/resources/js/navbar-activate-link.js}"></script>
     </div>
 </div>
 
@@ -49,17 +49,19 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li th:classappend="${page == 'home' ? 'active' : ''}"><a href="#" th:href="@{/home}">Home</a></li>
-                <li th:classappend="${page == 'reg' ? 'active' : ''}"><a href="#" th:href="@{/reg}">Registrations</a></li>
+                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs}">Radius logs</a></li>
                 <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/devices}">Devices</a></li>
-                <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switches}">Switches</a></li>
+                <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
+                <li th:classappend="${page == 'server' ? 'active' : ''}"><a href="#" th:href="@{/server}">Server status</a></li>
                 <li th:classappend="${page == 'admin' ? 'active' : ''}"><a href="#" th:href="@{/admin}">Administration</a></li>
+                <li th:text="${page}">hhh</li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}">Logout</a></li>
             </ul>
         </div>
         <!--/.nav-collapse -->
-        <script src="../../../resources/js/navbar-activate-link.js" th:src="@{/resources/js/navbar-activate-link.js}"></script>
+
     </div>
 </div>
 </body>

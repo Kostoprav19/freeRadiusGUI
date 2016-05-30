@@ -11,7 +11,7 @@ public interface DeviceDAO {
 
     boolean store(Device device);
 
-    Device getById(Long id);
+    Device getById(Integer id);
 
     List<Device> getAll();
 

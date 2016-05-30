@@ -1,6 +1,7 @@
 package lv.freeradiusgui.domain;
 
 import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -37,10 +38,12 @@ public class Device {
 
     @Column(name = "tor")
     @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
     private LocalDateTime timeOfRegistration;
 
     @Column(name = "lastseen")
     @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
     private LocalDateTime lastSeen;
 
     @Column(name = "access")
@@ -145,7 +148,7 @@ public class Device {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof Device)) return false;
 
         Device device = (Device) o;
 

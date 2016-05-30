@@ -12,7 +12,7 @@ public interface AccountDAO {
 
     boolean store(Account account);
 
-    Account getById(Long id);
+    Account getById(Integer id);
 
     Account getByLogin(String login);
 

@@ -6,19 +6,19 @@ CREATE SCHEMA IF NOT EXISTS `freeradiusGUI` DEFAULT CHARACTER SET utf8;
 USE `freeradiusGUI` ;
 
 -- -----------------------------------------------------
--- Table `freeradiusGUI`.`registrations`
+-- Table `freeradiusGUI`.`logs`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `freeradiusGUI`.`registrations` ;
+DROP TABLE IF EXISTS `freeradiusGUI`.`logs` ;
 
-CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`registrations` (
-  `reg_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`logs` (
+  `log_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(16) NOT NULL,
   `switch_id` INT UNSIGNED NOT NULL,
   `port` INT NOT NULL,
   `speed` INT NOT NULL,
   `tor` DATETIME NOT NULL,
   `status` INT NOT NULL,
-  PRIMARY KEY (`reg_id`)
+  PRIMARY KEY (`log_id`)
 )
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;

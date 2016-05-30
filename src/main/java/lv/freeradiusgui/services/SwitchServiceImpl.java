@@ -22,7 +22,7 @@ public class SwitchServiceImpl implements SwitchService{
     }
 
     @Override
-    public Switch getById(Long id) {
+    public Switch getById(Integer id) {
         return switchDAO.getById(id);
     }
 
@@ -44,5 +44,11 @@ public class SwitchServiceImpl implements SwitchService{
     @Override
     public Long getCount() {
         return switchDAO.getCount();
+    }
+
+    @Override
+    public Switch prepareNewSwitch() {
+        Switch aSwitch = new Switch();
+        return aSwitch;
     }
 }

@@ -8,7 +8,7 @@ public interface AccountService {
 
     boolean store(Account account);
 
-    Account getById(Long id);
+    Account getById(Integer id);
 
     Account getByLogin(String login);
 

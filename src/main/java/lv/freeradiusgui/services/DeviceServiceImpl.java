@@ -22,7 +22,7 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
-    public Device getById(Long id) {
+    public Device getById(Integer id) {
         return deviceDAO.getById(id);
     }
 

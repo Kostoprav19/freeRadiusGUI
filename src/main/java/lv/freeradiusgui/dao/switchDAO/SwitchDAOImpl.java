@@ -21,7 +21,7 @@ public class SwitchDAOImpl extends AbstractGenericBaseDao<Switch> implements Swi
     }
 
     @Override
-    public Switch getById(Long id) {
+    public Switch getById(Integer id) {
         if (id == null || id < 0) {
             return null;
         }

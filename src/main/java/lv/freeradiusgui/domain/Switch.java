@@ -36,6 +36,9 @@ public class Switch {
         this.ip = ip;
     }
 
+    public Switch() {
+    }
+
     public int getId() {
         return id;
     }
@@ -77,19 +80,32 @@ public class Switch {
     }
 
     @Override
+    public String toString() {
+        return "Switch{" +
+                "id=" + id +
+                ", mac='" + mac + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", ip='" + ip + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof Switch)) return false;
 
         Switch aSwitch = (Switch) o;
 
-        return mac.equals(aSwitch.mac);
-
+        if (mac != null ? !mac.equals(aSwitch.mac) : aSwitch.mac != null) return false;
+        return ip != null ? ip.equals(aSwitch.ip) : aSwitch.ip == null;
     }
 
     @Override
     public int hashCode() {
-        return mac.hashCode();
+        int result = mac != null ? mac.hashCode() : 0;
+        result = 31 * result + (ip != null ? ip.hashCode() : 0);
+        return result;
     }
 
     public static class SwitchBuilder {

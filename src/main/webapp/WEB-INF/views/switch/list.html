@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Switches</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'">&nbsp;</div>
+<div class="container">
+    <th:block th:if="${param.msg != null}">
+        <div th:replace="fragments/alert :: alert (type=${param.msgType[0]}, message=${param.msg[0]})">Alert</div>
+    </th:block>
+    <div class="page-header">
+        <h1>Switches</h1>
+    </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Mac</th>
+                <th>IP</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="aSwitch : ${switches}">
+                <td th:text="${aSwitch.id}"></td>
+                <td th:text="${aSwitch.name}"></td>
+                <td th:text="${aSwitch.mac}"></td>
+                <td th:text="${aSwitch.ip}"></td>
+                <td th:text="${aSwitch.description}"></td>
+                <td>
+                    <a role="button" class="btn btn-info btn-xs" th:href="@{/switch/{id}(id=${aSwitch.id})}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                    <a role="button" class="btn btn-danger btn-xs" th:href="@{/switch/delete/{id}(id=${aSwitch.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    <a role="button" class="btn btn-success" th:href="@{/switch/add}">Add <span class="glyphicon glyphicon-plus"></span></a>
+    <div th:replace="fragments/footer :: footer"></div>
+</div>
+
+</body>
+</html>
