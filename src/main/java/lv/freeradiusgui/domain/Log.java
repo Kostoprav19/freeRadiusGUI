@@ -6,19 +6,19 @@ import java.time.LocalDateTime;
  * Created by Dan on 24.11.2015.
  */
 public class Log {
-    private int id;
+    private Integer id;
     private String mac;
     private Switch aSwitch;
-    private int switchPort;
-    private int portSpeed;
+    private Integer switchPort;
+    private Integer portSpeed;
     private LocalDateTime timeOfRegistration;
-    private int status;
+    private Integer status;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -27,6 +27,7 @@ public class Log {
     }
 
     public void setMac(String mac) {
+        mac = mac.replaceAll("[^a-fA-F0-9]", ""); //normalize
         this.mac = mac;
     }
 
@@ -38,19 +39,19 @@ public class Log {
         this.aSwitch = aSwitch;
     }
 
-    public int getSwitchPort() {
+    public Integer getSwitchPort() {
         return switchPort;
     }
 
-    public void setSwitchPort(int switchPort) {
+    public void setSwitchPort(Integer switchPort) {
         this.switchPort = switchPort;
     }
 
-    public int getPortSpeed() {
+    public Integer getPortSpeed() {
         return portSpeed;
     }
 
-    public void setPortSpeed(int portSpeed) {
+    public void setPortSpeed(Integer portSpeed) {
         this.portSpeed = portSpeed;
     }
 
@@ -62,11 +63,11 @@ public class Log {
         this.timeOfRegistration = timeOfRegistration;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

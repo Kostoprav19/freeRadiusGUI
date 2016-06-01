@@ -4,14 +4,13 @@ import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Switch;
 import lv.freeradiusgui.services.SwitchService;
 import lv.freeradiusgui.services.SwitchService;
+import lv.freeradiusgui.validators.SwitchFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,9 +23,17 @@ public class SwitchesController {
     @Autowired
     SwitchService switchService;
 
+    @Autowired
+    SwitchFormValidator switchFormValidator;
+
     @ModelAttribute("page")
     public String module() {
         return "switches";
+    }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(switchFormValidator);
     }
 
     @RequestMapping(value = Views.SWITCH_LIST, method = RequestMethod.GET)
@@ -61,6 +68,12 @@ public class SwitchesController {
     public ModelAndView storeSwitch(@ModelAttribute("aSwitch") @Validated Switch aSwitch,
                                      BindingResult result,
                                      SessionStatus status) {
+
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView(Views.SWITCH_VIEW);
+            mav.addObject("aSwitch", aSwitch);
+            return mav;
+        }
 
         switchService.store(aSwitch);
         status.setComplete();

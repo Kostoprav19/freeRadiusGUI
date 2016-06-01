@@ -21,7 +21,7 @@ public class DeviceDAOImpl extends AbstractGenericBaseDao<Device> implements Dev
     }
 
     @Override
-    public Device getById(Long id) {
+    public Device getById(Integer id) {
         if (id == null || id < 0) {
             return null;
         }

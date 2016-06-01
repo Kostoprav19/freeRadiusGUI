@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS `freeradiusGUI`.`logs` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`logs` (
   `log_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `mac` VARCHAR(16) NOT NULL,
+  `mac` VARCHAR(12) NOT NULL,
   `switch_id` INT UNSIGNED NOT NULL,
   `port` INT NOT NULL,
   `speed` INT NOT NULL,
@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS `freeradiusGUI`.`devices` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
   `device_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `mac` VARCHAR(16) NOT NULL,
+  `mac` VARCHAR(12) NOT NULL,
   `name` VARCHAR(30) NOT NULL,
   `descr` VARCHAR(100) NOT NULL,
   `switch_id` BIGINT,
@@ -52,7 +52,7 @@ DROP TABLE IF EXISTS `freeradiusGUI`.`switches` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
   `switch_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `mac` VARCHAR(16) NOT NULL,
+  `mac` VARCHAR(12) NOT NULL,
   `name` VARCHAR(30) NOT NULL,
   `descr` VARCHAR(100) NOT NULL,
   `ip` VARCHAR(16) NOT NULL,

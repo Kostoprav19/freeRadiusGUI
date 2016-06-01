@@ -24,8 +24,6 @@ import java.util.List;
 @SessionAttributes("account")
 public class AccountController {
 
-    // private final Logger logger = LogManager.getLogger(IndexController.class);
-
     @Autowired
     AccountService accountService;
 

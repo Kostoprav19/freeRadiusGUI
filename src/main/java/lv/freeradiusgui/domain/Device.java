@@ -15,7 +15,7 @@ public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "device_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "mac", unique = true)
     private String mac;
@@ -31,10 +31,10 @@ public class Device {
     private Switch aSwitch;
 
     @Column(name = "port")
-    private int switchPort;
+    private Integer switchPort;
 
     @Column(name = "speed")
-    private int portSpeed;
+    private Integer portSpeed;
 
     @Column(name = "tor")
     @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
@@ -47,13 +47,13 @@ public class Device {
     private LocalDateTime lastSeen;
 
     @Column(name = "access")
-    private int access;
+    private Integer access;
 
     public Device(){
 
     }
 
-    public Device(String mac, String name, String description, Switch aSwitch, int switchPort, int portSpeed, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, int access) {
+    public Device(String mac, String name, String description, Switch aSwitch, Integer switchPort, Integer portSpeed, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, Integer access) {
         this.mac = mac;
         this.name = name;
         this.description = description;
@@ -65,11 +65,11 @@ public class Device {
         this.access = access;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -78,6 +78,7 @@ public class Device {
     }
 
     public void setMac(String mac) {
+        mac = mac.replaceAll("[^a-fA-F0-9]", ""); //normalize
         this.mac = mac;
     }
 
@@ -105,19 +106,19 @@ public class Device {
         this.aSwitch = aSwitch;
     }
 
-    public int getSwitchPort() {
+    public Integer getSwitchPort() {
         return switchPort;
     }
 
-    public void setSwitchPort(int switchPort) {
+    public void setSwitchPort(Integer switchPort) {
         this.switchPort = switchPort;
     }
 
-    public int getPortSpeed() {
+    public Integer getPortSpeed() {
         return portSpeed;
     }
 
-    public void setPortSpeed(int portSpeed) {
+    public void setPortSpeed(Integer portSpeed) {
         this.portSpeed = portSpeed;
     }
 
@@ -137,11 +138,11 @@ public class Device {
         this.lastSeen = lastSeen;
     }
 
-    public int getAccess() {
+    public Integer getAccess() {
         return access;
     }
 
-    public void setAccess(int access) {
+    public void setAccess(Integer access) {
         this.access = access;
     }
 
@@ -167,11 +168,11 @@ public class Device {
         private String name;
         private String description;
         private Switch aSwitch;
-        private int switchPort;
-        private int portSpeed;
+        private Integer switchPort;
+        private Integer portSpeed;
         private LocalDateTime timeOfRegistration;
         private LocalDateTime lastSeen;
-        private int access;
+        private Integer access;
 
         public DeviceBuilder() {
         }
@@ -196,12 +197,12 @@ public class Device {
             return this;
         }
 
-        public DeviceBuilder onPort(int switchPort) {
+        public DeviceBuilder onPort(Integer switchPort) {
             this.switchPort = switchPort;
             return this;
         }
 
-        public DeviceBuilder withPortSpeed(int portSpeed) {
+        public DeviceBuilder withPortSpeed(Integer portSpeed) {
             this.portSpeed = portSpeed;
             return this;
         }
@@ -216,7 +217,7 @@ public class Device {
             return this;
         }
 
-        public DeviceBuilder withAccess(int access) {
+        public DeviceBuilder withAccess(Integer access) {
             this.access = access;
             return this;
         }

@@ -17,7 +17,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "login")
     private String login;
@@ -50,11 +50,11 @@ public class Account {
     @Fetch(FetchMode.SUBSELECT)
     private Set<Role> roles = new HashSet<Role>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

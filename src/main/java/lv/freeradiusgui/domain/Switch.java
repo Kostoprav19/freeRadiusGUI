@@ -1,8 +1,6 @@
 package lv.freeradiusgui.domain;
 
 import javax.persistence.*;
-import java.lang.invoke.SwitchPoint;
-import java.time.LocalDateTime;
 
 /**
  * Created by Dan on 24.11.2015.
@@ -13,7 +11,7 @@ public class Switch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "switch_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "mac", unique = true)
     private String mac;
@@ -39,11 +37,11 @@ public class Switch {
     public Switch() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -52,6 +50,7 @@ public class Switch {
     }
 
     public void setMac(String mac) {
+        mac = mac.replaceAll("[^a-fA-F0-9]", ""); //normalize
         this.mac = mac;
     }
 
@@ -103,7 +102,7 @@ public class Switch {
 
     @Override
     public int hashCode() {
-        int result = mac != null ? mac.hashCode() : 0;
+        Integer result = mac != null ? mac.hashCode() : 0;
         result = 31 * result + (ip != null ? ip.hashCode() : 0);
         return result;
     }
