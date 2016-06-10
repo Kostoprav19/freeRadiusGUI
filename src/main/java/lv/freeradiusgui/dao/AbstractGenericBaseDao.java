@@ -42,7 +42,25 @@ public abstract class AbstractGenericBaseDao<T> {
             System.out.println("------------------------------------------------------------------------");
             e.printStackTrace();
             System.out.println("------------------------------------------------------------------------");
-           // logger.error(e.getStackTrace());
+            return false;
+        }
+    }
+
+    public boolean storeAll(List<T> list) {
+        if (list == null) {
+            return false;
+        }
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            for (T obj : list) {
+                session.saveOrUpdate(obj);
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println("Exception while execute AbstractGenericBaseDao.storeAll()");
+            System.out.println("------------------------------------------------------------------------");
+            e.printStackTrace();
+            System.out.println("------------------------------------------------------------------------");
             return false;
         }
     }

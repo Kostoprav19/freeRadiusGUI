@@ -91,4 +91,12 @@ public class SwitchesController {
         mav.addObject("aSwitch", aSwitch);
         return mav;
     }
+
+    @RequestMapping(value = Views.SWITCH + "/reload", method = RequestMethod.GET)
+    public ModelAndView reloadSwitches() {
+        switchService.reloadFromConfig();
+        ModelAndView mav = new ModelAndView(Views.SWITCH_LIST);
+        mav.addObject("switches", switchService.getAll());
+        return mav;
+    }
 }

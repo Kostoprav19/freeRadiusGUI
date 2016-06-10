@@ -52,10 +52,11 @@ DROP TABLE IF EXISTS `freeradiusGUI`.`switches` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
   `switch_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `mac` VARCHAR(12) NOT NULL,
+  `mac` VARCHAR(12),
   `name` VARCHAR(30) NOT NULL,
-  `descr` VARCHAR(100) NOT NULL,
+  `descr` VARCHAR(100),
   `ip` VARCHAR(16) NOT NULL,
+  `secret` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`switch_id`)
 )
   ENGINE = InnoDB

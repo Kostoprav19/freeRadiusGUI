@@ -11,6 +11,8 @@ public interface SwitchDAO {
 
     boolean store(Switch sSwitch);
 
+    boolean storeAll(List<Switch> switchList);
+
     Switch getById(Integer id);
 
     List<Switch> getAll();

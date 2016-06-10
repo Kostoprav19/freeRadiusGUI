@@ -24,14 +24,20 @@ public class Switch {
 
     @Column(name = "ip")
     private String ip;
+
+    @Column(name = "secret")
+    private String secret;
+
+
     //TODO: additional fields like numberOfPorts, vendor, model, year
 
 
-    public Switch(String mac, String name, String description, String ip) {
+    public Switch(String mac, String name, String description, String ip, String secret) {
         this.mac = mac;
         this.name = name;
         this.description = description;
         this.ip = ip;
+        this.secret = secret;
     }
 
     public Switch() {
@@ -78,6 +84,14 @@ public class Switch {
         this.ip = ip;
     }
 
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
     @Override
     public String toString() {
         return "Switch{" +
@@ -86,6 +100,7 @@ public class Switch {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", ip='" + ip + '\'' +
+                ", secret='" + secret + '\'' +
                 '}';
     }
 
@@ -113,7 +128,8 @@ public class Switch {
         private String name;
         private String description;
         private String ip;
-        
+        private String secret;
+
         public SwitchBuilder() {
         }
 
@@ -137,9 +153,13 @@ public class Switch {
             return this;
         }
 
+        public SwitchBuilder withSecret(String secret) {
+            this.secret = secret;
+            return this;
+        }
 
         public Switch build() {
-            return new Switch(mac, name, description, ip);
+            return new Switch(mac, name, description, ip, secret);
         }
     }
 }

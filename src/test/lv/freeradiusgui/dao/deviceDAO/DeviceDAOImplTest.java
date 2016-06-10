@@ -129,7 +129,7 @@ public class DeviceDAOImplTest {
         assertTrue(deviceDAO.store(device1));
         assertTrue(deviceDAO.store(device2));
 
-        Device storedDevice = deviceDAO.getById(Long.MAX_VALUE);
+        Device storedDevice = deviceDAO.getById(Integer.MAX_VALUE);
         assertTrue(storedDevice == null);
     }
 

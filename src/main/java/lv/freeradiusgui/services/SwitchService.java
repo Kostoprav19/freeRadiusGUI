@@ -11,6 +11,8 @@ public interface SwitchService {
 
     boolean store(Switch sSwitch);
 
+    boolean storeAll(List<Switch> switchList);
+
     Switch getById(Integer id);
 
     List<Switch> getAll();
@@ -22,4 +24,6 @@ public interface SwitchService {
     Long getCount();
 
     Switch prepareNewSwitch();
+
+    void reloadFromConfig();
 }
