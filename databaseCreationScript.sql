@@ -32,13 +32,13 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
   `device_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(12) NOT NULL,
   `name` VARCHAR(30) NOT NULL,
-  `descr` VARCHAR(100) NOT NULL,
+  `descr` VARCHAR(100),
   `switch_id` BIGINT,
-  `port` INT NOT NULL,
-  `speed` INT NOT NULL,
+  `port` INT,
+  `speed` INT,
   `tor` DATETIME NOT NULL,
   `lastseen` DATETIME NOT NULL,
-  `access` INT NOT NULL,
+  `access` INT,
   PRIMARY KEY (`device_id`)
 )
   ENGINE = InnoDB
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
   `name` VARCHAR(30) NOT NULL,
   `descr` VARCHAR(100),
   `ip` VARCHAR(16) NOT NULL,
-  `secret` VARCHAR(60) NOT NULL,
+  `secret` VARCHAR(60),
   PRIMARY KEY (`switch_id`)
 )
   ENGINE = InnoDB

@@ -57,7 +57,7 @@ public class ClientsConfigFileServiceImplTest {
 
     @Test
     public void testReadFromFile() {
-        List<Switch> list = clientsConfigFileService.parseList(clientsConfigFileService.readFile());
+        List<Switch> list = clientsConfigFileService.parseList(clientsConfigFileService.readConfigFile());
         System.out.println(list);
     }
 

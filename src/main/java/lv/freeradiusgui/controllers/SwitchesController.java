@@ -94,8 +94,14 @@ public class SwitchesController {
 
     @RequestMapping(value = Views.SWITCH + "/reload", method = RequestMethod.GET)
     public ModelAndView reloadSwitches() {
-        switchService.reloadFromConfig();
-        ModelAndView mav = new ModelAndView(Views.SWITCH_LIST);
+        ModelAndView mav = new ModelAndView("redirect:/" + Views.SWITCH_LIST);
+        if (switchService.reloadFromConfig()) {
+            mav.addObject("msg", "Successfully loaded clients.config file.");
+            mav.addObject("msgType", "success");
+        } else {
+            mav.addObject("msg", "Error loading clients.config file.");
+            mav.addObject("msgType", "error");
+        }
         mav.addObject("switches", switchService.getAll());
         return mav;
     }

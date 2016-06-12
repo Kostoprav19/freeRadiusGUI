@@ -37,6 +37,11 @@ public class SwitchServiceImpl implements SwitchService{
     }
 
     @Override
+    public Switch getByIp(String ip) {
+        return switchDAO.getByIp(ip);
+    }
+
+    @Override
     public List<Switch> getAll() {
         return switchDAO.getAll();
     }
@@ -63,27 +68,29 @@ public class SwitchServiceImpl implements SwitchService{
     }
 
     @Override
-    public void reloadFromConfig() {
-        List<String> list = clientsConfigFileService.readFile();
-        List<Switch> listFromConfig = clientsConfigFileService.parseList(list);
+    public boolean reloadFromConfig() {
+        List<Switch> listFromConfig = clientsConfigFileService.readConfigFile();
+        if (listFromConfig == null) return false;
 
         List<Switch> finalList = updateSwitchList(listFromConfig);
 
         switchDAO.storeAll(finalList);
-
+        return true;
     }
 
     private List<Switch> updateSwitchList(List<Switch> listFromConfig) {
         List<Switch> result = new ArrayList<>();
-        List<Switch> listFromDB = switchDAO.getAll();
 
-        for (Switch switchFromDB : listFromDB){
-            Switch switchFromConfig = find(switchFromDB, listFromConfig);
-            if (switchFromConfig != null ) {
-                result.add(updateSwitch(switchFromDB, switchFromConfig));
-                listFromConfig.remove(listFromConfig.indexOf(switchFromConfig)); //cant use remove because it is used for Hibernate
+        for (Switch switchFromConfig : listFromConfig){
+            Switch switchFromDB = getByIp(switchFromConfig.getIp());
+            if (switchFromDB != null ) {
+                switchFromDB.setName(switchFromConfig.getName());
+                switchFromDB.setSecret(switchFromConfig.getSecret());
+                result.add(switchFromDB);
+            } else {
+                result.add(switchFromConfig);
             }
         }
-
+        return result;
     }
 }

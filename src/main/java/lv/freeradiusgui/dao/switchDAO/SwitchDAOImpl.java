@@ -31,4 +31,12 @@ public class SwitchDAOImpl extends AbstractGenericBaseDao<Switch> implements Swi
         return getOneByCriteria("id", id);
     }
 
+    @Override
+    public Switch getByIp(String ip) {
+        if (ip == null | ip.isEmpty()) {
+            return null;
+        }
+        return getOneByCriteria("ip", ip);
+    }
+
 }

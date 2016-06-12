@@ -15,6 +15,8 @@ public interface SwitchDAO {
 
     Switch getById(Integer id);
 
+    Switch getByIp(String ip);
+
     List<Switch> getAll();
 
     List<Switch> getAllByCriteria(String fieldName, Object object);

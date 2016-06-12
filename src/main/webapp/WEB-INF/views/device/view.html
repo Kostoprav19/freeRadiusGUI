@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title th:text="${aSwitch.name != null} ? 'Switch: ' + ${aSwitch.name} : 'New switch'"></title>
+    <title th:text="${device.name != null} ? 'Switch: ' + ${device.name} : 'New switch'"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
     <link rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
@@ -15,10 +15,10 @@
 <div class="container">
 
     <div class="page-header">
-        <th:block th:if="${aSwitch.name != null}">
-            <h1 th:text="'Edit switch: ' + ${aSwitch.name}"> </h1>
+        <th:block th:if="${device.name != null}">
+            <h1 th:text="'Edit switch: ' + ${device.name}"> </h1>
         </th:block>
-        <th:block th:if="${aSwitch.name == null}">
+        <th:block th:if="${device.name == null}">
             <h1 th:text="'Create new switch'"> </h1>
         </th:block>
         <th:block th:if="${param.msg != null}">
@@ -27,8 +27,8 @@
     </div>
 
     <div class="forms-200px">
-    <form action="#" th:action="@{/switch/submit}" th:object="${aSwitch}" method="post">
-        <div th:object="${aSwitch}" class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+    <form action="#" th:action="@{/device/submit}" th:object="${device}" method="post">
+        <div th:object="${device}" class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
             <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
         </div>
         <div class="form-group">
@@ -56,8 +56,8 @@
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
-            <a role="button" class="btn btn-danger" th:href="@{/switch/delete/{id}(id=${aSwitch.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
-            <a role="button" class="btn btn-default" th:href="@{/switch/list}"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
+            <a role="button" class="btn btn-danger" th:href="@{/device/delete/{id}(id=${device.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+            <a role="button" class="btn btn-default" th:href="@{/device/list}"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
         </div>
     </form>
 </div>

@@ -25,19 +25,19 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
     public static final String IPADDR_PATTERN = "^ipaddr = (.+)$";
 
 
-    public List<String> readFile(){
-        List<String> list = new ArrayList<>();
+    public List<Switch> readConfigFile(){
+        List<String> listFromConfig = new ArrayList<>();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(FILE_NAME))) {
 
             //br returns as stream and convert it into a List
-            list = br.lines().collect(Collectors.toList());
+            listFromConfig = br.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
 
-        return list;
+        return parseList(listFromConfig);
     }
 
 

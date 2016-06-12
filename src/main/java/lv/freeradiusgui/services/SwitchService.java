@@ -15,6 +15,8 @@ public interface SwitchService {
 
     Switch getById(Integer id);
 
+    Switch getByIp(String ip);
+
     List<Switch> getAll();
 
     List<Switch> getAllByCriteria(String fieldName, Object object);
@@ -25,5 +27,5 @@ public interface SwitchService {
 
     Switch prepareNewSwitch();
 
-    void reloadFromConfig();
+    boolean reloadFromConfig();
 }
