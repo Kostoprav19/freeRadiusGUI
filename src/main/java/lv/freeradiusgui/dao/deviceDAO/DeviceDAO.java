@@ -1,6 +1,7 @@
 package lv.freeradiusgui.dao.deviceDAO;
 
 import lv.freeradiusgui.domain.Device;
+
 import java.util.List;
 
 /**
@@ -10,6 +11,8 @@ import java.util.List;
 public interface DeviceDAO {
 
     boolean store(Device device);
+
+    boolean storeAll(List<Device> deviceList);
 
     Device getById(Integer id);
 

@@ -10,7 +10,7 @@
             <AppenderRef ref="Console"/>
         </Root>
 
-        <logger name="lv.freeradiusgui" level="WARN">
+        <logger name="lv.freeradiusgui" level="DEBUG">
             <AppenderRef ref="Console"/>
         </logger>
 

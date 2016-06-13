@@ -96,11 +96,11 @@ public class SwitchesController {
     public ModelAndView reloadSwitches() {
         ModelAndView mav = new ModelAndView("redirect:/" + Views.SWITCH_LIST);
         if (switchService.reloadFromConfig()) {
-            mav.addObject("msg", "Successfully loaded clients.config file.");
+            mav.addObject("msg", "Successfully loaded 'clients.config' file.");
             mav.addObject("msgType", "success");
         } else {
-            mav.addObject("msg", "Error loading clients.config file.");
-            mav.addObject("msgType", "error");
+            mav.addObject("msg", "Error loading 'clients.config' file.");
+            mav.addObject("msgType", "danger");
         }
         mav.addObject("switches", switchService.getAll());
         return mav;

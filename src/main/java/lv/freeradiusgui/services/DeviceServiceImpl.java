@@ -5,6 +5,7 @@ import lv.freeradiusgui.domain.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -19,6 +20,11 @@ public class DeviceServiceImpl implements DeviceService{
     @Override
     public boolean store(Device device) {
         return deviceDAO.store(device);
+    }
+
+    @Override
+    public boolean storeAll(List<Device> deviceList) {
+        return deviceDAO.storeAll(deviceList);
     }
 
     @Override
@@ -44,5 +50,20 @@ public class DeviceServiceImpl implements DeviceService{
     @Override
     public Long getCount() {
         return deviceDAO.getCount();
+    }
+
+    @Override
+    public Device prepareNewDevice() {
+        Device device = new Device();
+        device.setAccess(1); //Access-Accept
+        device.setTimeOfRegistration(LocalDateTime.now());
+        device.setSwitchPort(-1); //No information yet
+        device.setPortSpeed(-1);
+        return device;
+    }
+
+    @Override
+    public boolean reloadFromConfig() {
+        return false;
     }
 }

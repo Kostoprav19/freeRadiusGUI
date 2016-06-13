@@ -23,20 +23,29 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Name</th>
                 <th>Mac</th>
-                <th>IP</th>
+                <th>Name</th>
                 <th>Description</th>
+                <th>Access</th>
+                <th>Switch name</th>
+                <th>Port</th>
+                <th>Speed</th>
+                <th>Time of Registration</th>
+                <th>Last Seen</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="device : ${devices}">
-                <td th:text="${device.id}"></td>
-                <td th:text="${device.name}"></td>
                 <td th:text="${device.mac}"></td>
-                <td th:text="${device.ip}"></td>
+                <td th:text="${device.name}"></td>
                 <td th:text="${device.description}"></td>
+                <td th:text="${device.access}"></td>
+                <td th:text="${device.switch.getName()}"></td>
+                <td th:text="${device.switchPort}"></td>
+                <td th:text="${device.portSpeed}"></td>
+                <td th:text="${#temporals.format(device.timeOfRegistration, 'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')}"></td>
                 <td>
                     <a role="button" class="btn btn-info btn-xs" th:href="@{/device/{id}(id=${device.id})}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                     <a role="button" class="btn btn-danger btn-xs" th:href="@{/device/delete/{id}(id=${device.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
@@ -45,7 +54,7 @@
             </tbody>
         </table>
     <a role="button" class="btn btn-success" th:href="@{/device/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
-    <a role="button" class="btn btn-primary" th:href="@{/device/reload}"><span class="glyphicon glyphicon-refresh"></span> Reload from 'clients.conf' file</a>
+    <a role="button" class="btn btn-primary" th:href="@{/device/reload}"><span class="glyphicon glyphicon-refresh"></span> Reload from 'users' file</a>
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 

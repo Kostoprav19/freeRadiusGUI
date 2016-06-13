@@ -11,6 +11,8 @@ public interface DeviceService {
 
     boolean store(Device device);
 
+    boolean storeAll(List<Device> deviceList);
+
     Device getById(Integer id);
 
     List<Device> getAll();
@@ -20,4 +22,8 @@ public interface DeviceService {
     void delete(Device device);
 
     Long getCount();
+
+    Device prepareNewDevice();
+
+    boolean reloadFromConfig();
 }

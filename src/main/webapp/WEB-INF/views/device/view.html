@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title th:text="${device.name != null} ? 'Switch: ' + ${device.name} : 'New switch'"></title>
+    <title th:text="${device.name != null} ? 'Device: ' + ${device.name} : 'New device'"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
     <link rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
@@ -16,10 +16,10 @@
 
     <div class="page-header">
         <th:block th:if="${device.name != null}">
-            <h1 th:text="'Edit switch: ' + ${device.name}"> </h1>
+            <h1 th:text="'Edit device: ' + ${device.name}"> </h1>
         </th:block>
         <th:block th:if="${device.name == null}">
-            <h1 th:text="'Create new switch'"> </h1>
+            <h1 th:text="'Create new device'"> </h1>
         </th:block>
         <th:block th:if="${param.msg != null}">
             <div th:replace="fragments/alert :: alert (type=${param.msgType[0]}, message=${param.msg[0]})">Alert</div>
@@ -35,25 +35,47 @@
             <input id="id" class="form-control" type="hidden" th:field="*{id}" />
         </div>
         <div class="form-group">
+            <label for="mac">Mac address</label>
+            <input id="mac" class="form-control" type="text" th:field="*{mac}" placeholder="Mac address" th:autofocus="true"/>
+        </div>
+        <div class="form-group">
             <label for="name">Name</label>
-            <input id="name" class="form-control" type="text" th:field="*{name}" placeholder="Name" th:autofocus="true"/>
-        </div>
-        <div class="form-group">
-            <label for="mac">Mac</label>
-            <input id="mac" class="form-control" type="text" th:field="*{mac}" placeholder="Mac address"/>
-        </div>
-        <div class="form-group">
-            <label for="ip">IP</label>
-            <input id="ip" class="form-control" type="text" th:field="*{ip}" placeholder="IP address"/>
-        </div>
-        <div class="form-group">
-            <label for="ip">Secret</label>
-            <input id="ip" class="form-control" type="text" th:field="*{secret}" placeholder="Secret"/>
+            <input id="name" class="form-control" type="text" th:field="*{name}" placeholder="Name"/>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
             <textarea id="description" class="form-control" type="text" th:field="*{description}" placeholder="Description"/>
         </div>
+        <div class="form-group">
+            <label for="access">Access</label>
+            <select class="form-control" id="access" th:field="*{access}">
+                <option value="0">Reject</option>
+                <option value="1">Accept</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="switch">Switch</label>
+            <p id="switch" th:text="*{switch?.id}"></p>
+        </div>
+        <div class="form-group">
+            <label for="port">Port number</label>
+            <p th:if="${device.portSpeed != -1}" id="port" th:text="*{switchPort}"></p>
+        </div>
+        <div class="form-group">
+            <label for="portspeed">Port speed</label>
+            <p id="portspeed" th:text="*{portSpeed}"></p>
+        </div>
+        <div class="form-group">
+            <label for="tor">Time of registration</label>
+            <p id="tor" th:if="${device.timeOfRegistration != null}" th:text="${#temporals.format(device.timeOfRegistration, 'dd.MM.yyyy HH:mm')}"></p>
+
+        </div>
+        <div class="form-group">
+            <label for="lastseen">Last seen</label>
+            <p id="lastseen" th:if="${device.timeOfRegistration != null}" th:text="${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')}"></p>
+        </div>
+
         <div class="form-group">
             <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
             <a role="button" class="btn btn-danger" th:href="@{/device/delete/{id}(id=${device.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
