@@ -1,6 +1,8 @@
 package lv.freeradiusgui.validators;
 
 import lv.freeradiusgui.domain.Device;
+import lv.freeradiusgui.services.DeviceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -14,6 +16,9 @@ import java.util.regex.Pattern;
  */
 @Component("deviceFormValidator")
 public class DeviceFormValidator implements Validator{
+
+    @Autowired
+    DeviceService deviceService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -31,6 +36,10 @@ public class DeviceFormValidator implements Validator{
 
         if (!isMacValid(device.getMac())){
             errors.rejectValue("mac", "Pattern.deviceForm.mac");
+        }
+
+        if (deviceService.getByMac(device.getMac()) != null){
+            errors.rejectValue("mac", "Exist.deviceForm.mac");
         }
 
     }

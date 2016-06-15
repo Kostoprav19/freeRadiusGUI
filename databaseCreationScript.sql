@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
   `switch_id` BIGINT,
   `port` INT,
   `speed` INT,
-  `tor` DATETIME NOT NULL,
-  `lastseen` DATETIME NOT NULL,
+  `tor` DATETIME,
+  `lastseen` DATETIME,
   `access` INT,
   PRIMARY KEY (`device_id`)
 )

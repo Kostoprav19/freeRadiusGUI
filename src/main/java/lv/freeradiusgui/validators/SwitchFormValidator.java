@@ -1,6 +1,8 @@
 package lv.freeradiusgui.validators;
 
+import lv.freeradiusgui.dao.switchDAO.SwitchDAO;
 import lv.freeradiusgui.domain.Switch;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -14,6 +16,9 @@ import java.util.regex.Pattern;
  */
 @Component("switchFormValidator")
 public class SwitchFormValidator implements Validator{
+
+    @Autowired
+    SwitchDAO switchDAO;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -37,6 +42,11 @@ public class SwitchFormValidator implements Validator{
         if (!isIPValid(aSwitch.getIp())){
             errors.rejectValue("ip", "Pattern.switchForm.ip");
         }
+
+        if (switchDAO.getByIp(aSwitch.getIp()) != null){
+            errors.rejectValue("ip", "Exist.switchForm.ip");
+        }
+
 
     }
 

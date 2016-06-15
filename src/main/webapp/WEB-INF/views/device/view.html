@@ -15,10 +15,10 @@
 <div class="container">
 
     <div class="page-header">
-        <th:block th:if="${device.name != null}">
+        <th:block th:if="${device.id != null}">
             <h1 th:text="'Edit device: ' + ${device.name}"> </h1>
         </th:block>
-        <th:block th:if="${device.name == null}">
+        <th:block th:if="${device.id == null}">
             <h1 th:text="'Create new device'"> </h1>
         </th:block>
         <th:block th:if="${param.msg != null}">
@@ -53,29 +53,29 @@
                 <option value="1">Accept</option>
             </select>
         </div>
-
+        <th:block th:if="${device.id != null }">
         <div class="form-group">
             <label for="switch">Switch</label>
-            <p id="switch" th:text="*{switch?.id}"></p>
+            <p id="switch" th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></p>
         </div>
         <div class="form-group">
             <label for="port">Port number</label>
-            <p th:if="${device.portSpeed != -1}" id="port" th:text="*{switchPort}"></p>
+            <p id="port" th:text="${device.switchPort != -1} ? ${device.switchPort} : 'N/a'"></p>
         </div>
         <div class="form-group">
             <label for="portspeed">Port speed</label>
-            <p id="portspeed" th:text="*{portSpeed}"></p>
+            <p id="portspeed" th:text="${device.portSpeed != -1} ? ${device.portSpeed} : 'N/a'"></p>
         </div>
         <div class="form-group">
             <label for="tor">Time of registration</label>
-            <p id="tor" th:if="${device.timeOfRegistration != null}" th:text="${#temporals.format(device.timeOfRegistration, 'dd.MM.yyyy HH:mm')}"></p>
+            <p id="tor" th:text="${device.timeOfRegistration != null} ? ${#temporals.format(device.timeOfRegistration, 'dd.MM.yyyy HH:mm')} : 'N/a'"></p>
 
         </div>
         <div class="form-group">
             <label for="lastseen">Last seen</label>
-            <p id="lastseen" th:if="${device.timeOfRegistration != null}" th:text="${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')}"></p>
+            <p id="lastseen" th:text="${device.lastSeen != null} ? ${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')} : 'N/a'"></p>
         </div>
-
+        </th:block>
         <div class="form-group">
             <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
             <a role="button" class="btn btn-danger" th:href="@{/device/delete/{id}(id=${device.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>

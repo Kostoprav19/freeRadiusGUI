@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by Dan on 30.04.2016.
  */
 @Controller
+@SessionAttributes("switch")
 public class SwitchesController {
 
     @Autowired

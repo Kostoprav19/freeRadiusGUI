@@ -16,6 +16,8 @@ public interface DeviceDAO {
 
     Device getById(Integer id);
 
+    Device getByMac(String mac);
+
     List<Device> getAll();
 
     List<Device> getAllByCriteria(String fieldName, Object object);

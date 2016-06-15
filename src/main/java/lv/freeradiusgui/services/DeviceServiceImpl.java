@@ -33,6 +33,11 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
+    public Device getByMac(String mac) {
+        return deviceDAO.getByMac(mac);
+    }
+
+    @Override
     public List<Device> getAll() {
         return deviceDAO.getAll();
     }

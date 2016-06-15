@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by Dan on 30.04.2016.
  */
 @Controller
+@SessionAttributes("device")
 public class DevicesController {
 
     @Autowired
@@ -30,9 +31,15 @@ public class DevicesController {
         return "devices";
     }
 
-    @InitBinder
+    @InitBinder("device")
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(deviceFormValidator);
+        try {
+            if (deviceFormValidator.supports(binder.getTarget().getClass())) {
+                binder.setValidator(deviceFormValidator);
+            }
+        }catch (Exception e) {
+                e.printStackTrace();
+    }
     }
 
     @RequestMapping(value = Views.DEVICE_LIST, method = RequestMethod.GET)

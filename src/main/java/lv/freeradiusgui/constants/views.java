@@ -16,6 +16,6 @@ public final class Views {
     public static final String SWITCH_LIST = "switch/list";
 
     public static final String DEVICE = "device";
+    public static final String DEVICE_VIEW = "device/view";
     public static final String DEVICE_LIST = "device/list";
-    public static final String DEVICE_VIEW = "device/list";
 }

@@ -28,4 +28,12 @@ public class DeviceDAOImpl extends AbstractGenericBaseDao<Device> implements Dev
         return getOneByCriteria("id", id);
     }
 
+    @Override
+    public Device getByMac(String mac) {
+        if (mac == null || mac.isEmpty()) {
+            return null;
+        }
+        return getOneByCriteria("mac", mac);
+    }
+
 }
