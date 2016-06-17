@@ -25,7 +25,6 @@
                 <th>#</th>
                 <th>Mac</th>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Access</th>
                 <th>Switch name</th>
                 <th>Port</th>
@@ -40,8 +39,7 @@
                 <td th:text="${device.id}"></td>
                 <td th:text="${device.mac}"></td>
                 <td th:text="${device.name}"></td>
-                <td th:text="${device.description}"></td>
-                <td th:text="${device.access == 1} ? 'Access-Accept' : 'Access-Reject'"></td>
+                <td th:text="${device.access == 1} ? 'Accept' : 'Reject'"></td>
                 <td th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></td>
                 <td th:text="${device.switchPort != -1} ? ${device.switchPort} : 'N/a'"></td>
                 <td th:text="${device.portSpeed != -1} ? ${device.portSpeed} : 'N/a'"></td>

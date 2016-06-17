@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS `freeradiusGUI`.`devices` ;
 CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
   `device_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(12) NOT NULL,
-  `name` VARCHAR(30) NOT NULL,
+  `name` VARCHAR(60) NOT NULL,
   `descr` VARCHAR(100),
   `switch_id` BIGINT,
   `port` INT,

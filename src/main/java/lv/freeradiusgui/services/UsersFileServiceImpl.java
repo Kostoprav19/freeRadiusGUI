@@ -20,16 +20,9 @@ import java.util.stream.Collectors;
 public class UsersFileServiceImpl implements UsersFileService{
     public static final String FILE_NAME = "users";
 
-    public static final String MAC_PATTERN = "^client (.+)\\{";
-    public static final String ACCESS_PATTERN = "^client (.+)\\{";
-    public static final String DEVICENAME_PATTERN = "^client (.+)\\{";
-
-
-
-    public static final String CLIENT_PATTERN = "^client (.+)\\{";
-    public static final String SECRET_PATTERN = "^secret = (.+)$";
-    public static final String SHORTNAME_PATTERN = "^shortname = (.+)$";
-    public static final String IPADDR_PATTERN = "^ipaddr = (.+)$";
+    public static final String MAC_PATTERN = "^(([0-9a-fA-F]){12})";
+    public static final String ACCESS_PATTERN = "Auth-Type := (\\w+)";
+    public static final String DEVICENAME_PATTERN = "Reply-Message = \"(.+?),";
 
 
     public List<Device> readConfigFile(){
@@ -67,20 +60,18 @@ public class UsersFileServiceImpl implements UsersFileService{
 
     private Device parseDevice(List<String> list) {
         Device newDevice = new Device();
-
-        newDevice.setIp(parseValue(list.get(0), CLIENT_PATTERN));
-
-            for (int index = 1; index < list.size(); index ++){
+            for (int index = 0; index < list.size(); index ++){
                 String string = list.get(index);
-                if (string.contains("secret")){
-                    newDevice.setSecret(parseValue(list.get(index), SECRET_PATTERN));
+                if (string.contains("Reply-Message")){
+                    newDevice.setName(parseValue(list.get(index), DEVICENAME_PATTERN));
                 }
-                if (string.contains("shortname")){
-                    newDevice.setName(parseValue(list.get(index), SHORTNAME_PATTERN));
-                }
-                if (string.contains("ipaddr")){
-                    newDevice.setName(newDevice.getIp());
-                    newDevice.setIp(parseValue(list.get(index), IPADDR_PATTERN));
+                if (string.contains("Auth-Type")){
+                    newDevice.setMac(parseValue(list.get(index), MAC_PATTERN));
+                    if (parseValue(list.get(index), ACCESS_PATTERN).equals("Accept")) {
+                        newDevice.setAccess(1);
+                    } else {
+                        newDevice.setAccess(0);
+                    }
                 }
             }
         return newDevice;

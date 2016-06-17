@@ -76,8 +76,9 @@ public abstract class AbstractGenericBaseDao<T> {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(persistentClass);
         criteria.add(Restrictions.eq(fieldName, object));
-        T obj = (T) criteria.uniqueResult();
 
+        List<T> list = criteria.list();
+        T obj = list.isEmpty() ? null : (T) criteria.list().get(0);
         return obj;
     }
 

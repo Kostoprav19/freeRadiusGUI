@@ -99,7 +99,7 @@ public class DevicesController {
     }
 
     @RequestMapping(value = Views.DEVICE + "/reload", method = RequestMethod.GET)
-    public ModelAndView reloadDevicees() {
+    public ModelAndView reloadDevices() {
         ModelAndView mav = new ModelAndView("redirect:/" + Views.DEVICE_LIST);
         if (deviceService.reloadFromConfig()) {
             mav.addObject("msg", "Successfully loaded 'users' file.");

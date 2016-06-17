@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,9 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Autowired
     private DeviceDAO deviceDAO;
+
+    @Autowired
+    private UsersFileService usersFileService;
 
     @Override
     public boolean store(Device device) {
@@ -63,12 +67,34 @@ public class DeviceServiceImpl implements DeviceService{
         device.setAccess(1); //Access-Accept
         device.setTimeOfRegistration(LocalDateTime.now());
         device.setSwitchPort(-1); //No information yet
-        device.setPortSpeed(-1);
+        device.setPortSpeed(-1); //No information yet
         return device;
     }
 
     @Override
     public boolean reloadFromConfig() {
-        return false;
+        List<Device> listFromFile = usersFileService.readConfigFile();
+        if (listFromFile == null) return false;
+
+        List<Device> finalList = updateDeviceList(listFromFile);
+
+        deviceDAO.storeAll(finalList);
+        return true;
+    }
+
+    private List<Device> updateDeviceList(List<Device> listFromFile) {
+        List<Device> result = new ArrayList<>();
+
+        for (Device deviceFromConfig : listFromFile){
+            Device switchFromDB = getByMac(deviceFromConfig.getMac());
+            if (switchFromDB != null ) {
+                switchFromDB.setName(deviceFromConfig.getName());
+                switchFromDB.setAccess(deviceFromConfig.getAccess());
+                result.add(switchFromDB);
+            } else {
+                result.add(deviceFromConfig);
+            }
+        }
+        return result;
     }
 }

@@ -77,6 +77,22 @@ public class Device {
         return mac;
     }
 
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id=" + id +
+                ", mac='" + mac + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", aSwitch=" + aSwitch +
+                ", switchPort=" + switchPort +
+                ", portSpeed=" + portSpeed +
+                ", timeOfRegistration=" + timeOfRegistration +
+                ", lastSeen=" + lastSeen +
+                ", access=" + access +
+                '}';
+    }
+
     public void setMac(String mac) {
         mac = mac.replaceAll("[^a-fA-F0-9]", ""); //normalize
         this.mac = mac;
