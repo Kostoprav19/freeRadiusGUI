@@ -12,6 +12,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 /**
  * Created by Dan on 30.04.2016.
@@ -27,8 +30,13 @@ public class DevicesController {
     DeviceFormValidator deviceFormValidator;
 
     @ModelAttribute("page")
-    public String module() {
+    public String page() {
         return "devices";
+    }
+
+    @ModelAttribute("allTypes")
+    public List<String> allType() {
+        return Device.TYPE_ALL;
     }
 
     @InitBinder("device")
@@ -58,16 +66,16 @@ public class DevicesController {
     }
 
     @RequestMapping(value = Views.DEVICE + "/delete/{id}", method = RequestMethod.GET)
-    public ModelAndView deleteDevice(@PathVariable("id") Integer deviceId) {
+    public String deleteDevice(@PathVariable("id") Integer deviceId, final RedirectAttributes redirectAttributes) {
 
         Device device = deviceService.getById(deviceId);
         deviceService.delete(device);
 
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.DEVICE_LIST);
-        mav.addObject("device", deviceService.getAll());
-        mav.addObject("msg", "Device '" + device.getName() + "' successfully deleted.");
-        mav.addObject("msgType", "success");
-        return mav;
+      //  ModelAndView mav = new ModelAndView("redirect:/" + Views.DEVICE_LIST);
+      //  mav.addObject("device", deviceService.getAll());
+        redirectAttributes.addFlashAttribute("msg", "Device '" + device.getName() + "' successfully deleted.");
+        redirectAttributes.addFlashAttribute("msgType", "success");
+        return "redirect:/" + Views.DEVICE_LIST;
     }
 
     @RequestMapping(value = Views.DEVICE + "/submit", method = RequestMethod.POST)

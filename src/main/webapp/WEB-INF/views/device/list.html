@@ -8,23 +8,27 @@
     <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
     <link href="css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="js/jquery-2.2.4.js" th:src="@{/resources/js/jquery-2.2.4.min.js}"></script>
     <script src="js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'">&nbsp;</div>
 <div class="container">
-    <th:block th:if="${param.msg != null}">
-        <div th:replace="fragments/alert :: alert (type=${param.msgType[0]}, message=${param.msg[0]})">Alert</div>
+    <th:block th:if="${msg != null}">
+        <div th:replace="fragments/alert :: alert (type=${msgType}, message=${msg})">Alert</div>
     </th:block>
     <div class="page-header">
         <h1>Devices</h1>
     </div>
-        <table class="table table-striped">
+    <a role="button" class="btn btn-success" th:href="@{/device/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
+    <a role="button" class="btn btn-primary" th:href="@{/device/reload}"><span class="glyphicon glyphicon-refresh"></span> Reload from 'users' file</a>
+    <table class="table table-striped">
             <thead>
             <tr>
                 <th>#</th>
                 <th>Mac</th>
                 <th>Name</th>
+                <th>Type</th>
                 <th>Access</th>
                 <th>Switch name</th>
                 <th>Port</th>
@@ -39,6 +43,7 @@
                 <td th:text="${device.id}"></td>
                 <td th:text="${device.mac}"></td>
                 <td th:text="${device.name}"></td>
+                <td th:text="${device.type != null} ? ${device.type} : 'Not set'"></td>
                 <td th:text="${device.access == 1} ? 'Accept' : 'Reject'"></td>
                 <td th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></td>
                 <td th:text="${device.switchPort != -1} ? ${device.switchPort} : 'N/a'"></td>

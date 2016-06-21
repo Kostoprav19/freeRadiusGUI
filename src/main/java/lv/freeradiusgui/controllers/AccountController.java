@@ -40,7 +40,7 @@ public class AccountController {
     }
 
     @ModelAttribute("page")
-    public String module() {
+    public String page() {
         return "admin";
     }
 

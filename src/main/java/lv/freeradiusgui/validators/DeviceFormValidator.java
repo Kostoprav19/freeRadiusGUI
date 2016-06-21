@@ -38,7 +38,7 @@ public class DeviceFormValidator implements Validator{
             errors.rejectValue("mac", "Pattern.deviceForm.mac");
         }
 
-        if (deviceService.getByMac(device.getMac()) != null){
+        if ((device.getId() == null) && (deviceService.getByMac(device.getMac()) != null)){
             errors.rejectValue("mac", "Exist.deviceForm.mac");
         }
 

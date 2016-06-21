@@ -28,7 +28,7 @@ public class SwitchesController {
     SwitchFormValidator switchFormValidator;
 
     @ModelAttribute("page")
-    public String module() {
+    public String page() {
         return "switches";
     }
 

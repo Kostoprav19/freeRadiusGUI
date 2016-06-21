@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
   `mac` VARCHAR(12) NOT NULL,
   `name` VARCHAR(60) NOT NULL,
   `descr` VARCHAR(100),
+  `type` VARCHAR(20),
   `switch_id` BIGINT,
   `port` INT,
   `speed` INT,

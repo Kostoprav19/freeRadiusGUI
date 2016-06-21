@@ -60,11 +60,11 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
 
     private Switch parseSwitch(List<String> list) {
         Switch newSwitch = new Switch();
-
-        newSwitch.setIp(parseValue(list.get(0), CLIENT_PATTERN));
-
-            for (int index = 1; index < list.size(); index ++){
+            for (int index = 0; index < list.size(); index ++){
                 String string = list.get(index);
+                if (string.contains("client")){
+                    newSwitch.setIp(parseValue(list.get(index), CLIENT_PATTERN));
+                }
                 if (string.contains("secret")){
                     newSwitch.setSecret(parseValue(list.get(index), SECRET_PATTERN));
                 }

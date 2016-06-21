@@ -1,10 +1,13 @@
 package lv.freeradiusgui.domain;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.mapping.Array;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by daniels on 24.11.2015.
@@ -12,6 +15,12 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "devices")
 public class Device {
+
+    public static final String TYPE_COMPUTER = "Computer";
+    public static final String TYPE_PRINTER = "Printer";
+    public static final String TYPE_OTHER = "Other";
+    public static final List TYPE_ALL = Arrays.asList("Computer", "Printer", "Other");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "device_id")
@@ -25,6 +34,9 @@ public class Device {
 
     @Column(name = "descr")
     private String description;
+
+    @Column(name = "type")
+    private String type;
 
     @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name="switch_id")
@@ -53,10 +65,11 @@ public class Device {
 
     }
 
-    public Device(String mac, String name, String description, Switch aSwitch, Integer switchPort, Integer portSpeed, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, Integer access) {
+    public Device(String mac, String name, String description, String type, Switch aSwitch, Integer switchPort, Integer portSpeed, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, Integer access) {
         this.mac = mac;
         this.name = name;
         this.description = description;
+        this.type = type;
         this.aSwitch = aSwitch;
         this.switchPort = switchPort;
         this.portSpeed = portSpeed;
@@ -84,6 +97,7 @@ public class Device {
                 ", mac='" + mac + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", type=" + type +
                 ", aSwitch=" + aSwitch +
                 ", switchPort=" + switchPort +
                 ", portSpeed=" + portSpeed +
@@ -112,6 +126,14 @@ public class Device {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Switch getSwitch() {
@@ -183,6 +205,7 @@ public class Device {
         private String mac;
         private String name;
         private String description;
+        private String type;
         private Switch aSwitch;
         private Integer switchPort;
         private Integer portSpeed;
@@ -205,6 +228,11 @@ public class Device {
 
         public DeviceBuilder withDescription(String description) {
             this.description = description;
+            return this;
+        }
+
+        public DeviceBuilder withType(String type) {
+            this.type = type;
             return this;
         }
 
@@ -239,7 +267,7 @@ public class Device {
         }
 
         public Device build() {
-            return new Device(mac, name, description, aSwitch, switchPort, portSpeed, timeOfRegistration, lastSeen, access);
+            return new Device(mac, name, description, type, aSwitch, switchPort, portSpeed, timeOfRegistration, lastSeen, access);
         }
     }
 }
