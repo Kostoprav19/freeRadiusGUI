@@ -31,7 +31,7 @@ public class SwitchFormValidator implements Validator{
         Switch aSwitch = (Switch) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.switchForm.name");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mac", "NotEmpty.switchForm.mac");
+        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mac", "NotEmpty.switchForm.mac");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "ip", "NotEmpty.switchForm.ip");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "secret", "NotEmpty.switchForm.secret");
 
@@ -39,7 +39,7 @@ public class SwitchFormValidator implements Validator{
             errors.rejectValue("mac", "Pattern.switchForm.mac");
         }
 
-        if (!isIPValid(aSwitch.getIp())){
+        if ((!aSwitch.getMac().isEmpty()) && (!isIPValid(aSwitch.getIp()))){
             errors.rejectValue("ip", "Pattern.switchForm.ip");
         }
 

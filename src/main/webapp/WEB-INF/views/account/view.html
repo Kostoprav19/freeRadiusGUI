@@ -22,8 +22,8 @@
         <th:block th:if="${account.login == null}">
             <h1 th:text="'Create new account'"> </h1>
         </th:block>
-        <th:block th:if="${param.msg != null}">
-            <div th:replace="fragments/alert :: alert (type=${param.msgType[0]}, message=${param.msg[0]})">Alert</div>
+        <th:block th:if="${msg != null}">
+            <div th:replace="fragments/alert :: alert (type=${msgType}, message=${msg})">Alert</div>
         </th:block>
     </div>
 

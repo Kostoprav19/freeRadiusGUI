@@ -3,16 +3,16 @@ package lv.freeradiusgui.controllers;
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Switch;
 import lv.freeradiusgui.services.SwitchService;
-import lv.freeradiusgui.services.SwitchService;
 import lv.freeradiusgui.validators.SwitchFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Created by Dan on 30.04.2016.
@@ -38,72 +38,67 @@ public class SwitchesController {
     }
 
     @RequestMapping(value = Views.SWITCH_LIST, method = RequestMethod.GET)
-    public ModelAndView viewSwitches() {
-        ModelAndView mav = new ModelAndView(Views.SWITCH_LIST);
-        mav.addObject("switches", switchService.getAll());
-        return mav;
+    public String viewSwitches(Model model) {
+        model.addAttribute("switches", switchService.getAll());
+        return Views.SWITCH_LIST;
     }
 
     @RequestMapping(value = Views.SWITCH + "/{id}", method = RequestMethod.GET)
-    public ModelAndView showSwitch(@PathVariable("id") Integer aSwitchId) {
+    public String showSwitch(@PathVariable("id") Integer aSwitchId,
+                             Model model) {
         Switch aSwitch = switchService.getById(aSwitchId);
-        ModelAndView mav = new ModelAndView(Views.SWITCH_VIEW);
-        mav.addObject("aSwitch", switchService.getById(aSwitchId));
-        return mav;
+        model.addAttribute("aSwitch", aSwitch);
+        return Views.SWITCH_VIEW;
     }
 
     @RequestMapping(value = Views.SWITCH + "/delete/{id}", method = RequestMethod.GET)
-    public ModelAndView deleteSwitch(@PathVariable("id") Integer aSwitchId) {
+    public String deleteSwitch(@PathVariable("id") Integer aSwitchId,
+                               final RedirectAttributes redirectAttributes) {
 
         Switch aSwitch = switchService.getById(aSwitchId);
         switchService.delete(aSwitch);
 
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.SWITCH_LIST);
-        mav.addObject("aSwitch", switchService.getAll());
-        mav.addObject("msg", "Switch '" + aSwitch.getName() + "' successfully deleted.");
-        mav.addObject("msgType", "success");
-        return mav;
+        redirectAttributes.addFlashAttribute("msg", "Switch '" + aSwitch.getName() + "' successfully deleted.");
+        redirectAttributes.addFlashAttribute("msgType", "success");
+        return "redirect:/" + Views.SWITCH_LIST;
     }
 
     @RequestMapping(value = Views.SWITCH + "/submit", method = RequestMethod.POST)
-    public ModelAndView storeSwitch(@ModelAttribute("aSwitch") @Validated Switch aSwitch,
-                                     BindingResult result,
-                                     SessionStatus status) {
+    public String storeSwitch(@ModelAttribute("aSwitch") @Validated Switch aSwitch,
+                              BindingResult result,
+                              SessionStatus status,
+                              Model model,
+                              final RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView(Views.SWITCH_VIEW);
-            mav.addObject("aSwitch", aSwitch);
-            return mav;
+            model.addAttribute("aSwitch", aSwitch);
+            return Views.SWITCH_VIEW;
         }
 
         switchService.store(aSwitch);
         status.setComplete();
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.SWITCH_LIST);
-        mav.addObject("aSwitch", switchService.getAll());
-        mav.addObject("msg", "Switch '" + aSwitch.getName() + "' successfully saved.");
-        mav.addObject("msgType", "success");
-        return mav;
+
+        redirectAttributes.addFlashAttribute("msg", "Switch '" + aSwitch.getName() + "' successfully saved.");
+        redirectAttributes.addFlashAttribute("msgType", "success");
+        return "redirect:/" + Views.SWITCH_LIST;
     }
 
     @RequestMapping(value = Views.SWITCH + "/add", method = RequestMethod.GET)
-    public ModelAndView addSwitch() {
+    public String addSwitch(Model model) {
         Switch aSwitch = switchService.prepareNewSwitch();
-        ModelAndView mav = new ModelAndView(Views.SWITCH_VIEW);
-        mav.addObject("aSwitch", aSwitch);
-        return mav;
+        model.addAttribute("aSwitch", aSwitch);
+        return Views.SWITCH_VIEW;
     }
 
     @RequestMapping(value = Views.SWITCH + "/reload", method = RequestMethod.GET)
-    public ModelAndView reloadSwitches() {
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.SWITCH_LIST);
+    public String reloadSwitches(final RedirectAttributes redirectAttributes) {
         if (switchService.reloadFromConfig()) {
-            mav.addObject("msg", "Successfully loaded 'clients.config' file.");
-            mav.addObject("msgType", "success");
+            redirectAttributes.addFlashAttribute("msg", "Successfully loaded 'clients.config' file.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
-            mav.addObject("msg", "Error loading 'clients.config' file.");
-            mav.addObject("msgType", "danger");
+            redirectAttributes.addFlashAttribute("msg", "Error loading 'clients.config' file.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
         }
-        mav.addObject("switches", switchService.getAll());
-        return mav;
+        return "redirect:/" + Views.SWITCH_LIST;
     }
 }

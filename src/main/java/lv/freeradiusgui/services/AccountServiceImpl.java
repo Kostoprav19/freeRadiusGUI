@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean store(Account account) {
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        fixPassword(account);
         return accountDAO.store(account);
     }
 
@@ -74,6 +74,15 @@ public class AccountServiceImpl implements AccountService {
             if (role.getId() == null) {
                 role.setId(roleService.getByName(role.getName()).getId());
             }
+        }
+    }
+
+    private void fixPassword(Account account) {
+        if ((account.getId() != null) && (account.getPassword().isEmpty())) {
+            Account accountFromDB = accountDAO.getById(account.getId());
+            account.setPassword(accountFromDB.getPassword());
+        } else {
+            account.setPassword(passwordEncoder.encode(account.getPassword()));
         }
     }
 }

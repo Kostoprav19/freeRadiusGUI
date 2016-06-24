@@ -8,12 +8,13 @@ import lv.freeradiusgui.services.RoleService;
 import lv.freeradiusgui.validators.AccountFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -50,52 +51,50 @@ public class AccountController {
     }
 
     @RequestMapping(value = Views.ACCOUNT + "/{id}", method = RequestMethod.GET)
-    public ModelAndView showAccount(@PathVariable("id") Integer accountId) {
+    public String showAccount(@PathVariable("id") Integer accountId,
+                              Model model) {
         Account account = accountService.getById(accountId);
-        ModelAndView mav = new ModelAndView(Views.ACCOUNT_VIEW);
-        mav.addObject("account", accountService.getById(accountId));
-        return mav;
+        model.addAttribute("account", account);
+        return Views.ACCOUNT_VIEW;
     }
 
     @RequestMapping(value = Views.ACCOUNT + "/delete/{id}", method = RequestMethod.GET)
-    public ModelAndView deleteAccount(@PathVariable("id") Integer accountId) {
+    public String deleteAccount(@PathVariable("id") Integer accountId,
+                                Model model,
+                                final RedirectAttributes redirectAttributes) {
 
         Account account = accountService.getById(accountId);
         accountService.delete(account);
 
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.ADMIN);
-        mav.addObject("accounts", accountService.getAll());
-        mav.addObject("msg", "Account '" + account.getLogin() + "' successfully deleted.");
-        mav.addObject("msgType", "success");
-        return mav;
+        redirectAttributes.addFlashAttribute("msg", "Account '" + account.getLogin() + "' successfully deleted.");
+        redirectAttributes.addFlashAttribute("msgType", "success");
+        return "redirect:/" + Views.ADMIN;
     }
 
     @RequestMapping(value = Views.ACCOUNT + "/submit", method = RequestMethod.POST)
-    public ModelAndView storeAccount(@ModelAttribute("account") @Validated Account account,
-                                     BindingResult result,
-                                     SessionStatus status) {
+    public String storeAccount(@ModelAttribute("account") @Validated Account account,
+                               BindingResult result,
+                               SessionStatus status,
+                               Model model,
+                               final RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView(Views.ACCOUNT_VIEW);
-            mav.addObject("accounts", account);
-            return mav;
+            model.addAttribute("accounts", account);
+            return Views.ACCOUNT_VIEW;
         }
-
         accountService.fixRolesWithOutId(account);
         accountService.store(account);
         status.setComplete();
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.ADMIN);
-        mav.addObject("accounts", accountService.getAll());
-        mav.addObject("msg", "Account '" + account.getLogin() + "' successfully saved.");
-        mav.addObject("msgType", "success");
-        return mav;
+
+        redirectAttributes.addFlashAttribute("msg", "Account '" + account.getLogin() + "' successfully saved.");
+        redirectAttributes.addFlashAttribute("msgType", "success");
+        return "redirect:/" + Views.ADMIN;
     }
 
     @RequestMapping(value = Views.ACCOUNT + "/add", method = RequestMethod.GET)
-    public ModelAndView addAccount() {
+    public String addAccount(Model model) {
         Account account = accountService.prepareNewAccount();
-        ModelAndView mav = new ModelAndView(Views.ACCOUNT_VIEW);
-        mav.addObject("account", account);
-        return mav;
+        model.addAttribute("account", account);
+        return Views.ACCOUNT_VIEW;
     }
 }

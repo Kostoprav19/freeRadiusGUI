@@ -33,15 +33,18 @@ public class AccountFormValidator implements Validator{
         Account account = (Account) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "login", "NotEmpty.accountForm.login");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.accountForm.password");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.accountForm.name");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.accountForm.email");
+        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.accountForm.email");
 
-        if (!emailValidator.valid(account.getEmail())){
+        if (account.getId() == null) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.accountForm.password");
+        }
+
+        if ((!account.getEmail().isEmpty()) && (!emailValidator.valid(account.getEmail()))){
             errors.rejectValue("email", "Pattern.accountForm.email");
         }
 
-        if (accountService.getByLogin(account.getLogin()) != null){
+        if ((account.getId() == null) && (accountService.getByLogin(account.getLogin()) != null)){
             errors.rejectValue("login", "Duplicate.accountForm.login");
         }
 /*

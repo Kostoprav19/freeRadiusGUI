@@ -14,8 +14,8 @@
 <body>
 <div th:replace="fragments/header :: header-admin">&nbsp;</div>
 <div class="container">
-    <th:block th:if="${param.msg != null}">
-        <div th:replace="fragments/alert :: alert (type=${param.msgType[0]}, message=${param.msg[0]})">Alert</div>
+    <th:block th:if="${msg != null}">
+        <div th:replace="fragments/alert :: alert (type=${msgType}, message=${msg})">Alert</div>
     </th:block>
     <div class="page-header">
         <h1>User administration</h1>

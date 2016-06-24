@@ -6,12 +6,12 @@ import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.validators.DeviceFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -51,72 +51,65 @@ public class DevicesController {
     }
 
     @RequestMapping(value = Views.DEVICE_LIST, method = RequestMethod.GET)
-    public ModelAndView viewDevices() {
-        ModelAndView mav = new ModelAndView(Views.DEVICE_LIST);
-        mav.addObject("devices", deviceService.getAll());
-        return mav;
+    public String viewDevices(Model model) {
+        model.addAttribute("devices", deviceService.getAll());
+        return Views.DEVICE_LIST;
     }
 
     @RequestMapping(value = Views.DEVICE + "/{id}", method = RequestMethod.GET)
-    public ModelAndView showDevice(@PathVariable("id") Integer deviceId) {
+    public String showDevice(@PathVariable("id") Integer deviceId,
+                             Model model) {
         Device device = deviceService.getById(deviceId);
-        ModelAndView mav = new ModelAndView(Views.DEVICE_VIEW);
-        mav.addObject("device", deviceService.getById(deviceId));
-        return mav;
+        model.addAttribute("device", device);
+        return Views.DEVICE_VIEW;
     }
 
     @RequestMapping(value = Views.DEVICE + "/delete/{id}", method = RequestMethod.GET)
-    public String deleteDevice(@PathVariable("id") Integer deviceId, final RedirectAttributes redirectAttributes) {
-
+    public String deleteDevice(@PathVariable("id") Integer deviceId,
+                               final RedirectAttributes redirectAttributes) {
         Device device = deviceService.getById(deviceId);
         deviceService.delete(device);
 
-      //  ModelAndView mav = new ModelAndView("redirect:/" + Views.DEVICE_LIST);
-      //  mav.addObject("device", deviceService.getAll());
         redirectAttributes.addFlashAttribute("msg", "Device '" + device.getName() + "' successfully deleted.");
         redirectAttributes.addFlashAttribute("msgType", "success");
         return "redirect:/" + Views.DEVICE_LIST;
     }
 
     @RequestMapping(value = Views.DEVICE + "/submit", method = RequestMethod.POST)
-    public ModelAndView storeDevice(@ModelAttribute("device") @Validated Device device,
-                                     BindingResult result,
-                                     SessionStatus status) {
+    public String storeDevice(@ModelAttribute("device") @Validated Device device,
+                              BindingResult result,
+                              SessionStatus status,
+                              Model model,
+                              final RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            ModelAndView mav = new ModelAndView(Views.DEVICE_VIEW);
-            mav.addObject("device", device);
-            return mav;
+            model.addAttribute("device", device);
+            return Views.DEVICE_VIEW;
         }
 
         deviceService.store(device);
         status.setComplete();
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.DEVICE_LIST);
-        mav.addObject("device", deviceService.getAll());
-        mav.addObject("msg", "Device '" + device.getName() + "' successfully saved.");
-        mav.addObject("msgType", "success");
-        return mav;
+        redirectAttributes.addFlashAttribute("msg", "Device '" + device.getName() + "' successfully saved.");
+        redirectAttributes.addFlashAttribute("msgType", "success");
+        return "redirect:/" + Views.DEVICE_LIST;
     }
 
     @RequestMapping(value = Views.DEVICE + "/add", method = RequestMethod.GET)
-    public ModelAndView addDevice() {
+    public String addDevice(Model model) {
         Device device = deviceService.prepareNewDevice();
-        ModelAndView mav = new ModelAndView(Views.DEVICE_VIEW);
-        mav.addObject("device", device);
-        return mav;
+        model.addAttribute("device", device);
+        return Views.DEVICE_VIEW;
     }
 
     @RequestMapping(value = Views.DEVICE + "/reload", method = RequestMethod.GET)
-    public ModelAndView reloadDevices() {
-        ModelAndView mav = new ModelAndView("redirect:/" + Views.DEVICE_LIST);
+    public String reloadDevices(final RedirectAttributes redirectAttributes) {
         if (deviceService.reloadFromConfig()) {
-            mav.addObject("msg", "Successfully loaded 'users' file.");
-            mav.addObject("msgType", "success");
+            redirectAttributes.addFlashAttribute("msg", "Successfully loaded 'users' file.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
-            mav.addObject("msg", "Error loading 'users' file.");
-            mav.addObject("msgType", "danger");
+            redirectAttributes.addFlashAttribute("msg", "Error loading 'users' file.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
         }
-        mav.addObject("devices", deviceService.getAll());
-        return mav;
+        return "redirect:/" + Views.DEVICE_LIST;
     }
 }

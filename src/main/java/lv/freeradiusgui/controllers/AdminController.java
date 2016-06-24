@@ -28,9 +28,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = Views.ADMIN, method = RequestMethod.GET)
-    public ModelAndView adminView() {
-        ModelAndView mav = new ModelAndView(Views.ADMIN);
-        mav.addObject("accounts", accountService.getAll());
-        return mav;
+    public String adminView(Model model) {
+        model.addAttribute("accounts", accountService.getAll());
+        return Views.ADMIN;
     }
 }
