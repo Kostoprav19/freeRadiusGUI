@@ -4,7 +4,6 @@ import lv.freeradiusgui.dao.deviceDAO.DeviceDAO;
 import lv.freeradiusgui.domain.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,7 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public boolean reloadFromConfig() {
-        List<Device> listFromFile = usersFileService.readConfigFile();
+        List<Device> listFromFile = usersFileService.readFile();
         if (listFromFile == null) return false;
 
         List<Device> finalList = updateDeviceList(listFromFile);

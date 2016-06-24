@@ -24,8 +24,8 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
     public static final String SHORTNAME_PATTERN = "^shortname = (.+)$";
     public static final String IPADDR_PATTERN = "^ipaddr = (.+)$";
 
-
-    public List<Switch> readConfigFile(){
+    @Override
+    public List<Switch> readFile(){
         List<String> listFromConfig = new ArrayList<>();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(FILE_NAME))) {

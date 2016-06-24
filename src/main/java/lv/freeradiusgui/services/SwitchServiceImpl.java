@@ -69,7 +69,7 @@ public class SwitchServiceImpl implements SwitchService{
 
     @Override
     public boolean reloadFromConfig() {
-        List<Switch> listFromConfig = clientsConfigFileService.readConfigFile();
+        List<Switch> listFromConfig = clientsConfigFileService.readFile();
         if (listFromConfig == null) return false;
 
         List<Switch> finalList = updateSwitchList(listFromConfig);

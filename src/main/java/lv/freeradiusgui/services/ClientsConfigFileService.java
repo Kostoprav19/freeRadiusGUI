@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ClientsConfigFileService {
 
-    List<Switch> readConfigFile();
+    List<Switch> readFile();
 
     List<Switch> parseList(List<String> list);
 

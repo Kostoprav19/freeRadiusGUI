@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`logs` (
   `switch_id` INT UNSIGNED NOT NULL,
   `port` INT NOT NULL,
   `speed` INT NOT NULL,
+  `duplex` INT NOT NULL,
   `tor` DATETIME NOT NULL,
   `status` INT NOT NULL,
   PRIMARY KEY (`log_id`)

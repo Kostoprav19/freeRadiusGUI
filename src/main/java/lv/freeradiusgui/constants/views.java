@@ -18,4 +18,8 @@ public final class Views {
     public static final String DEVICE = "device";
     public static final String DEVICE_VIEW = "device/view";
     public static final String DEVICE_LIST = "device/list";
+
+    public static final String LOGS = "logs";
+    public static final String LOG_VIEW = "logs/view";
+    public static final String LOGS_LIST = "logs/list";
 }

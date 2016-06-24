@@ -25,7 +25,7 @@ public class UsersFileServiceImpl implements UsersFileService{
     public static final String DEVICENAME_PATTERN = "Reply-Message = \"(.+?),";
 
 
-    public List<Device> readConfigFile(){
+    public List<Device> readFile(){
         List<String> listFromConfig = new ArrayList<>();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(FILE_NAME))) {
