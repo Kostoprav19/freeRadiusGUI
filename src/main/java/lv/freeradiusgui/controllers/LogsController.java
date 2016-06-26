@@ -25,7 +25,7 @@ public class LogsController {
         return "logs";
     }
 
-    @RequestMapping(value = Views.LOGS_LIST, method = RequestMethod.GET)
+    @RequestMapping(value = {Views.LOGS_LIST, Views.LOGS}, method = RequestMethod.GET)
     public String viewLogs(Model model) {
         model.addAttribute("logs", logService.getAll());
         return Views.LOGS_LIST;

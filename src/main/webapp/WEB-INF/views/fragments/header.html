@@ -28,7 +28,7 @@
                 <li th:classappend="${page == 'server' ? 'active' : ''}"><a href="#" th:href="@{/server}">Server status</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}">Logout</a></li>
+                <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
             </ul>
         </div>
         <!--/.nav-collapse -->
@@ -54,7 +54,7 @@
                 <li th:classappend="${page == 'admin' ? 'active' : ''}"><a href="#" th:href="@{/admin}">Administration</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}">Logout</a></li>
+                <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
             </ul>
         </div>
         <!--/.nav-collapse -->

@@ -5,6 +5,7 @@ import org.hibernate.mapping.Array;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "devices")
-public class Device {
+public class Device implements Serializable{
 
     public static final String TYPE_COMPUTER = "Computer";
     public static final String TYPE_PRINTER = "Printer";
@@ -48,6 +49,9 @@ public class Device {
     @Column(name = "speed")
     private Integer portSpeed;
 
+    @Column(name = "duplex")
+    private Integer duplex;
+
     @Column(name = "tor")
     @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
     @DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
@@ -65,7 +69,7 @@ public class Device {
 
     }
 
-    public Device(String mac, String name, String description, String type, Switch aSwitch, Integer switchPort, Integer portSpeed, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, Integer access) {
+    public Device(String mac, String name, String description, String type, Switch aSwitch, Integer switchPort, Integer portSpeed, Integer duplex, LocalDateTime timeOfRegistration, LocalDateTime lastSeen, Integer access) {
         this.mac = mac;
         this.name = name;
         this.description = description;
@@ -73,6 +77,7 @@ public class Device {
         this.aSwitch = aSwitch;
         this.switchPort = switchPort;
         this.portSpeed = portSpeed;
+        this.duplex = duplex;
         this.timeOfRegistration = timeOfRegistration;
         this.lastSeen = lastSeen;
         this.access = access;
@@ -160,6 +165,14 @@ public class Device {
         this.portSpeed = portSpeed;
     }
 
+    public Integer getDuplex() {
+        return duplex;
+    }
+
+    public void setDuplex(Integer duplex) {
+        this.duplex = duplex;
+    }
+
     public LocalDateTime getTimeOfRegistration() {
         return timeOfRegistration;
     }
@@ -209,6 +222,7 @@ public class Device {
         private Switch aSwitch;
         private Integer switchPort;
         private Integer portSpeed;
+        private Integer duplex;
         private LocalDateTime timeOfRegistration;
         private LocalDateTime lastSeen;
         private Integer access;
@@ -251,6 +265,11 @@ public class Device {
             return this;
         }
 
+        public DeviceBuilder withDuplex(Integer duplex) {
+            this.duplex = duplex;
+            return this;
+        }
+
         public DeviceBuilder withTOR(LocalDateTime timeOfRegistration) {
             this.timeOfRegistration = timeOfRegistration;
             return this;
@@ -267,7 +286,7 @@ public class Device {
         }
 
         public Device build() {
-            return new Device(mac, name, description, type, aSwitch, switchPort, portSpeed, timeOfRegistration, lastSeen, access);
+            return new Device(mac, name, description, type, aSwitch, switchPort, portSpeed, duplex, timeOfRegistration, lastSeen, access);
         }
     }
 }

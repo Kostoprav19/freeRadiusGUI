@@ -37,7 +37,7 @@ public class SwitchesController {
         binder.setValidator(switchFormValidator);
     }
 
-    @RequestMapping(value = Views.SWITCH_LIST, method = RequestMethod.GET)
+    @RequestMapping(value = {Views.SWITCH_LIST, Views.SWITCH}, method = RequestMethod.GET)
     public String viewSwitches(Model model) {
         model.addAttribute("switches", switchService.getAll());
         return Views.SWITCH_LIST;

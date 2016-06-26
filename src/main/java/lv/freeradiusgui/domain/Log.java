@@ -1,5 +1,6 @@
 package lv.freeradiusgui.domain;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +20,10 @@ public class Log {
 
     @Column(name = "mac")
     private String mac;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "mac", referencedColumnName = "mac", insertable=false, updatable=false)
+    private Device device;
 
     @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name="switch_id")
@@ -56,6 +61,14 @@ public class Log {
     public void setMac(String mac) {
         mac = mac.replaceAll("[^a-fA-F0-9]", ""); //normalize
         this.mac = mac;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
     public Switch getSwitch() {

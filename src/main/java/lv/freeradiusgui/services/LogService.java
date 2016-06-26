@@ -15,6 +15,8 @@ public interface LogService {
 
     Log getById(Integer id);
 
+    Log getLastByMac(String mac, List<Log> list);
+
     List<Log> getAll();
 
     List<Log> getAllByCriteria(String fieldName, Object object);

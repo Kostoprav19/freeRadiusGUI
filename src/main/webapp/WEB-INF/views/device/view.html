@@ -62,27 +62,30 @@
         </div>
 
         <th:block th:if="${device.id != null }">
-        <div class="form-group">
-            <label for="switch">Switch</label>
-            <p id="switch" th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></p>
-        </div>
-        <div class="form-group">
-            <label for="port">Port number</label>
-            <p id="port" th:text="${device.switchPort != -1} ? ${device.switchPort} : 'N/a'"></p>
-        </div>
-        <div class="form-group">
-            <label for="portspeed">Port speed</label>
-            <p id="portspeed" th:text="${device.portSpeed != -1} ? ${device.portSpeed} : 'N/a'"></p>
-        </div>
-        <div class="form-group">
-            <label for="tor">Time of registration</label>
-            <p id="tor" th:text="${device.timeOfRegistration != null} ? ${#temporals.format(device.timeOfRegistration, 'dd.MM.yyyy HH:mm')} : 'N/a'"></p>
-
-        </div>
-        <div class="form-group">
-            <label for="lastseen">Last seen</label>
-            <p id="lastseen" th:text="${device.lastSeen != null} ? ${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')} : 'N/a'"></p>
-        </div>
+            <div class="form-group">
+                <label for="lastseen">Last seen</label>
+                <p id="lastseen" th:text="${device.lastSeen != null} ? ${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')} : 'N/a'"></p>
+            </div>
+            <div class="form-group">
+                <label for="switch">Switch</label>
+                <p id="switch" th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></p>
+            </div>
+            <div class="form-group">
+                <label for="port">Port number</label>
+                <p id="port" th:text="${device.switchPort != -1} ? ${device.switchPort} : 'N/a'"></p>
+            </div>
+            <div class="form-group">
+                <label for="portspeed">Port speed</label>
+                <p id="portspeed" th:text="${device.portSpeed != -1} ? ${device.portSpeed} + ' Mbps': 'N/a'"></p>
+            </div>
+            <div class="form-group">
+                <label for="duplex">Port speed</label>
+                <p id="duplex" th:text="${device.duplex == 1} ? 'Full' : 'Half'"></p>
+            </div>
+            <div class="form-group">
+                <label for="tor">Time of registration</label>
+                <p id="tor" th:text="${device.timeOfRegistration != null} ? ${#temporals.format(device.timeOfRegistration, 'dd.MM.yyyy HH:mm')} : 'N/a'"></p>
+             </div>
         </th:block>
         <div class="form-group">
             <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>

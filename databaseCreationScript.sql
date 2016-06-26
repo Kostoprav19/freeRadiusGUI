@@ -38,10 +38,11 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
   `switch_id` BIGINT,
   `port` INT,
   `speed` INT,
+  `duplex` INT,
   `tor` DATETIME,
   `lastseen` DATETIME,
   `access` INT,
-  PRIMARY KEY (`device_id`)
+  PRIMARY KEY (`device_id`, `mac`)
 )
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;
@@ -59,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
   `descr` VARCHAR(100),
   `ip` VARCHAR(16) NOT NULL,
   `secret` VARCHAR(60),
-  PRIMARY KEY (`switch_id`)
+  PRIMARY KEY (`switch_id`, `mac`)
 )
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;

@@ -34,6 +34,15 @@ public class LogServiceImpl implements LogService{
         return logDAO.getById(id);
     }
 
+    @Override
+    public Log getLastByMac(String mac, List<Log> list) {
+        if (mac.isEmpty()) return null;
+        for (int i = list.size()-1; i>=0; i--){
+            if (list.get(i).getMac().equals(mac)) return list.get(i);
+        }
+        return null;
+    }
+
 
     @Override
     public List<Log> getAll() {

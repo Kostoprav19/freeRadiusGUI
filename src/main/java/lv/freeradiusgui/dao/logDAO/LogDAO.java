@@ -16,6 +16,8 @@ public interface LogDAO {
 
     Log getById(Integer id);
 
+    Log getLastByMac(String mac);
+
     List<Log> getAll();
 
     List<Log> getAllByCriteria(String fieldName, Object object);

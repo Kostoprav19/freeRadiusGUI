@@ -64,6 +64,7 @@ public class UsersFileServiceImpl implements UsersFileService{
                 String string = list.get(index);
                 if (string.contains("Reply-Message")){
                     newDevice.setName(parseValue(list.get(index), DEVICENAME_PATTERN));
+                    newDevice.setType(detectType(newDevice.getName()));
                 }
                 if (string.contains("Auth-Type")){
                     newDevice.setMac(parseValue(list.get(index), MAC_PATTERN));
@@ -75,6 +76,26 @@ public class UsersFileServiceImpl implements UsersFileService{
                 }
             }
         return newDevice;
+    }
+
+    private String detectType(String name) {
+        if ((name.toUpperCase().contains("LJ")) ||
+                (name.toUpperCase().contains("LASERJET")) ||
+                (name.toUpperCase().contains("TRIUMF")) ||
+                (name.toUpperCase().contains("DESIGNJET")) ||
+                (name.toUpperCase().contains("XEROX")) ||
+                (name.toUpperCase().contains("PHOTOSMART")) ||
+                (name.toUpperCase().contains(" MFP ")) ||
+                (name.toUpperCase().contains(" DJ ")) ||
+                (name.toUpperCase().contains("KONICA")) ||
+                (name.toUpperCase().contains("PRINTER")))
+            return Device.TYPE_PRINTER;
+
+        if ((name.toUpperCase().contains("TIMECAPSULE")) ||
+                (name.toUpperCase().contains("ZABBIX")))
+            return Device.TYPE_OTHER;
+
+        return Device.TYPE_COMPUTER;
     }
 
     public String parseValue(String string, String pattern) {

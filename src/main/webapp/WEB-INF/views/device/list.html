@@ -30,11 +30,10 @@
                 <th>Name</th>
                 <th>Type</th>
                 <th>Access</th>
+                <th>Last Seen</th>
                 <th>Switch name</th>
                 <th>Port</th>
                 <th>Speed</th>
-                <th>Time of Registration</th>
-                <th>Last Seen</th>
                 <th></th>
             </tr>
             </thead>
@@ -45,11 +44,10 @@
                 <td th:text="${device.name}"></td>
                 <td th:text="${device.type != null} ? ${device.type} : 'Not set'"></td>
                 <td th:text="${device.access == 1} ? 'Accept' : 'Reject'"></td>
-                <td th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></td>
-                <td th:text="${device.switchPort != -1} ? ${device.switchPort} : 'N/a'"></td>
-                <td th:text="${device.portSpeed != -1} ? ${device.portSpeed} : 'N/a'"></td>
-                <td th:text="${device.timeOfRegistration != null} ? ${#temporals.format(device.timeOfRegistration, 'dd.MM.yyyy HH:mm')} : 'N/a'"></td>
                 <td th:text="${device.lastSeen != null} ? ${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')} : 'N/a'"></td>
+                <td th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></td>
+                <td th:text="${device.switchPort}"></td>
+                <td th:text="${device.portSpeed != null} ? (${device.portSpeed} + ' ' + ${device.duplex == 1 ? 'Full' : 'Half'}) : ''"></td>
                 <td>
                     <a role="button" class="btn btn-info btn-xs" th:href="@{/device/{id}(id=${device.id})}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                     <a role="button" class="btn btn-danger btn-xs" th:href="@{/device/delete/{id}(id=${device.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>

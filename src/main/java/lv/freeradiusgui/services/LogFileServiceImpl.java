@@ -1,5 +1,6 @@
 package lv.freeradiusgui.services;
 
+import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class LogFileServiceImpl implements LogFileService{
 
     @Autowired
     SwitchService switchService;
+
+    @Autowired
+    DeviceService deviceService;
 
     public String fileName;
 
@@ -98,12 +102,17 @@ public class LogFileServiceImpl implements LogFileService{
                 }
                 if (string.contains("Reply-Message")){
                     newLog.setMac(parseValue(list.get(index), MAC_PATTERN));
+
+                    newLog.setDevice(deviceService.getByMac(newLog.getMac()));
+
                     newLog.setSwitchPort(Integer.parseInt(parseValue(list.get(index), PORT_PATTERN)));
+
                     newLog.setPortSpeed(Integer.parseInt(parseValue(list.get(index), PORTSPEED_PATTERN)));
+
                     if (string.contains("Full duplex")) newLog.setDuplex(1); else newLog.setDuplex(0);
+
                     String switchIP = parseValue(list.get(index), SWITCHIP_PATTERN);
                     newLog.setSwitch(switchService.getByIp(switchIP));
-                    if (newLog.getSwitch() == null) {newLog.setSwitch(switchService.getById(1));}
                 }
                 if (string.contains("Packet-Type")){
                     if (parseValue(list.get(index), ACCESS_PATTERN).equals("Accept")) {

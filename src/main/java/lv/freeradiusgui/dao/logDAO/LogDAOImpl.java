@@ -28,4 +28,12 @@ public class LogDAOImpl extends AbstractGenericBaseDao<Log> implements LogDAO {
         return getOneByCriteria("id", id);
     }
 
+    @Override
+    public Log getLastByMac(String mac) {
+        if (mac == null || mac.isEmpty()) {
+            return null;
+        }
+        return getLastByCriteria("mac", mac);
+    }
+
 }

@@ -50,7 +50,7 @@ public class DevicesController {
     }
     }
 
-    @RequestMapping(value = Views.DEVICE_LIST, method = RequestMethod.GET)
+    @RequestMapping(value = {Views.DEVICE_LIST, Views.DEVICE}, method = RequestMethod.GET)
     public String viewDevices(Model model) {
         model.addAttribute("devices", deviceService.getAll());
         return Views.DEVICE_LIST;

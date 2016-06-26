@@ -82,6 +82,17 @@ public abstract class AbstractGenericBaseDao<T> {
         return obj;
     }
 
+    protected T getLastByCriteria(String fieldName, Object object) {
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(persistentClass).addOrder(Order.desc("id"));
+        criteria.add(Restrictions.eq(fieldName, object));
+
+        List<T> list = criteria.list();
+        T obj = list.isEmpty() ? null : (T) criteria.list().get(0);
+        return obj;
+    }
+
     public List<T> getAllByCriteria(String fieldName, Object object) {
 
         Session session = sessionFactory.getCurrentSession();
