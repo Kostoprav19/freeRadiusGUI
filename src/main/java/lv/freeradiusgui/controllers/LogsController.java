@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 /**
  * Created by Dan on 30.04.2016.
  */
@@ -25,9 +27,14 @@ public class LogsController {
         return "logs";
     }
 
+
+
     @RequestMapping(value = {Views.LOGS_LIST, Views.LOGS}, method = RequestMethod.GET)
     public String viewLogs(Model model) {
-        model.addAttribute("logs", logService.getAll());
+        List<Log> list = logService.getAll();
+        model.addAttribute("logs", list);
+        model.addAttribute("recordCount", list.size());
+        model.addAttribute("rejectedCount", logService.countRejected(list));
         return Views.LOGS_LIST;
     }
 

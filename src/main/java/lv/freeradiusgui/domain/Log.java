@@ -44,7 +44,7 @@ public class Log {
     private LocalDateTime timeOfRegistration;
 
     @Column(name = "status")
-    private Integer status;
+    private Integer status; // 1 - Accept, 0 - Reject
 
     public Integer getId() {
         return id;

@@ -25,7 +25,7 @@ public interface DeviceService {
 
     Long getCount();
 
-    Device prepareNewDevice();
+    Device prepareNewDevice(String mac);
 
     boolean reloadFromConfig();
 }

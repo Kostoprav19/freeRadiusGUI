@@ -96,7 +96,15 @@ public class DevicesController {
 
     @RequestMapping(value = Views.DEVICE + "/add", method = RequestMethod.GET)
     public String addDevice(Model model) {
-        Device device = deviceService.prepareNewDevice();
+        Device device = deviceService.prepareNewDevice(null); //null - empty mac
+        model.addAttribute("device", device);
+        return Views.DEVICE_VIEW;
+    }
+
+    @RequestMapping(value = Views.DEVICE + "/add/{mac}", method = RequestMethod.GET)
+    public String addDeviceWithMac(@PathVariable("mac") String mac,
+                                   Model model) {
+        Device device = deviceService.prepareNewDevice(mac);
         model.addAttribute("device", device);
         return Views.DEVICE_VIEW;
     }

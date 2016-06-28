@@ -72,4 +72,14 @@ public class LogServiceImpl implements LogService{
         }
     }
 
+    @Override
+    public Integer countRejected(List<Log> list) {
+        if ( (list == null) || (list.isEmpty()) ) return 0;
+        int count = 0;
+        for (Log log : list){
+            if (log.getStatus() == 0) count++;
+        }
+        return count;
+    }
+
 }

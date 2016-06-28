@@ -24,4 +24,6 @@ public interface LogService {
     Long getCount();
 
     String loadFromFile();
+
+    Integer countRejected(List<Log> list);
 }

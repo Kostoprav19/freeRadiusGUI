@@ -79,7 +79,7 @@
         <div class="form-group">
             <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
             <a role="button" class="btn btn-danger" th:href="@{/account/delete/{id}(id=${account.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
-            <a role="button" class="btn btn-default" th:href="@{/admin}"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
+            <a role="button" class="btn btn-default" href="javascript:history.back()"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
         </div>
     </form>
 </div>

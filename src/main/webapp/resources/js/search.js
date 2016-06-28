@@ -4,9 +4,9 @@
 $(function () {
     $( '#table' ).searchable({
         striped: true,
-        oddRow: { 'background-color': '#fff' },
+        oddRow: { 'background-color': '#f9f9f9' },
         evenRow: { 'background-color': '#f5f5f5' },
-        searchType: 'fuzzy'
+        searchType: 'default'
     });
 
     $( '#searchable-container' ).searchable({

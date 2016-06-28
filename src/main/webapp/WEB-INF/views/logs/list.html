@@ -12,6 +12,7 @@
     <script src="js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
     <script src="js/jquery.searchable-1.1.0.min.js" th:src="@{/resources/js/jquery.searchable-1.1.0.min.js}"></script>
     <script src="js/search.js" th:src="@{/resources/js/search.js}"></script>
+    <script src="js/core.js" th:src="@{/resources/js/core.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'">&nbsp;</div>
@@ -22,11 +23,16 @@
     <div class="page-header">
         <h1>Radius logs</h1>
     </div>
+    <h3>Record count: <span th:text="${recordCount}" th:remove="tag"/></h3>
+    <h3>Rejected count: <span th:text="${rejectedCount}" th:remove="tag"/> <a th:if="${rejectedCount > 0}" href="#rejected" class="small">(scroll to)</a></h3>
+
+    <div class="space-20"></div>
+
     <div class="input-group">
          <span class="input-group-btn">
             <a role="button" class="btn btn-primary" th:href="@{/logs/refresh}"><span class="glyphicon glyphicon-refresh"></span> Refresh from log file</a>
         </span>
-        <input type="search" id="search" value="" class="form-control" placeholder="Search in current list"/>
+        <input type="search" id="search" value="" class="form-control" placeholder="Filter current list"/>
     </div>
 
     <table class="table table-striped" id="table">
@@ -41,23 +47,28 @@
                 <th>Port</th>
                 <th>Port Speed</th>
                 <th>Duplex</th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="log : ${logs}" th:classappend="${log.status == 0 ? 'danger' : ''}">
                 <td th:text="${log.timeOfRegistration != null} ? ${#temporals.format(log.timeOfRegistration, 'dd.MM.yyyy HH:mm')} : 'N/a'"></td>
                 <td th:text="${log.mac}"></td>
-                <td th:text="${log.device != null} ? ${log.device.name} : 'N/a'"></td>
+                <td>
+                    <a th:if="${log.device != null}" th:href="@{/device/{id}(id=${log.device.id})}">
+                        <span th:text="${log.device != null} ? ${log.device.name} : 'N/a'" th:remove="tag"/>
+                    </a>
+                    <a name="rejected" th:if="${log.device == null}" role="button" class="btn btn-warning btn-xs" th:href="@{/device/add/{mac}(mac=${log.mac})}"><span class="glyphicon glyphicon-plus"></span> Register new device</a>
+                </td>
                 <td th:text="${log.device != null} ? ${log.device.type} : 'N/a'"></td>
                 <td th:text="${log.status == 1} ? 'Accept' : 'Reject'"></td>
-                <td th:text="${log.switch != null} ? ${log.switch.name} : 'N/a'"></td>
-                <td th:text="${log.switchPort}"></td>
-                <td th:text="${log.portSpeed} + '%'"></td>
-                <td th:text="${log.duplex == 1} ? 'Full' : 'Half'"></td>
                 <td>
-                    <a role="button" class="btn btn-info btn-xs" th:href="@{/logs/{id}(id=${log.id})}"><span class="glyphicon glyphicon-eye-open"></span> View</a>
+                    <a th:if="${log.switch != null}" th:href="@{/switch/{id}(id=${log.switch.id})}">
+                        <span th:text="${log.switch != null} ? ${log.switch.name} : 'N/a'" th:remove="tag"/>
+                    </a>
                 </td>
+                <td th:text="${log.switchPort}"></td>
+                <td th:text="${log.portSpeed} + ' Mbps'" th:classappend="${log.portSpeed == 100 ? 'text-danger' : ''}"></td>
+                <td th:text="${log.duplex == 1} ? 'Full' : 'Half'" th:classappend="${log.duplex == 0 ? 'text-danger' : ''}"></td>
             </tr>
             </tbody>
         </table>
