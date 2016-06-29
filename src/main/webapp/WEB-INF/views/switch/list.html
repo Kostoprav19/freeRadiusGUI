@@ -10,6 +10,9 @@
     <link href="css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
     <script src="js/jquery-2.2.4.js" th:src="@{/resources/js/jquery-2.2.4.min.js}"></script>
     <script src="js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script src="js/jquery.searchable-1.1.0.min.js" th:src="@{/resources/js/jquery.searchable-1.1.0.min.js}"></script>
+    <script src="js/search.js" th:src="@{/resources/js/search.js}"></script>
+    <script src="js/core.js" th:src="@{/resources/js/core.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'">&nbsp;</div>
@@ -21,7 +24,11 @@
         <h1>Switches</h1>
         <p>and other RADIUS clients.</p>
     </div>
-        <table class="table table-striped">
+
+    <div class="input-group">
+        <input type="search" id="search" value="" class="form-control" placeholder="Filter current list"/>
+    </div>
+        <table class="table table-striped" id="table">
             <thead>
             <tr>
                 <th>#</th>
@@ -48,7 +55,9 @@
         </table>
     <a role="button" class="btn btn-success" th:href="@{/switch/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
     <a role="button" class="btn btn-primary" th:href="@{/switch/reload}"><span class="glyphicon glyphicon-refresh"></span> Reload from 'clients.conf' file</a>
-    <div th:replace="fragments/footer :: footer"></div>
+    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        <a role="button" class="btn btn-warning" th:href="@{/admin/writeClients}"><span class="glyphicon glyphicon-floppy-save"></span> Save changes</a>
+    </th:block>    <div th:replace="fragments/footer :: footer"></div>
 </div>
 
 </body>

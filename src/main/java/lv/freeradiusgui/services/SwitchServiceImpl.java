@@ -70,12 +70,20 @@ public class SwitchServiceImpl implements SwitchService{
     @Override
     public boolean reloadFromConfig() {
         List<Switch> listFromConfig = clientsConfigFileService.readFile();
-        if (listFromConfig == null) return false;
+        if ((listFromConfig == null) || (listFromConfig.isEmpty())) return false;
 
         List<Switch> finalList = updateSwitchList(listFromConfig);
 
         switchDAO.storeAll(finalList);
         return true;
+    }
+
+    @Override
+    public boolean writeToConfig() {
+        List<Switch> listFromDB = switchDAO.getAll();
+        if ((listFromDB == null) || (listFromDB.isEmpty())) return false;
+
+        return clientsConfigFileService.saveToFile(listFromDB);
     }
 
     private List<Switch> updateSwitchList(List<Switch> listFromConfig) {

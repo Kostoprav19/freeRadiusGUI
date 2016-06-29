@@ -28,4 +28,6 @@ public interface SwitchService {
     Switch prepareNewSwitch();
 
     boolean reloadFromConfig();
+
+    boolean writeToConfig();
 }

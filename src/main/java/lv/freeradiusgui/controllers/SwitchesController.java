@@ -101,4 +101,16 @@ public class SwitchesController {
         }
         return "redirect:/" + Views.SWITCH_LIST;
     }
+
+    @RequestMapping(value = Views.ADMIN + "/writeClients", method = RequestMethod.GET)
+    public String writeSwitches(final RedirectAttributes redirectAttributes) {
+        if (switchService.writeToConfig()) {
+            redirectAttributes.addFlashAttribute("msg", "Successfully written 'clients.config' file.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error writing to 'clients.config' file.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.SWITCH_LIST;
+    }
 }

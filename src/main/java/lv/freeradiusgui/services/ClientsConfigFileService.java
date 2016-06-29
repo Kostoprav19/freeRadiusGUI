@@ -11,6 +11,8 @@ public interface ClientsConfigFileService {
 
     List<Switch> readFile();
 
+    boolean saveToFile(List<Switch> list);
+
     List<Switch> parseList(List<String> list);
 
     List<String> findSubList(List<String> list, Integer index);

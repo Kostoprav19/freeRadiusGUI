@@ -4,8 +4,11 @@ import lv.freeradiusgui.domain.Switch;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +31,47 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
     public List<Switch> readFile(){
         List<String> listFromConfig = new ArrayList<>();
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(FILE_NAME))) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(FILE_NAME))) {
 
             //br returns as stream and convert it into a List
-            listFromConfig = br.lines().collect(Collectors.toList());
+            listFromConfig = reader.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
             return null;
         }
 
         return parseList(listFromConfig);
+    }
+
+    @Override
+    public boolean saveToFile(List<Switch> list) {
+        List<String> stringList = new ArrayList<>();
+
+        for (Switch aSwitch : list){
+            stringList.add("client " + aSwitch.getIp() + " {");
+            stringList.add(" secret = " + aSwitch.getSecret());
+            stringList.add(" shortname = " + aSwitch.getName());
+            stringList.add("}");
+        }
+
+        try {
+            writeListToFile(stringList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private void writeListToFile(List<String> list) throws IOException {
+        Path path = Paths.get(FILE_NAME);
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            for (String str : list) {
+                writer.write(str);
+                writer.newLine();
+            }
+            writer.close();
+        }
     }
 
 

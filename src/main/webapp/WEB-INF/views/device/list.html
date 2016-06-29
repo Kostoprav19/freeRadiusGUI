@@ -56,7 +56,11 @@
                 <td th:text="${device.type != null} ? ${device.type} : 'Not set'"></td>
                 <td th:text="${device.access == 1} ? 'Accept' : 'Reject'"></td>
                 <td th:text="${device.lastSeen != null} ? ${#temporals.format(device.lastSeen, 'dd.MM.yyyy HH:mm')} : 'N/a'"></td>
-                <td th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'"></td>
+                <td>
+                    <a th:if="${device.switch != null}" th:href="@{/switch/{id}(id=${device.switch.id})}">
+                        <span th:text="${device.switch != null} ? ${device.switch.name} : 'N/a'" th:remove="tag"/>
+                    </a>
+                </td>
                 <td th:text="${device.switchPort}"></td>
                 <td th:text="${device.portSpeed != null} ? (${device.portSpeed} + ' ' + ${device.duplex == 1 ? 'Full' : 'Half'}) : ''"></td>
                 <td>
