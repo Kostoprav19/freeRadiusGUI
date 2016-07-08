@@ -91,7 +91,7 @@ DROP TABLE IF EXISTS `freeradiusgui`.`roles` ;
 
 CREATE TABLE IF NOT EXISTS `freeradiusgui`.`roles` (
   `role_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
+  `roleName` varchar(45) NOT NULL,
   PRIMARY KEY (`role_id`)
 )
   ENGINE = InnoDB
