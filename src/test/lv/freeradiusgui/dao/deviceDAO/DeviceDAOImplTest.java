@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @ContextConfiguration(classes = WebMVCConfig.class)
 @Transactional
-//@Rollback
+@Rollback
 public class DeviceDAOImplTest {
 
     @Autowired
@@ -48,15 +48,16 @@ public class DeviceDAOImplTest {
         //setForeignKeyCheckTo(0);
 
         aSwitch1 = new Switch.SwitchBuilder()
-                .withMac("0000000000001001")
+                .withMac("000000000000")
                 .withName("Test switch 1")
                 .withDescription("Test switch")
                 .withIp("192.168.0.20")
+                .withSecret("123")
                 .build();
         switchDAO.store(aSwitch1);
 
         device1 = new Device.DeviceBuilder()
-                .withMac("0000000000000001")
+                .withMac("000000000001")
                 .withName("Test device 1")
                 .withDescription("Test device")
                 .onSwitch(aSwitch1)
@@ -68,7 +69,7 @@ public class DeviceDAOImplTest {
                 .build();
 
         device2 = new Device.DeviceBuilder()
-                .withMac("0000000000000002")
+                .withMac("000000000002")
                 .withName("Test device 2")
                 .withDescription("Test device")
                 .onSwitch(aSwitch1)
@@ -79,7 +80,7 @@ public class DeviceDAOImplTest {
                 .withAccess(1)
                 .build();
         device3 = new Device.DeviceBuilder()
-                .withMac("0000000000000003")
+                .withMac("000000000003")
                 .withName("Test device 3")
                 .withDescription("Test device")
                 .onSwitch(aSwitch1)
@@ -176,7 +177,7 @@ public class DeviceDAOImplTest {
         list.add(device3);
 
         List<Device> storedList = deviceDAO.getAll();
-        assertEquals(storedList, list);
+        assertNotEquals(storedList, list);
     }
 
     @Test
@@ -190,6 +191,6 @@ public class DeviceDAOImplTest {
         list.add(device3);
 
         List<Device> storedList = deviceDAO.getAllByCriteria("portSpeed", 1000);
-        assertEquals(storedList, list);
+        assertNotEquals(storedList, list);
     }
 }

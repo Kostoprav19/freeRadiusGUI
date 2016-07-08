@@ -30,6 +30,8 @@ public class HybernateConfig {
         dataSource.setPassword("freeradius");
         dataSource.setMaxPoolSize(20);
         dataSource.setMinPoolSize(5);
+        dataSource.setCheckoutTimeout(1800);
+        dataSource.setMaxStatements(50);
         dataSource.setIdleConnectionTestPeriod(30000);
 
         return dataSource;

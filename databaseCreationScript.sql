@@ -2,15 +2,15 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=`TRADITIONAL,ALLOW_INVALID_DATES`;
 
-CREATE SCHEMA IF NOT EXISTS `freeradiusGUI` DEFAULT CHARACTER SET utf8;
-USE `freeradiusGUI` ;
+CREATE SCHEMA IF NOT EXISTS `freeradiusgui` DEFAULT CHARACTER SET utf8;
+USE `freeradiusgui` ;
 
 -- -----------------------------------------------------
--- Table `freeradiusGUI`.`logs`
+-- Table `freeradiusgui`.`logs`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `freeradiusGUI`.`logs` ;
+DROP TABLE IF EXISTS `freeradiusgui`.`logs` ;
 
-CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`logs` (
+CREATE TABLE IF NOT EXISTS `freeradiusgui`.`logs` (
   `log_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(12) NOT NULL,
   `switch_id` INT UNSIGNED NOT NULL,
@@ -25,11 +25,11 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`logs` (
 DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
--- Table `freeradiusGUI`.`devices`
+-- Table `freeradiusgui`.`devices`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `freeradiusGUI`.`devices` ;
+DROP TABLE IF EXISTS `freeradiusgui`.`devices` ;
 
-CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`devices` (
+CREATE TABLE IF NOT EXISTS `freeradiusgui`.`devices` (
   `device_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(12) NOT NULL,
   `name` VARCHAR(60) NOT NULL,
@@ -49,11 +49,11 @@ DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
--- Table `freeradiusGUI`.`switches`
+-- Table `freeradiusgui`.`switches`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `freeradiusGUI`.`switches` ;
+DROP TABLE IF EXISTS `freeradiusgui`.`switches` ;
 
-CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
+CREATE TABLE IF NOT EXISTS `freeradiusgui`.`switches` (
   `switch_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(12),
   `name` VARCHAR(30) NOT NULL,
@@ -66,11 +66,11 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`switches` (
 DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
--- Table `freeradiusGUI`.`accounts`
+-- Table `freeradiusgui`.`accounts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `freeradiusGUI`.`accounts` ;
+DROP TABLE IF EXISTS `freeradiusgui`.`accounts` ;
 
-CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`accounts` (
+CREATE TABLE IF NOT EXISTS `freeradiusgui`.`accounts` (
   `account_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `login` VARCHAR(45) NOT NULL,
   `password` VARCHAR(60) NOT NULL,
@@ -85,11 +85,11 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`accounts` (
 DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
--- Table `freeradiusGUI`.`roles`
+-- Table `freeradiusgui`.`roles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `freeradiusGUI`.`roles` ;
+DROP TABLE IF EXISTS `freeradiusgui`.`roles` ;
 
-CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`roles` (
+CREATE TABLE IF NOT EXISTS `freeradiusgui`.`roles` (
   `role_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`role_id`)
@@ -98,23 +98,23 @@ CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`roles` (
 DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
--- Table `freeradiusGUI`.`accounts_roles`
+-- Table `freeradiusgui`.`accounts_roles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `freeradiusGUI`.`accounts_roles`;
+DROP TABLE IF EXISTS `freeradiusgui`.`accounts_roles`;
 
-CREATE TABLE IF NOT EXISTS `freeradiusGUI`.`accounts_roles` (
+CREATE TABLE IF NOT EXISTS `freeradiusgui`.`accounts_roles` (
   `account_id` INT UNSIGNED NOT NULL,
   `role_id` INT UNSIGNED NOT NULL,
 INDEX `FK_to_users_idx` (`account_id` ASC),
 INDEX `FK_to_roles_idx` (`role_id` ASC),
 CONSTRAINT `FK_to_roles`
   FOREIGN KEY (`role_id`)
-  REFERENCES `freeradiusGUI`.`roles` (`role_id`)
+  REFERENCES `freeradiusgui`.`roles` (`role_id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE,
 CONSTRAINT `FK_to_accounts`
   FOREIGN KEY (`account_id`)
-  REFERENCES `freeradiusGUI`.`accounts` (`account_id`)
+  REFERENCES `freeradiusgui`.`accounts` (`account_id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE)
 ENGINE = InnoDB
