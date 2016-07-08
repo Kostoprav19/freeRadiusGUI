@@ -131,9 +131,9 @@ INSERT INTO accounts(account_id, login,password,enabled, created)
 VALUES (2, 'user','$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y', true, '2016-03-05 11:00:00');
 
 
-INSERT INTO roles (role_id, name)
+INSERT INTO roles (role_id, roleName)
 VALUES (1, 'ROLE_ADMIN');
-INSERT INTO roles (role_id, name)
+INSERT INTO roles (role_id, roleName)
 VALUES (2, 'ROLE_USER');
 
 
