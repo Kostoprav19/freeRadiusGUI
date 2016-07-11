@@ -1,6 +1,8 @@
 package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Switch;
+import lv.freeradiusgui.utils.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -21,22 +23,27 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
-    public static final String FILE_NAME = "clients.conf";
+
     public static final String CLIENT_PATTERN = "^client (.+)\\{";
     public static final String SECRET_PATTERN = "^secret = (.+)$";
     public static final String SHORTNAME_PATTERN = "^shortname = (.+)$";
     public static final String IPADDR_PATTERN = "^ipaddr = (.+)$";
 
+    @Autowired
+    AppConfig appConfig;
+
     @Override
     public List<Switch> readFile(){
         List<String> listFromConfig = new ArrayList<>();
 
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(FILE_NAME))) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(appConfig.getPathToClientsConfFile()))) {
 
             //br returns as stream and convert it into a List
             listFromConfig = reader.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
+            System.out.println("Error reading file  '" + appConfig.getPathToClientsConfFile() + "'");
+            e.printStackTrace();
             return null;
         }
 
@@ -64,7 +71,7 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
     }
 
     private void writeListToFile(List<String> list) throws IOException {
-        Path path = Paths.get(FILE_NAME);
+        Path path = Paths.get(appConfig.getPathToClientsConfFile());
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             for (String str : list) {
                 writer.write(str);

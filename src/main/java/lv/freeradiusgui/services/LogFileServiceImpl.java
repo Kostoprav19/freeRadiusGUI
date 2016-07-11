@@ -2,6 +2,7 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.utils.AppConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ public class LogFileServiceImpl implements LogFileService{
     public static final String PORT_PATTERN = "Port: (\\d+),";
     public static final String PORTSPEED_PATTERN = "Connection: CONNECT Ethernet (.+?)M";
     public static final String SWITCHIP_PATTERN = "Switch IP: (.+?),";
+
+    @Autowired
+    AppConfig appConfig;
 
     @Autowired
     SwitchService switchService;
@@ -63,7 +67,7 @@ public class LogFileServiceImpl implements LogFileService{
     public String getFileName() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         //return "auth-detail-" + formatter.format(LocalDateTime.now());
-        return "auth-detail-20160620";
+        return appConfig.getPathToLogDirectory() + "/auth-detail-20160620";
     }
 
 

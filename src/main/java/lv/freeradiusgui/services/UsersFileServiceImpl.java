@@ -1,6 +1,8 @@
 package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Device;
+import lv.freeradiusgui.utils.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -18,22 +20,24 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UsersFileServiceImpl implements UsersFileService{
-    public static final String FILE_NAME = "users";
-
     public static final String MAC_PATTERN = "^(([0-9a-fA-F]){12})";
     public static final String ACCESS_PATTERN = "Auth-Type := (\\w+)";
     public static final String DEVICENAME_PATTERN = "Reply-Message = \"(.+?),";
 
+    @Autowired
+    AppConfig appConfig;
 
     public List<Device> readFile(){
         List<String> listFromConfig = new ArrayList<>();
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(FILE_NAME))) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(appConfig.getPathToUsersFile()))) {
 
             //br returns as stream and convert it into a List
             listFromConfig = br.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
+            System.out.println("Error reading file  '" + appConfig.getPathToUsersFile() + "'");
+            e.printStackTrace();
             return null;
         }
 
