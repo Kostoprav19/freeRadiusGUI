@@ -32,16 +32,16 @@ public class AppConfig {
     }
     public AppConfig() {
         super();
-        System.out.println("Reading properties from file '" + PROPERTIES_FILE + "'");
+        System.err.println("Reading properties from file '" + PROPERTIES_FILE + "'");
 
         readPropertyFile();
         PathToClientsConfFile = getProperty("clientsfilepath");
         PathToUsersFile = getProperty("usersfilepath");
         PathToLogDirectory = getProperty("logfilesdirpath");
 
-        System.out.println("clientsfilepath = " + getPathToClientsConfFile());
-        System.out.println("usersfilepath = " + getPathToUsersFile());
-        System.out.println("logfilesdirpath = " + getPathToLogDirectory());
+        System.err.println("clientsfilepath = " + getPathToClientsConfFile());
+        System.err.println("usersfilepath = " + getPathToUsersFile());
+        System.err.println("logfilesdirpath = " + getPathToLogDirectory());
     }
 
     public String getProperty(String key){

@@ -36,7 +36,7 @@ public class UsersFileServiceImpl implements UsersFileService{
             listFromConfig = br.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
-            System.out.println("Error reading file  '" + appConfig.getPathToUsersFile() + "'");
+            System.err.println("Error reading file  '" + appConfig.getPathToUsersFile() + "'");
             e.printStackTrace();
             return null;
         }
