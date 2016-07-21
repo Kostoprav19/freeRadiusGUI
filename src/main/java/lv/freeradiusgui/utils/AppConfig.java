@@ -1,5 +1,7 @@
 package lv.freeradiusgui.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.util.Properties;
 @Service
 public class AppConfig {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static final String PROPERTIES_FILE = "config.properties";
     private final Properties configProp = new Properties();
 
@@ -32,16 +35,16 @@ public class AppConfig {
     }
     public AppConfig() {
         super();
-        System.err.println("Reading properties from file '" + PROPERTIES_FILE + "'");
+        logger.info("Reading properties from file '" + PROPERTIES_FILE + "'");
 
         readPropertyFile();
         PathToClientsConfFile = getProperty("clientsfilepath");
         PathToUsersFile = getProperty("usersfilepath");
         PathToLogDirectory = getProperty("logfilesdirpath");
 
-        System.err.println("clientsfilepath = " + getPathToClientsConfFile());
-        System.err.println("usersfilepath = " + getPathToUsersFile());
-        System.err.println("logfilesdirpath = " + getPathToLogDirectory());
+        logger.info("clientsfilepath = " + getPathToClientsConfFile());
+        logger.info("usersfilepath = " + getPathToUsersFile());
+        logger.info("logfilesdirpath = " + getPathToLogDirectory());
     }
 
     public String getProperty(String key){

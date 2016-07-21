@@ -26,6 +26,13 @@
     </div>
 
     <div class="input-group">
+         <span class="input-group-btn">
+            <a role="button" class="btn btn-success" th:href="@{/switch/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
+            <a role="button" class="btn btn-primary" th:href="@{/switch/reload}"><span class="glyphicon glyphicon-refresh"></span> Reload from 'clients.conf' file</a>
+    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <a role="button" class="btn btn-warning" th:href="@{/admin/writeClients}"><span class="glyphicon glyphicon-floppy-save"></span> Save changes</a>
+    </th:block>    <div th:replace="fragments/footer :: footer"></div>
+        </span>
         <input type="search" id="search" value="" class="form-control" placeholder="Filter current list"/>
     </div>
         <table class="table table-striped" id="table">
@@ -53,12 +60,13 @@
             </tr>
             </tbody>
         </table>
+
     <a role="button" class="btn btn-success" th:href="@{/switch/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
     <a role="button" class="btn btn-primary" th:href="@{/switch/reload}"><span class="glyphicon glyphicon-refresh"></span> Reload from 'clients.conf' file</a>
     <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
         <a role="button" class="btn btn-warning" th:href="@{/admin/writeClients}"><span class="glyphicon glyphicon-floppy-save"></span> Save changes</a>
     </th:block>    <div th:replace="fragments/footer :: footer"></div>
-</div>
 
+</div>
 </body>
 </html>
