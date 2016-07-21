@@ -2,6 +2,8 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.utils.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class UsersFileServiceImpl implements UsersFileService{
     public static final String ACCESS_PATTERN = "Auth-Type := (\\w+)";
     public static final String DEVICENAME_PATTERN = "Reply-Message = \"(.+?),";
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     AppConfig appConfig;
 
@@ -36,8 +40,8 @@ public class UsersFileServiceImpl implements UsersFileService{
             listFromConfig = br.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
-            System.out.println("Error reading file  '" + appConfig.getPathToUsersFile() + "'");
-            e.printStackTrace();
+            logger.error("Error reading file  '" + appConfig.getPathToUsersFile() + "'");
+            logger.error("STACK TRACE: ",e);
             return null;
         }
 

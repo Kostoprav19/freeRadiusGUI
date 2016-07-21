@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOG_PATH" value="/var/log/freeradiusgui" />
+    <!-- <property name="LOG_PATH" value="/var/log/freeradiusgui" /> -->
+    <property name="LOG_PATH" value="c:/logs" />
 
-    <appender name="FILE-AUDIT"
+    <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/debug.log</file>
+        <file>${LOG_PATH}/logs.txt</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
             </Pattern>
         </encoder>
 
@@ -24,34 +25,49 @@
 
     </appender>
 
-    <logger name="lv.freeradiusgui" level="ERROR"
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="lv.freeradiusgui" level="DEBUG"
             additivity="false">
-        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </logger>
 
     <logger name="org.thymeleaf" level="WARN"
             additivity="false">
-        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </logger>
 
-    <logger name="com.mchange.v2.c3p0" level="INFO"
+    <logger name="com.mchange.v2.c3p0" level="WARN"
             additivity="false">
-        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </logger>
 
     <logger name="org.hibernate" level="WARN"
             additivity="false">
-        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </logger>
 
     <logger name="org.springframework.security" level="WARN"
             additivity="false">
-        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </logger>
 
 
-    <root level="error">
-        <appender-ref ref="FILE-AUDIT" />
+
+    <root level="WARN">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </root>
 
 </configuration>

@@ -26,14 +26,10 @@
     <h4>Record count: <span th:text="${recordCount}" th:remove="tag"/>&nbsp;|&nbsp;Rejected count: <a href="#rejected"><span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${rejectedCount}"/></a></h4>
 
     <div class="space-20"></div>
-
-    <div class="input-group">
-         <span class="input-group-btn">
-            <a role="button" class="btn btn-primary" th:href="@{/logs/refresh}"><span class="glyphicon glyphicon-refresh"></span> Refresh from log file</a>
-        </span>
-        <input type="search" id="search" value="" class="form-control" placeholder="Filter current list"/>
+    <a role="button" class="btn btn-primary" th:href="@{/logs/refresh}"><span class="glyphicon glyphicon-refresh"></span> Refresh from log file</a>
+    <div class="form-group pull-right">
+        <input type="search" id="search" class="search form-control" placeholder="Filter current list"/>
     </div>
-
     <table class="table table-striped" id="table">
             <thead>
             <tr>
