@@ -1,7 +1,9 @@
 package lv.freeradiusgui.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lv.freeradiusgui.utils.AppConfig;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,20 +21,22 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HybernateConfig {
 
+    @Autowired
+    AppConfig appConfig;
 
     @Bean(destroyMethod = "close")
     public DataSource dataSource() throws PropertyVetoException {
 
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setDriverClass("com.mysql.jdbc.Driver");
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/freeradiusgui?useSSL=false");
-        dataSource.setUser("freeradius");
-        dataSource.setPassword("freeradius");
-        dataSource.setMaxPoolSize(20);
-        dataSource.setMinPoolSize(5);
-        dataSource.setCheckoutTimeout(1800);
-        dataSource.setMaxStatements(50);
-        dataSource.setIdleConnectionTestPeriod(30000);
+        dataSource.setDriverClass(appConfig.getDbDriverClass());
+        dataSource.setJdbcUrl(appConfig.getDbUrl());
+        dataSource.setUser(appConfig.getDbUser());
+        dataSource.setPassword(appConfig.getDbPassword());
+        dataSource.setMaxPoolSize(appConfig.getDbMaxPoolSize());
+        dataSource.setMinPoolSize(appConfig.getDbMinPoolSize());
+        dataSource.setCheckoutTimeout(appConfig.getDbCheckoutTimeout());
+        dataSource.setMaxStatements(appConfig.getDbMaxStatements());
+        dataSource.setIdleConnectionTestPeriod(appConfig.getDbIdleConnectionTestPeriod());
 
         return dataSource;
     }
