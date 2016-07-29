@@ -44,7 +44,7 @@ public class UsersFileServiceImpl implements UsersFileService{
             logger.error("STACK TRACE: ",e);
             return null;
         }
-
+        logger.info("Successfully loaded '" + appConfig.getPathToUsersFile() + "'" +  " file.");
         return parseList(listFromConfig);
     }
 

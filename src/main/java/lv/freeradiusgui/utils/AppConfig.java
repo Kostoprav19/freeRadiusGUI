@@ -87,7 +87,7 @@ public class AppConfig {
         setVariables();
 
         logger.info("setting variables:");
-        logger.info("usersfilepath = " + getPathToUsersFile());
+        logger.info("clientsfilepath = " + getPathToClientsConfFile());
         logger.info("usersfilepath = " + getPathToUsersFile());
         logger.info("logfilesdirpath = " + getPathToLogDirectory());
         logger.info("Database connection settings:");

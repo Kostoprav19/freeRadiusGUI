@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusgui`.`switches` (
   `descr` VARCHAR(100),
   `ip` VARCHAR(16) NOT NULL,
   `secret` VARCHAR(60),
-  PRIMARY KEY (`switch_id`, `mac`)
+  PRIMARY KEY (`switch_id`)
 )
   ENGINE = InnoDB
 DEFAULT CHARSET=utf8;

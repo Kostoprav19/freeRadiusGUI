@@ -2,6 +2,8 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Switch;
 import lv.freeradiusgui.utils.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
     public static final String SHORTNAME_PATTERN = "^shortname = (.+)$";
     public static final String IPADDR_PATTERN = "^ipaddr = (.+)$";
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     AppConfig appConfig;
 
@@ -42,11 +46,11 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
             listFromConfig = reader.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
-            System.out.println("Error reading file  '" + appConfig.getPathToClientsConfFile() + "'");
-            e.printStackTrace();
+            logger.error("Error reading file  '" + appConfig.getPathToClientsConfFile() + "'");
+            logger.error("STACK TRACE: ",e);
             return null;
         }
-
+        logger.info("Successfully loaded '" + appConfig.getPathToClientsConfFile() + "'" +  " file.");
         return parseList(listFromConfig);
     }
 

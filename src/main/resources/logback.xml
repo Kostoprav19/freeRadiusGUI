@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <!-- <property name="LOG_PATH" value="/var/log/freeradiusgui" /> -->
-    <property name="LOG_PATH" value="c:/logs" />
+    <property name="LOG_PATH" value="/var/log/freeradiusgui" />
+    <!--<property name="LOG_PATH" value="c:/logs" />-->
 
-    <appender name="FILE"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/logs.txt</file>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
-            </Pattern>
-        </encoder>
+   <appender name="FILE"
+             class="ch.qos.logback.core.rolling.RollingFileAppender">
+       <file>${LOG_PATH}/logs.txt</file>
+       <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+           <Pattern>
+               %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+           </Pattern>
+       </encoder>
 
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- rollover daily -->
+       <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+           <!-- rollover daily -->
             <fileNamePattern>${LOG_PATH}/archived/debug.%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy

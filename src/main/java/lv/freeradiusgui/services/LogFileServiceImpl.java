@@ -3,6 +3,8 @@ package lv.freeradiusgui.services;
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.utils.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,8 @@ public class LogFileServiceImpl implements LogFileService{
     public static final String PORTSPEED_PATTERN = "Connection: CONNECT Ethernet (.+?)M";
     public static final String SWITCHIP_PATTERN = "Switch IP: (.+?),";
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     AppConfig appConfig;
 
@@ -55,11 +59,11 @@ public class LogFileServiceImpl implements LogFileService{
             listFromConfig = br.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
-            System.out.println("Error reading file  '" + fileName + "'");
-            e.printStackTrace();
+            logger.error("Error reading file  '" + fileName + "'");
+            logger.error("STACK TRACE: ",e);
             return null;
         }
-
+        logger.info("Successfully loaded '" + fileName + "'" +  " file.");
         return parseList(listFromConfig);
     }
 
@@ -67,7 +71,8 @@ public class LogFileServiceImpl implements LogFileService{
     public String getFileName() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         //return "auth-detail-" + formatter.format(LocalDateTime.now());
-        return appConfig.getPathToLogDirectory() + "/auth-detail-20160620";
+        //return appConfig.getPathToLogDirectory() + "/auth-detail-20160620";
+        return "auth-detail-20160620";
     }
 
 
