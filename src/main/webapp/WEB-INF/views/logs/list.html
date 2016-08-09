@@ -6,13 +6,13 @@
     <title>Radius logs</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="icon" type="image/png" th:href="@{/resources/img/favico.png}" />
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <link href="css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
-    <script src="js/jquery-2.2.4.js" th:src="@{/resources/js/jquery-2.2.4.min.js}"></script>
-    <script src="js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
-    <script src="js/jquery.searchable-1.1.0.min.js" th:src="@{/resources/js/jquery.searchable-1.1.0.min.js}"></script>
-    <script src="js/search.js" th:src="@{/resources/js/search.js}"></script>
-    <script src="js/core.js" th:src="@{/resources/js/core.js}"></script>
+    <link rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script th:src="@{/resources/js/jquery-2.2.4.min.js}"></script>
+    <script th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script th:src="@{/resources/js/jquery.searchable-1.1.0.min.js}"></script>
+    <script th:src="@{/resources/js/search.js}"></script>
+    <script th:src="@{/resources/js/core.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'">&nbsp;</div>
@@ -55,7 +55,10 @@
                     <a name="rejected" th:if="${log.device == null}" role="button" class="btn btn-warning btn-xs" th:href="@{/device/add/{mac}(mac=${log.mac})}"><span class="glyphicon glyphicon-plus"></span> Register new device</a>
                 </td>
                 <td th:text="${log.device != null} ? ${log.device.type} : 'N/a'"></td>
-                <td th:text="${log.status == 1} ? 'Accept' : 'Reject'"></td>
+                <td>
+                    <a th:if="${log.status == 0}" name="rejected"></a>
+                    <span th:text="${log.status == 1} ? 'Accept' : 'Reject'" th:remove="tag"></span>
+                </td>
                 <td>
                     <a th:if="${log.switch != null}" th:href="@{/switch/{id}(id=${log.switch.id})}">
                         <span th:text="${log.switch != null} ? ${log.switch.name} : 'N/a'" th:remove="tag"/>

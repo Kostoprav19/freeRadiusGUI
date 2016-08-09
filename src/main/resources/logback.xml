@@ -2,7 +2,6 @@
 <configuration>
 
     <property name="LOG_PATH" value="/var/log/freeradiusgui" />
-    <!--<property name="LOG_PATH" value="c:/logs" />-->
 
    <appender name="FILE"
              class="ch.qos.logback.core.rolling.RollingFileAppender">

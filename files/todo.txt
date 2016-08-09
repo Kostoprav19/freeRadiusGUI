@@ -2,5 +2,5 @@
 2) Server status
 3) Devices -> button Update statistics
 4) on startup load/refresh clients, devices and logs (in that order!)
-5) Link to rejected not generated if rejected device is in database. Check uslovie creation of link
-6) go up link button arrow is not showing
+5) Link to rejected not generated if rejected device is in database. Check uslovie creation of link - DONE
+6) go up link button arrow is not showing - DONE
