@@ -1,6 +1,11 @@
-1) Log Failed logins
+1) Log Failed logins - DONE
 2) Server status
-3) Devices -> button Update statistics
+3) Devices -> button Update statistics - RECALLED
 4) on startup load/refresh clients, devices and logs (in that order!)
 5) Link to rejected not generated if rejected device is in database. Check uslovie creation of link - DONE
 6) go up link button arrow is not showing - DONE
+7) Save changes shown only if there is changes
+8) Scheduler - update statistics
+9) email alert about rejected devices
+10) alert in header about rejected devices count
+11) Load logs from archive

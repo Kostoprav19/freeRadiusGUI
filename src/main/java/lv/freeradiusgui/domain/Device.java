@@ -21,6 +21,8 @@ public class Device implements Serializable{
     public static final String TYPE_PRINTER = "Printer";
     public static final String TYPE_OTHER = "Other";
     public static final List TYPE_ALL = Arrays.asList("Computer", "Printer", "Other");
+    public static final int ACCESS_ACCEPT = 1;
+    public static final int ACCESS_REJECT = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

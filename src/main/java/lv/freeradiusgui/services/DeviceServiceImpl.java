@@ -47,8 +47,6 @@ public class DeviceServiceImpl implements DeviceService{
     @Override
     public List<Device> getAll() {
         List<Device> list = deviceDAO.getAll();
-        list = updateStatistics(list);
-        deviceDAO.storeAll(list);
         return list;
     }
 
@@ -86,7 +84,7 @@ public class DeviceServiceImpl implements DeviceService{
     public Device prepareNewDevice(String mac) {
         Device device = new Device();
         if (mac != null) device.setMac(mac);
-        device.setAccess(1); //Access-Accept
+        device.setAccess(Device.ACCESS_ACCEPT);
         device.setTimeOfRegistration(LocalDateTime.now());
         device.setSwitchPort(-1); //No information yet
         device.setPortSpeed(-1); //No information yet
@@ -100,6 +98,7 @@ public class DeviceServiceImpl implements DeviceService{
         if (listFromFile == null) return false;
 
         List<Device> finalList = updateDeviceList(listFromFile);
+        finalList = updateStatistics(finalList);
 
         deviceDAO.storeAll(finalList);
         return true;

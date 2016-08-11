@@ -3,14 +3,15 @@ package lv.freeradiusgui.dao;
 /**
  * Created by Dan on 23.04.2016.
  */
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.ParameterizedType;
@@ -20,7 +21,7 @@ import java.util.List;
 public abstract class AbstractGenericBaseDao<T> {
 
     protected SessionFactory sessionFactory;
-    //private Logger logger = LogManager.getLogger(AbstractGenericBaseDao.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private Class<T> persistentClass;
 
     @SuppressWarnings("unchecked")
@@ -38,10 +39,8 @@ public abstract class AbstractGenericBaseDao<T> {
             session.saveOrUpdate(obj);
             return true;
         } catch (Exception e) {
-            System.out.println("Exception while execute AbstractGenericBaseDao.store()");
-            System.out.println("------------------------------------------------------------------------");
-            e.printStackTrace();
-            System.out.println("------------------------------------------------------------------------");
+            logger.error("Exception while execute AbstractGenericBaseDao.store()");
+            logger.error("STACK TRACE: ",e);
             return false;
         }
     }
@@ -57,10 +56,8 @@ public abstract class AbstractGenericBaseDao<T> {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("Exception while execute AbstractGenericBaseDao.storeAll()");
-            System.out.println("------------------------------------------------------------------------");
-            e.printStackTrace();
-            System.out.println("------------------------------------------------------------------------");
+            logger.error("Exception while execute AbstractGenericBaseDao.storeAll()");
+            logger.error("STACK TRACE: ",e);
             return false;
         }
     }
