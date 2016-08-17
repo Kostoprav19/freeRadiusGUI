@@ -82,6 +82,7 @@ public class AppConfig {
 
     public AppConfig() {
         super();
+        logger.info("---------------- Loading configuration ----------------");
         logger.info("Reading properties from file '" + PROPERTIES_FILE + "'");
 
         setVariables();
@@ -99,6 +100,8 @@ public class AppConfig {
         logger.info("dbCheckoutTimeout = " + getDbCheckoutTimeout());
         logger.info("dbMaxStatements = " + getDbMaxStatements());
         logger.info("dbIdleConnectionTestPeriod = " + getDbIdleConnectionTestPeriod());
+
+        logger.info("---------------- Configuration loaded  ----------------");
     }
 
     private void setVariables() {
