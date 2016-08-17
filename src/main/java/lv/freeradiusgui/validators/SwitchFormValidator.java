@@ -35,11 +35,11 @@ public class SwitchFormValidator implements Validator{
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "ip", "NotEmpty.switchForm.ip");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "secret", "NotEmpty.switchForm.secret");
 
-        if (!isMacValid(aSwitch.getMac())){
+        if ((!aSwitch.getMac().isEmpty()) && (!isMacValid(aSwitch.getMac()))){
             errors.rejectValue("mac", "Pattern.switchForm.mac");
         }
 
-        if ((!aSwitch.getMac().isEmpty()) && (!isIPValid(aSwitch.getIp()))){
+        if ((!aSwitch.getIp().isEmpty()) && (!isIPValid(aSwitch.getIp()))){
             errors.rejectValue("ip", "Pattern.switchForm.ip");
         }
 

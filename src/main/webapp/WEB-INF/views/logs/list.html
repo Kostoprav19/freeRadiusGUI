@@ -23,7 +23,7 @@
     <div class="page-header">
         <h1>Radius logs</h1>
     </div>
-    <h4>Record count: <span th:text="${recordCount}" th:remove="tag"/>&nbsp;|&nbsp;Rejected count: <a href="#rejected"><span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${rejectedCount}"/></a></h4>
+    <h4>Record count: <span th:text="${recordCount}" th:remove="tag"/>&nbsp;|&nbsp;Rejected count: <a href="#rejected"><span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.rejectedCount}"/></a></h4>
 
     <div class="space-20"></div>
     <a role="button" class="btn btn-primary" th:href="@{/logs/refresh}" title="Refresh from log file."><span class="glyphicon glyphicon-refresh"></span> Refresh</a>

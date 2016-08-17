@@ -4,6 +4,8 @@ import lv.freeradiusgui.dao.logDAO.LogDAO;
 import lv.freeradiusgui.domain.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,17 @@ public class LogServiceImpl implements LogService{
 
     @Override
     public boolean storeAll(List<Log> logList) {
+        LocalDateTime lastRecordTime = logDAO.getLast().getTimeOfRegistration();
+        logList = removeOldRecords(logList, lastRecordTime);
         return logDAO.storeAll(logList);
+    }
+
+    private List<Log> removeOldRecords(List<Log> logList, LocalDateTime lastRecord) {
+        List<Log> result = new ArrayList<>();
+        for (Log log : logList){
+            if (log.getTimeOfRegistration().isAfter(lastRecord)) result.add(log);
+        }
+        return result;
     }
 
     @Override
@@ -67,7 +79,7 @@ public class LogServiceImpl implements LogService{
         if (listFromFile == null) {
             return null;
         } else {
-            logDAO.storeAll(listFromFile);
+            storeAll(listFromFile);
             return logFileService.getFileName();
         }
     }
@@ -77,7 +89,7 @@ public class LogServiceImpl implements LogService{
         if ( (list == null) || (list.isEmpty()) ) return 0;
         int count = 0;
         for (Log log : list){
-            if (log.getStatus() == 0) count++;
+            if (log.getStatus() == Log.STATUS_REJECT) count++;
         }
         return count;
     }

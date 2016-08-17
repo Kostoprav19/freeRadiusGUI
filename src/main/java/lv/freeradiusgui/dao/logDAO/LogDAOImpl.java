@@ -2,10 +2,16 @@ package lv.freeradiusgui.dao.logDAO;
 
 import lv.freeradiusgui.dao.AbstractGenericBaseDao;
 import lv.freeradiusgui.domain.Log;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by Dan on 23.04.2016.
@@ -34,6 +40,16 @@ public class LogDAOImpl extends AbstractGenericBaseDao<Log> implements LogDAO {
             return null;
         }
         return getLastByCriteria("mac", mac);
+    }
+
+    @Override
+    public Log getLast() {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Log.class).addOrder(Order.desc("timeOfRegistration"));
+
+        List<Log> list = criteria.list();
+        Log obj = list.isEmpty() ? null : (Log) criteria.list().get(0);
+        return obj;
     }
 
 }

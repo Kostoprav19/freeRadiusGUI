@@ -11,3 +11,5 @@
 11) Load logs from archive
 12) after server restart CFRS incorect exception
 13) LogService implement log file name
+14) Apply button on navbar
+15) Load logs only once

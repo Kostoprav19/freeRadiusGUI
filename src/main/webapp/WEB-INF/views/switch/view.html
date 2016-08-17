@@ -39,12 +39,12 @@
             <input id="name" class="form-control" type="text" th:field="*{name}" placeholder="Name" th:autofocus="true"/>
         </div>
         <div class="form-group">
-            <label for="mac">Mac</label>
-            <input id="mac" class="form-control" type="text" th:field="*{mac}" placeholder="Mac address"/>
-        </div>
-        <div class="form-group">
             <label for="ip">IP</label>
             <input id="ip" class="form-control" type="text" th:field="*{ip}" placeholder="IP address"/>
+        </div>
+        <div class="form-group">
+            <label for="mac">Mac</label>
+            <input id="mac" class="form-control" type="text" th:field="*{mac}" placeholder="Mac address"/>
         </div>
         <div class="form-group">
             <label for="ip">Secret</label>
@@ -55,7 +55,7 @@
             <textarea id="description" class="form-control" type="text" th:field="*{description}" placeholder="Description"/>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+            <button type="submit" class="btn btn-info" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
             <a role="button" class="btn btn-danger" th:href="@{/switch/delete/{id}(id=${aSwitch.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
             <a role="button" class="btn btn-default" href="javascript:history.back()"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
         </div>

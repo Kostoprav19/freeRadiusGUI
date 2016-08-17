@@ -26,7 +26,7 @@
     </div>
 
     <a role="button" class="btn btn-success" th:href="@{/device/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
-    <a role="button" class="btn btn-primary" th:href="@{/device/reload}" title="Reload from 'users' file."><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    <a role="button" class="btn btn-primary" th:href="@{/device/reload}" title="Reload from 'users' file."><span class="glyphicon glyphicon-refresh"></span> Reload</a>
     <div class="form-group pull-right">
         <input type="search" id="search" class="search form-control" placeholder="Filter current list"/>
     </div>
@@ -59,7 +59,7 @@
                     </a>
                 </td>
                 <td th:text="${device.switchPort}"></td>
-                <td th:text="${device.portSpeed != null} ? (${device.portSpeed} + ' ' + ${device.duplex == 1 ? 'Full' : 'Half'}) : ''"></td>
+                <td th:text="${device.portSpeed != null} ? (${device.portSpeed} + ' ' + ${device.duplex == 1 ? 'Full' : 'Half'}) : ''" th:classappend="${device.portSpeed == 100 ? 'text-danger' : ''}"></td>
                 <td>
                     <a role="button" class="btn btn-info btn-xs" th:href="@{/device/{id}(id=${device.id})}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
                     <a role="button" class="btn btn-danger btn-xs" th:href="@{/device/delete/{id}(id=${device.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
@@ -68,7 +68,7 @@
             </tbody>
         </table>
     <a role="button" class="btn btn-success" th:href="@{/device/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
-    <a role="button" class="btn btn-primary" th:href="@{/device/reload}" title="Reload from 'users' file."><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    <a role="button" class="btn btn-primary" th:href="@{/device/reload}" title="Reload from 'users' file."><span class="glyphicon glyphicon-refresh"></span> Reload</a>
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 

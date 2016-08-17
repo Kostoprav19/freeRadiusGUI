@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "logs")
 public class Log {
+    public static final int STATUS_ACCEPT = 1;
+    public static final int STATUS_REJECT = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "log_id")

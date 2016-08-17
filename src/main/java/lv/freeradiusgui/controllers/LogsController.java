@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -21,20 +22,17 @@ public class LogsController {
     @Autowired
     LogService logService;
 
-
     @ModelAttribute("page")
     public String page() {
         return "logs";
     }
 
-
-
     @RequestMapping(value = {Views.LOGS_LIST, Views.LOGS}, method = RequestMethod.GET)
-    public String viewLogs(Model model) {
+    public String viewLogs(Model model, HttpServletRequest request) {
         List<Log> list = logService.getAll();
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
-        model.addAttribute("rejectedCount", logService.countRejected(list));
+        request.getSession().setAttribute("rejectedCount", logService.countRejected(list));
         return Views.LOGS_LIST;
     }
 

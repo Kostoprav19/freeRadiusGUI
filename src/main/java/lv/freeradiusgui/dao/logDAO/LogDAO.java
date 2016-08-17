@@ -18,6 +18,8 @@ public interface LogDAO {
 
     Log getLastByMac(String mac);
 
+    Log getLast();
+
     List<Log> getAll();
 
     List<Log> getAllByCriteria(String fieldName, Object object);
