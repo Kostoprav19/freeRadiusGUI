@@ -17,10 +17,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li th:classappend="${page == 'logs' ? 'active' : ''}">
-                    <a href="#" th:href="@{/logs/list}">Radius logs</a>
-                    <a href="#rejected"><span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${rejectedCount}"/></a>
-                </li>
+                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.rejectedCount}"/></a></li>
                 <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/device/list}">Devices</a></li>
                 <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
                 <li th:classappend="${page == 'server' ? 'active' : ''}"><a href="#" th:href="@{/server}">Server status</a></li>
