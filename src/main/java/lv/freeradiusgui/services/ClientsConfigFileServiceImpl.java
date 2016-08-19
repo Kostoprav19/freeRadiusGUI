@@ -55,7 +55,7 @@ public class ClientsConfigFileServiceImpl implements ClientsConfigFileService{
     }
 
     @Override
-    public boolean saveToFile(List<Switch> list) {
+    public boolean saveFile(List<Switch> list) {
         List<String> stringList = new ArrayList<>();
 
         for (Switch aSwitch : list){

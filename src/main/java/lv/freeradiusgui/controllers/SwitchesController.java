@@ -93,7 +93,7 @@ public class SwitchesController {
     @RequestMapping(value = Views.SWITCH + "/reload", method = RequestMethod.GET)
     public String reloadSwitches(final RedirectAttributes redirectAttributes) {
         if (switchService.reloadFromConfig()) {
-            redirectAttributes.addFlashAttribute("msg", "Successfully loaded 'clients.config' file.");
+            redirectAttributes.addFlashAttribute("msg", "Successfully loaded 'clients.conf' file.");
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
             redirectAttributes.addFlashAttribute("msg", "Error loading 'clients.config' file.");
@@ -105,10 +105,10 @@ public class SwitchesController {
     @RequestMapping(value = Views.ADMIN + "/writeClients", method = RequestMethod.GET)
     public String writeSwitches(final RedirectAttributes redirectAttributes) {
         if (switchService.writeToConfig()) {
-            redirectAttributes.addFlashAttribute("msg", "Successfully written 'clients.config' file.");
+            redirectAttributes.addFlashAttribute("msg", "Successfully written 'clients.conf' file.");
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
-            redirectAttributes.addFlashAttribute("msg", "Error writing to 'clients.config' file.");
+            redirectAttributes.addFlashAttribute("msg", "Error writing to 'clients.conf' file.");
             redirectAttributes.addFlashAttribute("msgType", "danger");
         }
         return "redirect:/" + Views.SWITCH_LIST;

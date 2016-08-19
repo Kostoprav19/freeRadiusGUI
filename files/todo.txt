@@ -7,7 +7,7 @@
 7) Save changes shown only if there is changes
 8) Scheduler - update statistics
 9) email alert about rejected devices
-10) alert in header about rejected devices count
+10) alert in header about rejected devices count - DONE
 11) Load logs from archive
 12) after server restart CFRS incorect exception
 13) LogService implement log file name

@@ -2,6 +2,8 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.dao.logDAO.LogDAO;
 import lv.freeradiusgui.domain.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class LogServiceImpl implements LogService{
     @Autowired
     private LogFileService logFileService;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public boolean store(Log log) {
         return logDAO.store(log);
@@ -28,9 +32,19 @@ public class LogServiceImpl implements LogService{
 
     @Override
     public boolean storeAll(List<Log> logList) {
-        LocalDateTime lastRecordTime = logDAO.getLast().getTimeOfRegistration();
-        logList = removeOldRecords(logList, lastRecordTime);
-        return logDAO.storeAll(logList);
+        Log lastRecord = logDAO.getLast();
+        LocalDateTime lastRecordTime;
+        if (lastRecord != null) { //If no logs in DB yet
+            lastRecordTime = lastRecord.getTimeOfRegistration();
+            logList = removeOldRecords(logList, lastRecordTime);
+        }
+        boolean result = logDAO.storeAll(logList);
+        if (result) {
+            logger.info("Successfully written log records to database.");
+        } else {
+            logger.error("Failed to write log records to database");
+        }
+        return result;
     }
 
     private List<Log> removeOldRecords(List<Log> logList, LocalDateTime lastRecord) {

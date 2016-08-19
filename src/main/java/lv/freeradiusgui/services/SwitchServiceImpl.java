@@ -2,6 +2,8 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.dao.switchDAO.SwitchDAO;
 import lv.freeradiusgui.domain.Switch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class SwitchServiceImpl implements SwitchService{
     @Autowired
     ClientsConfigFileService clientsConfigFileService;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public boolean store(Switch aSwitch) {
         return switchDAO.store(aSwitch);
@@ -27,9 +31,14 @@ public class SwitchServiceImpl implements SwitchService{
 
     @Override
     public boolean storeAll(List<Switch> switchList) {
-        return switchDAO.storeAll(switchList);
+        boolean result = switchDAO.storeAll(switchList);
+        if (result) {
+            logger.info("Successfully written switch records to database.");
+        } else {
+            logger.error("Failed to write switch records to database");
+        }
+        return result;
     }
-
 
     @Override
     public Switch getById(Integer id) {
@@ -73,8 +82,7 @@ public class SwitchServiceImpl implements SwitchService{
         if ((listFromConfig == null) || (listFromConfig.isEmpty())) return false;
 
         List<Switch> finalList = updateSwitchList(listFromConfig);
-
-        switchDAO.storeAll(finalList);
+        storeAll(finalList);
         return true;
     }
 
@@ -83,7 +91,7 @@ public class SwitchServiceImpl implements SwitchService{
         List<Switch> listFromDB = switchDAO.getAll();
         if ((listFromDB == null) || (listFromDB.isEmpty())) return false;
 
-        return clientsConfigFileService.saveToFile(listFromDB);
+        return clientsConfigFileService.saveFile(listFromDB);
     }
 
     private List<Switch> updateSwitchList(List<Switch> listFromConfig) {
