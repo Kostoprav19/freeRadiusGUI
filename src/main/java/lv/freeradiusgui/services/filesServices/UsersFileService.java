@@ -1,6 +1,7 @@
-package lv.freeradiusgui.services;
+package lv.freeradiusgui.services.filesServices;
 
 import lv.freeradiusgui.domain.Device;
+import lv.freeradiusgui.domain.Switch;
 import lv.freeradiusgui.utils.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,37 +22,40 @@ import java.util.stream.Collectors;
  * Created by Dan on 08.06.2016.
  */
 @Service
-public class UsersFileServiceImpl implements UsersFileService{
+public class UsersFileService extends AbstractFileServices implements FileService<Device>{
     public static final String MAC_PATTERN = "^(([0-9a-fA-F]){12})";
     public static final String ACCESS_PATTERN = "Auth-Type := (\\w+)";
     public static final String DEVICENAME_PATTERN = "Reply-Message = \"(.+?),";
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    AppConfig appConfig;
-
-    public List<Device> readFile(){
-        List<String> listFromConfig = new ArrayList<>();
-
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(appConfig.getPathToUsersFile()))) {
-
-            //br returns as stream and convert it into a List
-            listFromConfig = br.lines().collect(Collectors.toList());
-
-        } catch (IOException e) {
-            logger.error("Error reading file  '" + appConfig.getPathToUsersFile() + "'");
-            logger.error("STACK TRACE: ",e);
-            return null;
-        }
-        logger.info("Successfully loaded '" + appConfig.getPathToUsersFile() + "'" +  " file.");
-        return parseList(listFromConfig);
+    @Override
+    public List<Device> readListFromFile(){
+        List<String> listFromFile = readFile(appConfig.getPathToUsersFile());
+        listFromFile = removeComments(listFromFile);
+        return parseList(listFromFile);
     }
 
+    @Override
+    public boolean saveListToFile(List<Device> list) {
+        List<String> stringList = new ArrayList<>();
 
-    public List<Device> parseList(List<String> list){
+        for (Device device : list){
+            String accessStr = (device.getAccess() == Device.ACCESS_ACCEPT) ? "Accept" : "Reject";
+            stringList.add(device.getMac() + " Auth-Type := " + accessStr);
+            stringList.add("        Reply-Message = \"" + device.getName() + ", Access-" + accessStr +
+            ", MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}\"");
+        }
+        stringList.add("DEFAULT Auth-Type := Reject");
+        stringList.add("        Reply-Message = \"Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}\"");
+//        Example:
+//        041e64fc08c3  Auth-Type := Accept
+//        Reply-Message = "ansis-imac-ethernet2, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+
+
+        return writeFile(stringList, appConfig.getPathToUsersFile());
+    }
+
+    private List<Device> parseList(List<String> list){
         List<Device> deviceList = new ArrayList<>();
-        list = removeComments(list);
         Integer index = 0;
         do {
             List<String> subList = findSubList(list, index);
@@ -63,6 +67,7 @@ public class UsersFileServiceImpl implements UsersFileService{
 
         } while (index < list.size()-1);
 
+        deviceList.remove(deviceList.size()-1); //last record is DEFAULT
         return deviceList;
     }
 
@@ -77,9 +82,9 @@ public class UsersFileServiceImpl implements UsersFileService{
                 if (string.contains("Auth-Type")){
                     newDevice.setMac(parseValue(list.get(index), MAC_PATTERN));
                     if (parseValue(list.get(index), ACCESS_PATTERN).equals("Accept")) {
-                        newDevice.setAccess(1);
+                        newDevice.setAccess(Device.ACCESS_ACCEPT);
                     } else {
-                        newDevice.setAccess(0);
+                        newDevice.setAccess(Device.ACCESS_REJECT);
                     }
                 }
             }
@@ -106,13 +111,7 @@ public class UsersFileServiceImpl implements UsersFileService{
         return Device.TYPE_COMPUTER;
     }
 
-    public String parseValue(String string, String pattern) {
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(string);
-        if (m.find()) return m.group(1).trim(); else return "";
-    }
-
-    public List<String> findSubList(List<String> list, Integer index) {
+    private List<String> findSubList(List<String> list, Integer index) {
         List<String> result = new ArrayList<>();
 
         while (!list.get(index).contains("Auth-Type")){
@@ -129,24 +128,6 @@ public class UsersFileServiceImpl implements UsersFileService{
                 break;
             }
             result.add(currentString);
-        }
-
-        return result;
-    }
-
-
-    public List<String> removeComments(List<String> list) {
-        List<String> result = new ArrayList<>();
-
-        for (String string : list) {
-            string = string.trim();
-            int position = string.indexOf("#");
-            if (string.equals("")) position = 0; //do not add empty lines
-            switch (position){
-                case -1: result.add(string); break;
-                case 0: break;
-                default: result.add(string.substring(0, position).trim()); break;
-            }
         }
 
         return result;

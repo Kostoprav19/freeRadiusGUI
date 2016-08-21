@@ -2,6 +2,7 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.dao.logDAO.LogDAO;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.services.filesServices.LogFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class LogServiceImpl implements LogService{
 
     @Override
     public String loadFromFile() {
-        List<Log> listFromFile = logFileService.readFile();
+        List<Log> listFromFile = logFileService.readListFromFile();
         if (listFromFile == null) {
             return null;
         } else {

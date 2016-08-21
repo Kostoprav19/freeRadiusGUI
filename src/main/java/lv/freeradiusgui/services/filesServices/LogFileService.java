@@ -1,7 +1,8 @@
-package lv.freeradiusgui.services;
+package lv.freeradiusgui.services.filesServices;
 
-import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.services.DeviceService;
+import lv.freeradiusgui.services.SwitchService;
 import lv.freeradiusgui.utils.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +27,13 @@ import java.util.stream.Collectors;
  * Created by Dan on 08.06.2016.
  */
 @Service
-public class LogFileServiceImpl implements LogFileService{
+public class LogFileService extends AbstractFileServices implements FileService<Log>{
 
     public static final String MAC_PATTERN = "MAC:(([0-9a-fA-F]){12})";
     public static final String ACCESS_PATTERN = "Packet-Type = Access-(\\w+)";
     public static final String PORT_PATTERN = "Port: (\\d+),";
     public static final String PORTSPEED_PATTERN = "Connection: CONNECT Ethernet (.+?)M";
     public static final String SWITCHIP_PATTERN = "Switch IP: (.+?),";
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    AppConfig appConfig;
 
     @Autowired
     SwitchService switchService;
@@ -48,37 +44,29 @@ public class LogFileServiceImpl implements LogFileService{
     public String fileName;
 
     @Override
-    public List<Log> readFile(){
-        List<String> listFromConfig = new ArrayList<>();
+    public List<Log> readListFromFile(){
+        List<String> listFromFile = readFile(getFileName());
+        if (listFromFile == null) return null;
 
-        fileName = getFileName();
-
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) {
-
-            //br returns as stream and convert it into a List
-            listFromConfig = br.lines().collect(Collectors.toList());
-
-        } catch (IOException e) {
-            logger.error("Error reading file  '" + fileName + "'");
-            logger.error("STACK TRACE: ",e);
-            return null;
-        }
-        logger.info("Successfully loaded '" + fileName + "'" +  " file.");
-        return parseList(listFromConfig);
+        listFromFile = removeComments(listFromFile);
+        return parseList(listFromFile);
     }
 
     @Override
+    public boolean saveListToFile(List<Log> list) {
+        return false;
+    }
+
     public String getFileName() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         //return "auth-detail-" + formatter.format(LocalDateTime.now());
-        //return appConfig.getPathToLogDirectory() + "/auth-detail-20160620";
-        return "auth-detail-20160620";
+        return appConfig.getPathToLogDirectory() + "/auth-detail-20160620";
+        //return "auth-detail-20160620";
     }
 
 
-    public List<Log> parseList(List<String> list){
+    private List<Log> parseList(List<String> list){
         List<Log> logList = new ArrayList<>();
-        list = removeComments(list);
         Integer index = 0;
         do {
             List<String> subList = findSubList(list, index);
@@ -134,13 +122,7 @@ public class LogFileServiceImpl implements LogFileService{
         return newLog;
     }
 
-    public String parseValue(String string, String pattern) {
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(string);
-        if (m.find()) return m.group(1).trim(); else return "";
-    }
-
-    public List<String> findSubList(List<String> list, Integer index) {
+        private List<String> findSubList(List<String> list, Integer index) {
         List<String> result = new ArrayList<>();
 
         while (!list.get(index).contains("Packet-Type")){
@@ -158,24 +140,6 @@ public class LogFileServiceImpl implements LogFileService{
                 break;
             }
             result.add(currentString);
-        }
-
-        return result;
-    }
-
-
-    public List<String> removeComments(List<String> list) {
-        List<String> result = new ArrayList<>();
-
-        for (String string : list) {
-            string = string.trim();
-            int position = string.indexOf("#");
-            if (string.equals("")) position = 0; //do not add empty lines
-            switch (position){
-                case -1: result.add(string); break;
-                case 0: break;
-                default: result.add(string.substring(0, position).trim()); break;
-            }
         }
 
         return result;

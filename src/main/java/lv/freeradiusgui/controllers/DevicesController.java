@@ -52,7 +52,9 @@ public class DevicesController {
 
     @RequestMapping(value = {Views.DEVICE_LIST, Views.DEVICE}, method = RequestMethod.GET)
     public String viewDevices(Model model) {
-        model.addAttribute("devices", deviceService.getAll());
+        List<Device> list = deviceService.getAll();
+        model.addAttribute("devices", list);
+        model.addAttribute("recordCount", list.size());
         return Views.DEVICE_LIST;
     }
 
@@ -116,6 +118,18 @@ public class DevicesController {
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
             redirectAttributes.addFlashAttribute("msg", "Error loading 'users' file.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.DEVICE_LIST;
+    }
+
+    @RequestMapping(value = Views.ADMIN + "/writeUsers", method = RequestMethod.GET)
+    public String writeDevices(final RedirectAttributes redirectAttributes) {
+        if (deviceService.writeToConfig()) {
+            redirectAttributes.addFlashAttribute("msg", "Successfully written data to 'users' file.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error writing to data to 'users' file.");
             redirectAttributes.addFlashAttribute("msgType", "danger");
         }
         return "redirect:/" + Views.DEVICE_LIST;

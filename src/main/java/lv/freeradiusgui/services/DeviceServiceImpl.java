@@ -3,6 +3,9 @@ package lv.freeradiusgui.services;
 import lv.freeradiusgui.dao.deviceDAO.DeviceDAO;
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.services.filesServices.UsersFileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -14,6 +17,8 @@ import java.util.List;
  */
 @Service
 public class DeviceServiceImpl implements DeviceService{
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private DeviceDAO deviceDAO;
@@ -31,7 +36,14 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public boolean storeAll(List<Device> deviceList) {
-        return deviceDAO.storeAll(deviceList);
+        boolean result =  deviceDAO.storeAll(deviceList);
+
+        if (result) {
+            logger.info("Successfully written device records to database.");
+        } else {
+            logger.error("Failed to write device records to database");
+        }
+        return result;
     }
 
     @Override
@@ -94,7 +106,7 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public boolean reloadFromConfig() {
-        List<Device> listFromFile = usersFileService.readFile();
+        List<Device> listFromFile = usersFileService.readListFromFile();
         if (listFromFile == null) return false;
 
         List<Device> finalList = updateDeviceList(listFromFile);
@@ -102,6 +114,14 @@ public class DeviceServiceImpl implements DeviceService{
 
         deviceDAO.storeAll(finalList);
         return true;
+    }
+
+    @Override
+    public boolean writeToConfig() {
+        List<Device> listFromDB = deviceDAO.getAll();
+        if ((listFromDB == null) || (listFromDB.isEmpty())) return false;
+
+        return usersFileService.saveListToFile(listFromDB);
     }
 
     private List<Device> updateDeviceList(List<Device> listFromFile) {

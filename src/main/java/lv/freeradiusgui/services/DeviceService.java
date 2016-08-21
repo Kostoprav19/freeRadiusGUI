@@ -28,4 +28,6 @@ public interface DeviceService {
     Device prepareNewDevice(String mac);
 
     boolean reloadFromConfig();
+
+    boolean writeToConfig();
 }

@@ -2,6 +2,7 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.dao.switchDAO.SwitchDAO;
 import lv.freeradiusgui.domain.Switch;
+import lv.freeradiusgui.services.filesServices.ClientsConfFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class SwitchServiceImpl implements SwitchService{
     private SwitchDAO switchDAO;
 
     @Autowired
-    ClientsConfigFileService clientsConfigFileService;
+    ClientsConfFileService clientsConfigFileService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -78,11 +79,11 @@ public class SwitchServiceImpl implements SwitchService{
 
     @Override
     public boolean reloadFromConfig() {
-        List<Switch> listFromConfig = clientsConfigFileService.readFile();
+        List<Switch> listFromConfig = clientsConfigFileService.readListFromFile();
         if ((listFromConfig == null) || (listFromConfig.isEmpty())) return false;
 
         List<Switch> finalList = updateSwitchList(listFromConfig);
-        storeAll(finalList);
+        if (!finalList.isEmpty()) storeAll(finalList);
         return true;
     }
 
@@ -91,7 +92,7 @@ public class SwitchServiceImpl implements SwitchService{
         List<Switch> listFromDB = switchDAO.getAll();
         if ((listFromDB == null) || (listFromDB.isEmpty())) return false;
 
-        return clientsConfigFileService.saveFile(listFromDB);
+        return clientsConfigFileService.saveListToFile(listFromDB);
     }
 
     private List<Switch> updateSwitchList(List<Switch> listFromConfig) {
