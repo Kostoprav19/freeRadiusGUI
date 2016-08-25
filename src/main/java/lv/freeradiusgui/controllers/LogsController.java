@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,6 +27,8 @@ public class LogsController {
     @Autowired
     LogService logService;
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withLocale(Locale.ENGLISH);
+
     @ModelAttribute("page")
     public String page() {
         return "logs";
@@ -33,11 +37,12 @@ public class LogsController {
     @RequestMapping(value = {Views.LOGS_LIST, Views.LOGS}, method = RequestMethod.GET)
     public String viewLogs(Model model,
                            HttpServletRequest request) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.mm.yyyy").withLocale(Locale.ENGLISH);
-        List<Log> list = logService.getbyDate(LocalDateTime.now());
+        LocalDateTime date = LocalDateTime.now();
+        List<Log> list = logService.getByDate(date);
 
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
+        model.addAttribute("date", date.format(formatter));
         request.getSession().setAttribute("rejectedCount", logService.countRejected(list));
         return Views.LOGS_LIST;
     }
@@ -47,12 +52,19 @@ public class LogsController {
                            HttpServletRequest request,
                            @RequestParam("date") String dateStr) {
         LocalDateTime date;
-        if (dateStr != null) date = LocalDateTime.parse(dateStr); else date = LocalDateTime.now();
+        if (dateStr != null || !dateStr.equals("")) {
+            try {
+                date = LocalDateTime.from(LocalDate.parse(dateStr, formatter).atStartOfDay());
+            } catch (DateTimeParseException e){
+                date = LocalDateTime.now();
+            }
+        } else date = LocalDateTime.now();
 
-        List<Log> list = logService.getbyDate(date);
+        List<Log> list = logService.getByDate(date);
 
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
+        model.addAttribute("date", date.format(formatter));
         request.getSession().setAttribute("rejectedCount", logService.countRejected(list));
         return Views.LOGS_LIST;
     }

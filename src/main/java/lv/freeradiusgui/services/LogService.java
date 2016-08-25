@@ -16,7 +16,7 @@ public interface LogService {
 
     Log getById(Integer id);
 
-    Log getByDate(LocalDateTime date);
+    List<Log> getByDate(LocalDateTime date);
 
     Log getLastByMac(String mac, List<Log> list);
 

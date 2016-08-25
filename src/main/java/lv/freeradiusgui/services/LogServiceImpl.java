@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,10 +63,13 @@ public class LogServiceImpl implements LogService{
     }
 
     @Override
-    public Log getByDate(LocalDateTime date) {
-        LocalDateTime sDate = date.withHour(0);
-        
-        return logDAO.getByDate(date.withHour(0));
+    public List<Log> getByDate(LocalDateTime date) {
+
+        LocalDateTime sDate = date.with(LocalTime.MIDNIGHT);
+        LocalDateTime eDate = sDate.plusDays(1);
+    //    logger.info("sDate = " + sDate);
+   //     logger.info("eDate = " + eDate);
+        return logDAO.getByDate(sDate, eDate);
     }
 
     @Override
