@@ -100,7 +100,6 @@ public abstract class AbstractGenericBaseDao<T> {
     }
 
     public List<T> getAll() {
-
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(persistentClass).addOrder(Order.asc("id"));
         //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -113,6 +112,21 @@ public abstract class AbstractGenericBaseDao<T> {
         }
         Session session = sessionFactory.getCurrentSession();
         session.delete(obj);
+    }
+
+    public void deleteAll(List<T> list) {
+        if (list == null) {
+            return;
+        }
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            for (T obj : list) {
+                session.delete(obj);
+            }
+        } catch (Exception e) {
+            logger.error("Exception while execute AbstractGenericBaseDao.deleteAll()");
+            logger.error("STACK TRACE: ",e);
+        }
     }
 
     public Long getCount(){

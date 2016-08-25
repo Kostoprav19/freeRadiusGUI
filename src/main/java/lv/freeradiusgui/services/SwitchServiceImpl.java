@@ -52,6 +52,15 @@ public class SwitchServiceImpl implements SwitchService{
     }
 
     @Override
+    public Switch getByIp(String ip, List<Switch> list) {
+        if (ip.isEmpty() || list.isEmpty() ) return null;
+        for (int i = 0; i < list.size(); i++){
+            if (list.get(i).getIp().equals(ip)) return list.get(i);
+        }
+        return null;
+    }
+
+    @Override
     public List<Switch> getAll() {
         return switchDAO.getAll();
     }

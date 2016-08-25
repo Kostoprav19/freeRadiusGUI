@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Dan on 30.04.2016.
@@ -28,13 +31,32 @@ public class LogsController {
     }
 
     @RequestMapping(value = {Views.LOGS_LIST, Views.LOGS}, method = RequestMethod.GET)
-    public String viewLogs(Model model, HttpServletRequest request) {
-        List<Log> list = logService.getAll();
+    public String viewLogs(Model model,
+                           HttpServletRequest request) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.mm.yyyy").withLocale(Locale.ENGLISH);
+        List<Log> list = logService.getbyDate(LocalDateTime.now());
+
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
         request.getSession().setAttribute("rejectedCount", logService.countRejected(list));
         return Views.LOGS_LIST;
     }
+
+    @RequestMapping(value = {Views.LOGS_LIST, Views.LOGS}, method = RequestMethod.POST)
+    public String viewLogsbyDate(Model model,
+                           HttpServletRequest request,
+                           @RequestParam("date") String dateStr) {
+        LocalDateTime date;
+        if (dateStr != null) date = LocalDateTime.parse(dateStr); else date = LocalDateTime.now();
+
+        List<Log> list = logService.getbyDate(date);
+
+        model.addAttribute("logs", list);
+        model.addAttribute("recordCount", list.size());
+        request.getSession().setAttribute("rejectedCount", logService.countRejected(list));
+        return Views.LOGS_LIST;
+    }
+
 
     @RequestMapping(value = Views.LOGS + "/{id}", method = RequestMethod.GET)
     public String showLog(@PathVariable("id") Integer logId,

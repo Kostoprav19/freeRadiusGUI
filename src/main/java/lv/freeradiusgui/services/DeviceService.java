@@ -17,6 +17,8 @@ public interface DeviceService {
 
     Device getByMac(String mac);
 
+    Device getByMac(String mac, List<Device> list);
+
     List<Device> getAll();
 
     List<Device> getAllByCriteria(String fieldName, Object object);

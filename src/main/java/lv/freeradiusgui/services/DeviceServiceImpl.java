@@ -57,6 +57,15 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
+    public Device getByMac(String mac, List<Device> list) {
+        if (mac.isEmpty() || list.isEmpty() ) return null;
+        for (int i = 0; i < list.size(); i++){
+            if (list.get(i).getMac().equals(mac)) return list.get(i);
+        }
+        return null;
+    }
+
+    @Override
     public List<Device> getAll() {
         List<Device> list = deviceDAO.getAll();
         return list;
@@ -109,10 +118,9 @@ public class DeviceServiceImpl implements DeviceService{
         List<Device> listFromFile = usersFileService.readListFromFile();
         if (listFromFile == null) return false;
 
-        List<Device> finalList = updateDeviceList(listFromFile);
-        finalList = updateStatistics(finalList);
-
-        deviceDAO.storeAll(finalList);
+        listFromFile = updateDeviceList(listFromFile);
+        listFromFile = updateStatistics(listFromFile);
+        deviceDAO.storeAll(listFromFile);
         return true;
     }
 
@@ -126,19 +134,20 @@ public class DeviceServiceImpl implements DeviceService{
 
     private List<Device> updateDeviceList(List<Device> listFromFile) {
         List<Device> result = new ArrayList<>();
+        List<Device> listFromDB = getAll();
 
-        for (Device deviceFromConfig : listFromFile){
-            Device switchFromDB = getByMac(deviceFromConfig.getMac());
-            if (switchFromDB != null ) {
-                switchFromDB.setName(deviceFromConfig.getName());
-                switchFromDB.setAccess(deviceFromConfig.getAccess());
-                switchFromDB.setType(deviceFromConfig.getType());
-                if (deviceFromConfig.getTimeOfRegistration() == null) deviceFromConfig.setTimeOfRegistration(LocalDateTime.now());
-                switchFromDB.setTimeOfRegistration(deviceFromConfig.getTimeOfRegistration());
-                result.add(switchFromDB);
+        for (Device deviceFromFile : listFromFile){
+            Device deviceFromDB = getByMac(deviceFromFile.getMac(), listFromDB);
+            if (deviceFromDB != null ) {
+                deviceFromDB.setName(deviceFromFile.getName());
+                deviceFromDB.setAccess(deviceFromFile.getAccess());
+                deviceFromDB.setType(deviceFromFile.getType());
+                if (deviceFromFile.getTimeOfRegistration() == null) deviceFromFile.setTimeOfRegistration(LocalDateTime.now());
+                deviceFromDB.setTimeOfRegistration(deviceFromFile.getTimeOfRegistration());
+                result.add(deviceFromDB);
             } else {
-                deviceFromConfig.setTimeOfRegistration(LocalDateTime.now());
-                result.add(deviceFromConfig);
+                deviceFromFile.setTimeOfRegistration(LocalDateTime.now());
+                result.add(deviceFromFile);
             }
         }
         return result;

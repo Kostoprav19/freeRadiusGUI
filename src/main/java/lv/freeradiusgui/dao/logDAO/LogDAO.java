@@ -2,6 +2,7 @@ package lv.freeradiusgui.dao.logDAO;
 
 import lv.freeradiusgui.domain.Log;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ public interface LogDAO {
     Log getLast();
 
     List<Log> getAll();
+
+    List<Log> getByDate(LocalDateTime sDate, LocalDateTime eDate);
 
     List<Log> getAllByCriteria(String fieldName, Object object);
 

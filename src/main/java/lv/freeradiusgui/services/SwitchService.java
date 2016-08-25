@@ -17,6 +17,8 @@ public interface SwitchService {
 
     Switch getByIp(String ip);
 
+    Switch getByIp(String ip, List<Switch> list);
+
     List<Switch> getAll();
 
     List<Switch> getAllByCriteria(String fieldName, Object object);

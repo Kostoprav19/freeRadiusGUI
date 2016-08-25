@@ -62,6 +62,13 @@ public class LogServiceImpl implements LogService{
     }
 
     @Override
+    public Log getByDate(LocalDateTime date) {
+        LocalDateTime sDate = date.withHour(0);
+        
+        return logDAO.getByDate(date.withHour(0));
+    }
+
+    @Override
     public Log getLastByMac(String mac, List<Log> list) {
         if (mac.isEmpty()) return null;
         for (int i = list.size()-1; i>=0; i--){

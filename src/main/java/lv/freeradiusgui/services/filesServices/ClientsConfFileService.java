@@ -29,6 +29,14 @@ public class ClientsConfFileService extends AbstractFileServices implements File
     public boolean saveListToFile(List<Switch> list) {
         List<String> stringList = new ArrayList<>();
 
+        stringList.add("client localhost");
+        stringList.add(" ipaddr = 127.0.0.1");
+        stringList.add(" secret = testing123");
+        stringList.add(" require_message_authenticator = no");
+        stringList.add(" nastype = other");
+        stringList.add("}");
+
+
         for (Switch aSwitch : list){
             stringList.add("client " + aSwitch.getIp() + " {");
             stringList.add(" secret = " + aSwitch.getSecret());
@@ -48,7 +56,8 @@ public class ClientsConfFileService extends AbstractFileServices implements File
             index = index + subList.size();
 
             if (!subList.isEmpty()){
-                switchList.add(parseSwitch(subList));
+                Switch aSwitch = parseSwitch(subList);
+                if (! aSwitch.getIp().equals("127.0.0.1")) switchList.add(aSwitch);
             }
 
         } while (index < list.size()-1);

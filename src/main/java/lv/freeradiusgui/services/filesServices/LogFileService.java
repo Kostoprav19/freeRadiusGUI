@@ -1,6 +1,8 @@
 package lv.freeradiusgui.services.filesServices;
 
+import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.domain.Switch;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.SwitchService;
 import lv.freeradiusgui.utils.AppConfig;
@@ -83,6 +85,9 @@ public class LogFileService extends AbstractFileServices implements FileService<
 
     private Log parseLog(List<String> list) {
         Log newLog = new Log();
+        List<Device> deviceList = deviceService.getAll();
+        List<Switch> switchList = switchService.getAll();
+
             for (int index = 0; index < list.size(); index ++){
                 String string = list.get(index);
                 if (string.contains(Integer.toString(LocalDateTime.now().getYear()))){
@@ -100,7 +105,7 @@ public class LogFileService extends AbstractFileServices implements FileService<
                 if (string.contains("Reply-Message")){
                     newLog.setMac(parseValue(list.get(index), MAC_PATTERN));
 
-                    newLog.setDevice(deviceService.getByMac(newLog.getMac()));
+                    newLog.setDevice(deviceService.getByMac(newLog.getMac(), deviceList));
 
                     newLog.setSwitchPort(Integer.parseInt(parseValue(list.get(index), PORT_PATTERN)));
 
@@ -109,7 +114,7 @@ public class LogFileService extends AbstractFileServices implements FileService<
                     if (string.contains("Full duplex")) newLog.setDuplex(1); else newLog.setDuplex(0);
 
                     String switchIP = parseValue(list.get(index), SWITCHIP_PATTERN);
-                    newLog.setSwitch(switchService.getByIp(switchIP));
+                    newLog.setSwitch(switchService.getByIp(switchIP, switchList));
                 }
                 if (string.contains("Packet-Type")){
                     if (parseValue(list.get(index), ACCESS_PATTERN).equals("Accept")) {
