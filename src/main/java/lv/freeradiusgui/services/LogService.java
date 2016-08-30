@@ -26,7 +26,7 @@ public interface LogService {
 
     Long getCount();
 
-    String loadFromFile();
+    String loadFromFile(LocalDateTime date);
 
     Integer countRejected(List<Log> list);
 }

@@ -43,11 +43,17 @@ public class LogFileService extends AbstractFileServices implements FileService<
     @Autowired
     DeviceService deviceService;
 
-    public String fileName;
+    public List<Log> readListFromFile(LocalDateTime date){
+        List<String> listFromFile = readFile(getFileName(date));
+        if (listFromFile == null) return null;
+
+        listFromFile = removeComments(listFromFile);
+        return parseList(listFromFile);
+    }
 
     @Override
     public List<Log> readListFromFile(){
-        List<String> listFromFile = readFile(getFileName());
+        List<String> listFromFile = readFile(getFileName(LocalDateTime.now()));
         if (listFromFile == null) return null;
 
         listFromFile = removeComments(listFromFile);
@@ -59,11 +65,10 @@ public class LogFileService extends AbstractFileServices implements FileService<
         return false;
     }
 
-    public String getFileName() {
+    public String getFileName(LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        //return "auth-detail-" + formatter.format(LocalDateTime.now());
-        return appConfig.getPathToLogDirectory() + "/auth-detail-20160620";
-        //return "auth-detail-20160620";
+        String fileName = "auth-detail-" + date.format(formatter);
+        return appConfig.getPathToLogDirectory() + "/" + fileName;
     }
 
 

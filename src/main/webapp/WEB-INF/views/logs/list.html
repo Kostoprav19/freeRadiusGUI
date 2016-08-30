@@ -30,10 +30,10 @@
 
     <div class="space-20"></div>
 
-    <form class="form-inline" method="post" th:action="@{/logs/list}">
+    <form class="form-inline" method="post" th:action="@{/logs/list/submit}">
         <div class="form-group">
             <div class="input-group date" data-provide="datepicker">
-                <input name="date" type="text" class="form-control" placeholder="Select date"/><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                <input name="date" type="text" class="form-control" placeholder="Select date" th:value="${date}"/><div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
             </div>
             <script th:src="@{/resources/js/datepicker.js}"></script>
         </div>
@@ -41,7 +41,7 @@
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-right"></span> Change date</button>
         </div>
         <div class="form-group">
-            <a role="button" class="btn btn-primary" th:href="@{/logs/refresh}" title="Refresh from log file."><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+            <a role="button" class="btn btn-primary" th:href="@{/logs/refresh/{dateStr}(dateStr=${#strings.replace(date,'.','')})}" title="Refresh from log file."><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
         </div>
         <div class="form-group pull-right">
             <input type="search" id="search" class="search form-control" placeholder="Filter current list"/>

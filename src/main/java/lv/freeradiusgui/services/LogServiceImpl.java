@@ -100,13 +100,13 @@ public class LogServiceImpl implements LogService{
 
 
     @Override
-    public String loadFromFile() {
-        List<Log> listFromFile = logFileService.readListFromFile();
+    public String loadFromFile(LocalDateTime date) {
+        List<Log> listFromFile = logFileService.readListFromFile(date);
         if (listFromFile == null) {
             return null;
         } else {
             storeAll(listFromFile);
-            return logFileService.getFileName();
+            return logFileService.getFileName(date);
         }
     }
 
