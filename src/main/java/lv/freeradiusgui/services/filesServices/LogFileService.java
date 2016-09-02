@@ -43,6 +43,11 @@ public class LogFileService extends AbstractFileServices implements FileService<
     @Autowired
     DeviceService deviceService;
 
+    private List<Device> deviceList;
+    private List<Switch> switchList;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy").withLocale(Locale.ENGLISH);
+
     public List<Log> readListFromFile(LocalDateTime date){
         List<String> listFromFile = readFile(getFileName(date));
         if (listFromFile == null) return null;
@@ -73,6 +78,8 @@ public class LogFileService extends AbstractFileServices implements FileService<
 
 
     private List<Log> parseList(List<String> list){
+        deviceList = deviceService.getAll();
+        switchList = switchService.getAll();
         List<Log> logList = new ArrayList<>();
         Integer index = 0;
         do {
@@ -90,19 +97,15 @@ public class LogFileService extends AbstractFileServices implements FileService<
 
     private Log parseLog(List<String> list) {
         Log newLog = new Log();
-        List<Device> deviceList = deviceService.getAll();
-        List<Switch> switchList = switchService.getAll();
-
-            for (int index = 0; index < list.size(); index ++){
+        for (int index = 0; index < list.size(); index ++){
                 String string = list.get(index);
                 if (string.contains(Integer.toString(LocalDateTime.now().getYear()))){
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy").withLocale(Locale.ENGLISH);
+
                     LocalDateTime dateTime;
                     try {
                         dateTime = LocalDateTime.parse(string, formatter);
                     } catch (DateTimeException e){
-                        System.out.println("Can't be formatted.");
-                        e.printStackTrace();
+                        logger.error("String '" + string +"' can't be formatted.");
                         dateTime = null;
                     }
                     newLog.setTimeOfRegistration(dateTime);
@@ -128,7 +131,7 @@ public class LogFileService extends AbstractFileServices implements FileService<
                         newLog.setStatus(0);
                     }
                 }
-            }
+        }
         return newLog;
     }
 

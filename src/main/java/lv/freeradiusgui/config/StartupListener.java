@@ -4,6 +4,7 @@ import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.SwitchService;
+import lv.freeradiusgui.services.filesServices.FileOperationResult;
 import lv.freeradiusgui.utils.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,11 +48,11 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
             logger.info(appConfig.getPathToUsersFile() + " - FAIL");
 
         LocalDateTime date = LocalDateTime.now();
-        String fileName = logService.loadFromFile(date);
-        if (fileName != null)
-            logger.info("Log file name '" + fileName + "' - OK");
+        FileOperationResult result = logService.loadFromFile(date);
+        if (result.ok)
+            logger.info("Log file name '" + result.message + "' - OK");
         else
-            logger.info("Log file - FAIL");
+            logger.info("Log file - FAIL - " + result.message);
 
         logger.info("---------------- Application started----------------");
     }

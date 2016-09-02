@@ -2,6 +2,7 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.dao.logDAO.LogDAO;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.services.filesServices.FileOperationResult;
 import lv.freeradiusgui.services.filesServices.LogFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,26 +34,12 @@ public class LogServiceImpl implements LogService{
     }
 
     @Override
-    public boolean storeAll(List<Log> logList) {
-        Log lastRecord = logDAO.getLast();
-        LocalDateTime lastRecordTime;
-        if (lastRecord != null) { //If no logs in DB yet
-            lastRecordTime = lastRecord.getTimeOfRegistration();
-            logList = removeOldRecords(logList, lastRecordTime);
-        }
-        boolean result = logDAO.storeAll(logList);
+    public boolean storeAll(List<Log> listFromFile) {
+        boolean result = logDAO.storeAll(listFromFile);
         if (result) {
             logger.info("Successfully written log records to database.");
         } else {
             logger.error("Failed to write log records to database");
-        }
-        return result;
-    }
-
-    private List<Log> removeOldRecords(List<Log> logList, LocalDateTime lastRecord) {
-        List<Log> result = new ArrayList<>();
-        for (Log log : logList){
-            if (log.getTimeOfRegistration().isAfter(lastRecord)) result.add(log);
         }
         return result;
     }
@@ -67,9 +54,19 @@ public class LogServiceImpl implements LogService{
 
         LocalDateTime sDate = date.with(LocalTime.MIDNIGHT);
         LocalDateTime eDate = sDate.plusDays(1);
-    //    logger.info("sDate = " + sDate);
-   //     logger.info("eDate = " + eDate);
         return logDAO.getByDate(sDate, eDate);
+    }
+
+    @Override
+    public boolean deleteByDate(LocalDateTime date) {
+        List<Log> list = getByDate(date);
+        boolean result = logDAO.deleteAll(list);
+        if (result) {
+            logger.info("Successfully deleted log records from database by date: " + date);
+        } else {
+            logger.error("Failed to delete log records from database by date: " + date);
+        }
+        return result;
     }
 
     @Override
@@ -81,7 +78,6 @@ public class LogServiceImpl implements LogService{
         return null;
     }
 
-
     @Override
     public List<Log> getAll() {
         return logDAO.getAll();
@@ -92,7 +88,6 @@ public class LogServiceImpl implements LogService{
         return logDAO.getAllByCriteria(fieldName, object);
     }
 
-
     @Override
     public Long getCount() {
         return logDAO.getCount();
@@ -100,14 +95,18 @@ public class LogServiceImpl implements LogService{
 
 
     @Override
-    public String loadFromFile(LocalDateTime date) {
+    public FileOperationResult loadFromFile(LocalDateTime date) {
+        FileOperationResult result = new FileOperationResult(true, logFileService.getFileName(date));
+
         List<Log> listFromFile = logFileService.readListFromFile(date);
         if (listFromFile == null) {
-            return null;
-        } else {
-            storeAll(listFromFile);
-            return logFileService.getFileName(date);
+            result.ok = false;
+            return result;
         }
+        deleteByDate(date);
+        storeAll(listFromFile);
+
+        return result;
     }
 
     @Override

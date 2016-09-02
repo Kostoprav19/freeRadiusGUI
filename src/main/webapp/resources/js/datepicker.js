@@ -7,4 +7,5 @@ $('.input-group.date').datepicker({
                 calendarWeeks: true,
                 autoclose: true,
                 todayHighlight: true,
+                zIndexOffset: 1000,
             });

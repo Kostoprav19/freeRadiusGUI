@@ -54,7 +54,9 @@
                 <td th:text="${aSwitch.description}"></td>
                 <td>
                     <a role="button" class="btn btn-info btn-xs" th:href="@{/switch/{id}(id=${aSwitch.id})}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-                    <a role="button" class="btn btn-danger btn-xs" th:href="@{/switch/delete/{id}(id=${aSwitch.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                        <a role="button" class="btn btn-danger btn-xs" th:href="@{/switch/delete/{id}(id=${aSwitch.id})}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                    </th:block>
                 </td>
             </tr>
             </tbody>

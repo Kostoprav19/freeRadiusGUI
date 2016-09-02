@@ -5,7 +5,7 @@
 <body>
 
 <!-- Navbar -->
-<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+<div class="navbar navbar-inverse navbar-static-top" th:fragment="header">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
@@ -30,7 +30,7 @@
     </div>
 </div>
 
-<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header-admin">
+<div class="navbar navbar-inverse navbar-static-top" th:fragment="header-admin">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
@@ -42,7 +42,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.rejectedCount}"/></a></li>
+                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${session.todayRejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.todayRejectedCount}"/></a></li>
                 <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/device/list}">Devices</a></li>
                 <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
                 <li th:classappend="${page == 'server' ? 'active' : ''}"><a href="#" th:href="@{/server}">Server status</a></li>

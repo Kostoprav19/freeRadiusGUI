@@ -1,6 +1,7 @@
 package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.services.filesServices.FileOperationResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,8 @@ public interface LogService {
 
     List<Log> getByDate(LocalDateTime date);
 
+    boolean deleteByDate(LocalDateTime date);
+
     Log getLastByMac(String mac, List<Log> list);
 
     List<Log> getAll();
@@ -26,7 +29,7 @@ public interface LogService {
 
     Long getCount();
 
-    String loadFromFile(LocalDateTime date);
+    FileOperationResult loadFromFile(LocalDateTime date);
 
     Integer countRejected(List<Log> list);
 }

@@ -26,7 +26,7 @@
         <h1>Radius logs</h1>
     </div>
     <h3 class="text-danger">Selected date: <span th:text="${date}" th:remove="tag"/></h3>
-    <h4>Record count: <span th:text="${recordCount}" th:remove="tag"/>&nbsp;|&nbsp;Rejected count: <a href="#rejected"><span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.rejectedCount}"/></a></h4>
+    <h4>Record count: <span th:text="${recordCount}" th:remove="tag"/>&nbsp;|&nbsp;Rejected count: <a href="#rejected"><span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${rejectedCount}"/></a></h4>
 
     <div class="space-20"></div>
 
@@ -41,7 +41,7 @@
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-right"></span> Change date</button>
         </div>
         <div class="form-group">
-            <a role="button" class="btn btn-primary" th:href="@{/logs/refresh/{dateStr}(dateStr=${#strings.replace(date,'.','')})}" title="Refresh from log file."><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+            <a role="button" class="btn btn-primary" th:href="@{/logs/refresh/{dateStr}(dateStr=${#strings.replace(date,'.','')})}" title="Reload from log file."><span class="glyphicon glyphicon-refresh"></span> Reload</a>
         </div>
         <div class="form-group pull-right">
             <input type="search" id="search" class="search form-control" placeholder="Filter current list"/>
@@ -88,7 +88,6 @@
             </tr>
             </tbody>
         </table>
-    <a role="button" class="btn btn-primary" th:href="@{/logs/refresh}" title="Refresh from log file."><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 

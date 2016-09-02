@@ -25,6 +25,8 @@ public interface LogDAO {
 
     List<Log> getByDate(LocalDateTime sDate, LocalDateTime eDate);
 
+    boolean deleteAll(List<Log> list);
+
     List<Log> getAllByCriteria(String fieldName, Object object);
 
     Long getCount();

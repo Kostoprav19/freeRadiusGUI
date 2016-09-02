@@ -62,5 +62,4 @@ public class LogDAOImpl extends AbstractGenericBaseDao<Log> implements LogDAO {
         //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria.list();
     }
-
 }

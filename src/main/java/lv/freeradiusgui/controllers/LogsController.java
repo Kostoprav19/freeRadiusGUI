@@ -3,6 +3,7 @@ package lv.freeradiusgui.controllers;
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.services.LogService;
+import lv.freeradiusgui.services.filesServices.FileOperationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,13 +53,18 @@ public class LogsController {
                            @PathVariable("date") String dateStr) {
 
         LocalDateTime date = convertStringToDateTime(dateStr, URLformatter);
+        LocalDate today = LocalDate.now();
 
         List<Log> list = logService.getByDate(date);
 
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
         model.addAttribute("date", date.format(displayFormatter));
-        request.getSession().setAttribute("rejectedCount", logService.countRejected(list));
+        Integer rejectedCount = logService.countRejected(list);
+        model.addAttribute("rejectedCount", rejectedCount);
+        if (date.toLocalDate().equals(today)) {
+            request.getSession().setAttribute("todayRejectedCount", rejectedCount);
+        }
         return Views.LOGS_LIST;
     }
 
@@ -66,12 +72,12 @@ public class LogsController {
     public String refreshLogs(final RedirectAttributes redirectAttributes,
                              @PathVariable("date") String dateStr) {
         LocalDateTime date = LocalDateTime.from(LocalDate.parse(dateStr, URLformatter).atStartOfDay());
-        String result = logService.loadFromFile(date);
-        if (result != null) {
-            redirectAttributes.addFlashAttribute("msg", "Successfully loaded '" + result + "' file.");
+        FileOperationResult result = logService.loadFromFile(date);
+        if (result.ok) {
+            redirectAttributes.addFlashAttribute("msg", "Successfully loaded '" + result.message + "' file.");
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
-            redirectAttributes.addFlashAttribute("msg", "Error loading file.");
+            redirectAttributes.addFlashAttribute("msg", "Error loading file - " + result.message);
             redirectAttributes.addFlashAttribute("msgType", "danger");
         }
         return "redirect:/" + Views.LOGS_LIST + "/" + date.format(URLformatter);
