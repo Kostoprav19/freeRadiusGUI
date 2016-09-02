@@ -106,12 +106,19 @@ public abstract class AbstractGenericBaseDao<T> {
         return criteria.list();
     }
 
-    public void delete(T obj) {
+    public boolean delete(T obj) {
         if (obj == null) {
-            return;
+            return false;
         }
         Session session = sessionFactory.getCurrentSession();
-        session.delete(obj);
+        try{
+            session.delete(obj);
+        } catch (Exception e) {
+            logger.error("Exception while execute AbstractGenericBaseDao.delete()");
+            logger.error("STACK TRACE: ",e);
+            return false;
+        }
+        return true;
     }
 
     public boolean deleteAll(List<T> list) {

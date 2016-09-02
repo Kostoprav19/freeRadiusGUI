@@ -70,10 +70,15 @@ public class DevicesController {
     public String deleteDevice(@PathVariable("id") Integer deviceId,
                                final RedirectAttributes redirectAttributes) {
         Device device = deviceService.getById(deviceId);
-        deviceService.delete(device);
 
-        redirectAttributes.addFlashAttribute("msg", "Device '" + device.getName() + "' successfully deleted.");
-        redirectAttributes.addFlashAttribute("msgType", "success");
+        if (deviceService.delete(device)) {
+            redirectAttributes.addFlashAttribute("msg", "Device '" + device.getName() + "' successfully deleted.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error deleting device '" + device.getName() + "'.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+
         return "redirect:/" + Views.DEVICE_LIST;
     }
 

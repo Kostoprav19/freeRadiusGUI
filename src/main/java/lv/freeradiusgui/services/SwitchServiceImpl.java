@@ -71,8 +71,14 @@ public class SwitchServiceImpl implements SwitchService{
     }
 
     @Override
-    public void delete(Switch aSwitch) {
-        switchDAO.delete(aSwitch);
+    public boolean delete(Switch aSwitch) {
+        boolean result = switchDAO.delete(aSwitch);
+        if (result) {
+            logger.info("Successfully deleted switch record from database. Switch id: " + aSwitch.getId());
+        } else {
+            logger.error("Failed to delete switch records from database. Switch id: " + aSwitch.getId());
+        }
+        return result;
     }
 
     @Override

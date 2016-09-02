@@ -12,7 +12,7 @@
     <link href="css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
 </head>
 
-<body>
+<body class="loginBody">
 
 <form class="form-narrow form-horizontal" action="/j_spring_security_check" method="post" th:action="@{/j_spring_security_check}">
     <th:block th:if="${param.error != null}">
@@ -48,6 +48,7 @@
             </div>
         </div>
     </fieldset>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 </form>
 </body>
 </html>

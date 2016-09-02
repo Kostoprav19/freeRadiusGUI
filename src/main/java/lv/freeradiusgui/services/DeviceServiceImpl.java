@@ -92,8 +92,14 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
-    public void delete(Device device) {
-        deviceDAO.delete(device);
+    public boolean delete(Device device) {
+        boolean result = deviceDAO.delete(device);
+        if (result) {
+            logger.info("Successfully deleted device record from database. Switch id: " + device.getId());
+        } else {
+            logger.error("Failed to delete device records from database. Switch id: " + device.getId());
+        }
+        return result;
     }
 
     @Override

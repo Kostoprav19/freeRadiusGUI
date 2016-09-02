@@ -16,7 +16,7 @@ public interface AccountService {
 
     List<Account> getAllByCriteria(String fieldName, Object object);
 
-    void delete(Account account);
+    boolean delete(Account account);
 
     Long getCount();
 

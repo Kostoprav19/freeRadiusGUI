@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 /**
  * Created by Dan on 30.04.2016.
  */
@@ -39,7 +41,9 @@ public class SwitchesController {
 
     @RequestMapping(value = {Views.SWITCH_LIST, Views.SWITCH}, method = RequestMethod.GET)
     public String viewSwitches(Model model) {
-        model.addAttribute("switches", switchService.getAll());
+        List<Switch> list = switchService.getAll();
+        model.addAttribute("switches", list);
+        model.addAttribute("recordCount", list.size());
         return Views.SWITCH_LIST;
     }
 
@@ -56,10 +60,14 @@ public class SwitchesController {
                                final RedirectAttributes redirectAttributes) {
 
         Switch aSwitch = switchService.getById(aSwitchId);
-        switchService.delete(aSwitch);
+        if (switchService.delete(aSwitch)) {
+            redirectAttributes.addFlashAttribute("msg", "Switch '" + aSwitch.getName() + "' successfully deleted.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error deleting switch '" + aSwitch.getName() + "'.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
 
-        redirectAttributes.addFlashAttribute("msg", "Switch '" + aSwitch.getName() + "' successfully deleted.");
-        redirectAttributes.addFlashAttribute("msgType", "success");
         return "redirect:/" + Views.SWITCH_LIST;
     }
 

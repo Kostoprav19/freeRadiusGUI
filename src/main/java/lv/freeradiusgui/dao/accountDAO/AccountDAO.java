@@ -20,7 +20,7 @@ public interface AccountDAO {
 
     List<Account> getAllByCriteria(String fieldName, Object object);
 
-    void delete(Account account);
+    boolean delete(Account account);
 
     Long getCount();
 

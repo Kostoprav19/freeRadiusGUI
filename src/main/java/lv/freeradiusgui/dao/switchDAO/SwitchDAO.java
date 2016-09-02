@@ -21,7 +21,7 @@ public interface SwitchDAO {
 
     List<Switch> getAllByCriteria(String fieldName, Object object);
 
-    void delete(Switch aSwitch);
+    boolean delete(Switch aSwitch);
 
     Long getCount();
 

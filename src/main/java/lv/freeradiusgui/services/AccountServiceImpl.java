@@ -4,6 +4,8 @@ package lv.freeradiusgui.services;
 import lv.freeradiusgui.dao.accountDAO.AccountDAO;
 import lv.freeradiusgui.domain.Account;
 import lv.freeradiusgui.domain.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,9 @@ import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private AccountDAO accountDAO;
 
@@ -50,8 +55,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void delete(Account account) {
-        accountDAO.delete(account);
+    public boolean delete(Account account) {
+        boolean result = accountDAO.delete(account);
+        if (result) {
+            logger.info("Successfully deleted switch records from database. Switch id: " + account.getId());
+        } else {
+            logger.error("Failed to delete switch records from database. Switch id: " + account.getId());
+        }
+        return result;
     }
 
     @Override

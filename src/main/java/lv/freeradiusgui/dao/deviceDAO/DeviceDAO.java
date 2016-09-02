@@ -22,7 +22,7 @@ public interface DeviceDAO {
 
     List<Device> getAllByCriteria(String fieldName, Object object);
 
-    void delete(Device device);
+    boolean delete(Device device);
 
     Long getCount();
 

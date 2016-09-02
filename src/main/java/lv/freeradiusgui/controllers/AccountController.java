@@ -60,14 +60,18 @@ public class AccountController {
 
     @RequestMapping(value = Views.ACCOUNT + "/delete/{id}", method = RequestMethod.GET)
     public String deleteAccount(@PathVariable("id") Integer accountId,
-                                Model model,
                                 final RedirectAttributes redirectAttributes) {
 
         Account account = accountService.getById(accountId);
-        accountService.delete(account);
 
-        redirectAttributes.addFlashAttribute("msg", "Account '" + account.getLogin() + "' successfully deleted.");
-        redirectAttributes.addFlashAttribute("msgType", "success");
+        if (accountService.delete(account)) {
+            redirectAttributes.addFlashAttribute("msg", "Account '" + account.getLogin() + "' successfully deleted.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error deleting account '" + account.getLogin() + "'.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+
         return "redirect:/" + Views.ADMIN;
     }
 

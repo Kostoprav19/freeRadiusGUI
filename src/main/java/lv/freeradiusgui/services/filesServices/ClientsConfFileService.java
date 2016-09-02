@@ -29,7 +29,7 @@ public class ClientsConfFileService extends AbstractFileServices implements File
     public boolean saveListToFile(List<Switch> list) {
         List<String> stringList = new ArrayList<>();
 
-        stringList.add("client localhost");
+        stringList.add("client localhost{");
         stringList.add(" ipaddr = 127.0.0.1");
         stringList.add(" secret = testing123");
         stringList.add(" require_message_authenticator = no");
