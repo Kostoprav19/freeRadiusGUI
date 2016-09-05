@@ -1,7 +1,6 @@
 package lv.freeradiusgui.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import lv.freeradiusgui.utils.AppConfig;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

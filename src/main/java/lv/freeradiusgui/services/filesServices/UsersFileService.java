@@ -1,22 +1,10 @@
 package lv.freeradiusgui.services.filesServices;
 
 import lv.freeradiusgui.domain.Device;
-import lv.freeradiusgui.domain.Switch;
-import lv.freeradiusgui.utils.AppConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Created by Dan on 08.06.2016.

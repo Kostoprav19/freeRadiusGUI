@@ -4,7 +4,7 @@ package lv.freeradiusgui.constants;
  * Created by Dan on 29.04.2016.
  */
 public final class Views {
-    public static final String HOME = "home";
+    public static final String SERVER = "server";
     public static final String LOGIN = "login";
     public static final String ADMIN = "admin";
 
@@ -20,6 +20,5 @@ public final class Views {
     public static final String DEVICE_LIST = "device/list";
 
     public static final String LOGS = "logs";
-    public static final String LOG_VIEW = "logs/view";
     public static final String LOGS_LIST = "logs/list";
 }

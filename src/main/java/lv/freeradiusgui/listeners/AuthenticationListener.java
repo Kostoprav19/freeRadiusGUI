@@ -1,4 +1,4 @@
-package lv.freeradiusgui.config;
+package lv.freeradiusgui.listeners;
 
 /**
  * Created by Dan on 10.08.2016.
@@ -11,7 +11,7 @@ import org.springframework.security.authentication.event.AuthenticationFailureBa
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyApplicationListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
+public class AuthenticationListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {

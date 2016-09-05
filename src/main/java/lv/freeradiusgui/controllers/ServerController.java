@@ -2,19 +2,14 @@ package lv.freeradiusgui.controllers;
 
 import lv.freeradiusgui.constants.Views;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * Created by Dan on 30.04.2016.
  */
 @Controller
-public class HomeController {
+public class ServerController {
 
    // private final Logger logger = LogManager.getLogger(IndexController.class);
 
@@ -23,9 +18,9 @@ public class HomeController {
         return "home";
     }
 
-    @RequestMapping(Views.HOME)
+    @RequestMapping(Views.SERVER)
     public String home() {
-        return Views.HOME;
+        return Views.SERVER;
     }
 
 }

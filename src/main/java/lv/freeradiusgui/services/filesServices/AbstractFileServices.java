@@ -1,6 +1,6 @@
 package lv.freeradiusgui.services.filesServices;
 
-import lv.freeradiusgui.utils.AppConfig;
+import lv.freeradiusgui.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,10 @@
-package lv.freeradiusgui.config;
+package lv.freeradiusgui.listeners;
 
-import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.SwitchService;
 import lv.freeradiusgui.services.filesServices.FileOperationResult;
-import lv.freeradiusgui.utils.AppConfig;
+import lv.freeradiusgui.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Created by Dan on 17.08.2016.
@@ -53,7 +51,6 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
             logger.info("Log file name '" + result.message + "' - OK");
         else
             logger.info("Log file - FAIL - " + result.message);
-
         logger.info("---------------- Application started----------------");
     }
 
