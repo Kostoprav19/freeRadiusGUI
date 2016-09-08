@@ -1,5 +1,6 @@
 package lv.freeradiusgui.listeners;
 
+import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.SwitchService;
@@ -30,6 +31,8 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
     LogService logService;
     @Autowired
     AppConfig appConfig;
+    @Autowired
+    Server server;
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
@@ -51,6 +54,13 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
             logger.info("Log file name '" + result.message + "' - OK");
         else
             logger.info("Log file - FAIL - " + result.message);
+
+        server.updateStatus();
+        logger.info("Server status: " + (server.getStatus() ? "UP" : "DOWN") );
+
+        server.setTodayRejectedCount(logService.countRejected(logService.getByDate(LocalDateTime.now())));
+        logger.info("Today rejected count: " + server.getTodayRejectedCount());
+
         logger.info("---------------- Application started----------------");
     }
 

@@ -8,16 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthenticationListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
+public class AuthenticationSuccessListener implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
-    public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
+    public void onApplicationEvent(InteractiveAuthenticationSuccessEvent event) {
         Object userName = event.getAuthentication().getPrincipal();
-        Object credentials = event.getAuthentication().getCredentials();
-        logger.info("Failed login using USERNAME: '" + userName + "'");
-        logger.info("Failed login using PASSWORD: '" + credentials + "'");
+        logger.info("Users logged in using USERNAME: '" + userName + "'");
+
     }
 }

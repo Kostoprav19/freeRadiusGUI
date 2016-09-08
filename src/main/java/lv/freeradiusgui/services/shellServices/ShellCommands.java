@@ -9,8 +9,8 @@ public final class ShellCommands {
     //pgrep -fl free //pid
     public static final String COMMAND_PGREP = "pgrep -fl freeradius";
 
-    public static final String COMMAND_STOP_SERVER = "kilall freeradius";
+    public static final String COMMAND_STOP_SERVER = "killall freeradius";
 
     public static final String COMMAND_START_SERVER = "freeradius";
-    
+
 }

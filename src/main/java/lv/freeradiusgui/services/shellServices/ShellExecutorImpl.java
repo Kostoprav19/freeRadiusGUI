@@ -13,8 +13,6 @@ import java.io.InputStreamReader;
 @Service
 public class ShellExecutorImpl implements ShellExecutor{
 
-
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override

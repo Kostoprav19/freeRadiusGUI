@@ -2,6 +2,7 @@ package lv.freeradiusgui.controllers;
 
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.filesServices.FileOperationResult;
 import org.slf4j.Logger;
@@ -30,6 +31,9 @@ public class LogsController {
 
     @Autowired
     LogService logService;
+
+    @Autowired
+    Server server;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -63,7 +67,7 @@ public class LogsController {
         Integer rejectedCount = logService.countRejected(list);
         model.addAttribute("rejectedCount", rejectedCount);
         if (date.toLocalDate().equals(today)) {
-            request.getSession().setAttribute("todayRejectedCount", rejectedCount);
+            server.setTodayRejectedCount(rejectedCount);
         }
         return Views.LOGS_LIST;
     }
