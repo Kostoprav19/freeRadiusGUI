@@ -27,7 +27,7 @@ public class SessionVariablesInterceptor implements HandlerInterceptor {
         if (server != null){
             request.getSession().setAttribute("todayRejectedCount", server.getTodayRejectedCount());
             request.getSession().setAttribute("serverStatus", server.getStatus());
-            request.getSession().setAttribute("changes", server.isChanges());
+            request.getSession().setAttribute("dbChangesFlag", server.getDbgChangesFlag());
         }
     }
 

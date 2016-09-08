@@ -20,7 +20,13 @@
                 <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${rejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.rejectedCount}"/></a></li>
                 <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/device/list}">Devices</a></li>
                 <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
-                <li th:classappend="${page == 'server' ? 'active' : ''}"><a href="#" th:href="@{/server}">Server status</a></li>
+                <li th:classappend="${page == 'server' ? 'active' : ''}">
+                    <a href="#" th:href="@{/server}">Server <span class="label" th:classappend="${session.serverStatus == true ? 'label-success' : 'label-warning'}" th:text="${session.serverStatus == true} ? 'RUNNING' : 'DOWN'"/>
+                        <th:block th:if="${session.changesFlag == true}">
+                            <span class="label label-info">Changed!</span>
+                        </th:block>
+                    </a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${#authorization.expression('isAuthenticated()')}"><a href="/logout" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -46,11 +52,7 @@
                 <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/device/list}">Devices</a></li>
                 <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
                 <li th:classappend="${page == 'server' ? 'active' : ''}">
-                    <a href="#" th:href="@{/server}">Server <span class="label" th:classappend="${session.serverStatus == true ? 'label-success' : 'label-warning'}" th:text="${session.serverStatus == true} ? 'RUNNING' : 'DOWN'"/>
-                    <th:block th:if="${session.changes == true}">
-                        <span class="label label-info">Changed!</span>
-                    </th:block>
-                    </a>
+                    <a href="#" th:href="@{/server}">Server <span class="label" th:classappend="${session.serverStatus == true ? 'label-success' : 'label-warning'}" th:text="${session.serverStatus == true} ? 'RUNNING' : 'DOWN'"/></a>
                 </li>
                 <li th:classappend="${page == 'admin' ? 'active' : ''}"><a href="#" th:href="@{/admin}">Administration</a></li>
             </ul>

@@ -1,6 +1,7 @@
 package lv.freeradiusgui.controllers;
 
 import lv.freeradiusgui.constants.Views;
+import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.domain.Switch;
 import lv.freeradiusgui.services.SwitchService;
 import lv.freeradiusgui.validators.SwitchFormValidator;
@@ -28,6 +29,9 @@ public class SwitchesController {
 
     @Autowired
     SwitchFormValidator switchFormValidator;
+
+    @Autowired
+    Server server;
 
     @ModelAttribute("page")
     public String page() {
@@ -84,6 +88,7 @@ public class SwitchesController {
         }
 
         switchService.store(aSwitch);
+        server.setDbChangesFlag();
         status.setComplete();
 
         redirectAttributes.addFlashAttribute("msg", "Switch '" + aSwitch.getName() + "' successfully saved.");
@@ -113,8 +118,14 @@ public class SwitchesController {
     @RequestMapping(value = Views.ADMIN + "/writeClients", method = RequestMethod.GET)
     public String writeSwitches(final RedirectAttributes redirectAttributes) {
         if (switchService.writeToConfig()) {
-            redirectAttributes.addFlashAttribute("msg", "Successfully written 'clients.conf' file.");
-            redirectAttributes.addFlashAttribute("msgType", "success");
+            if (server.restartService()) {
+                redirectAttributes.addFlashAttribute("msg", "Successfully applied changes.");
+                redirectAttributes.addFlashAttribute("msgType", "success");
+                server.unsetDbChangesFlag();
+            } else {
+                redirectAttributes.addFlashAttribute("msg", "Changes saved to 'clinets.conf' file, but failed to restart freeradius service.");
+                redirectAttributes.addFlashAttribute("msgType", "danger");
+            }
         } else {
             redirectAttributes.addFlashAttribute("msg", "Error writing to 'clients.conf' file.");
             redirectAttributes.addFlashAttribute("msgType", "danger");

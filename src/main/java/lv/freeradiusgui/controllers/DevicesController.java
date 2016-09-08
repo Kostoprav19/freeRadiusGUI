@@ -2,6 +2,7 @@ package lv.freeradiusgui.controllers;
 
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Device;
+import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.validators.DeviceFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class DevicesController {
 
     @Autowired
     DeviceFormValidator deviceFormValidator;
+
+    @Autowired
+    Server server;
 
     @ModelAttribute("page")
     public String page() {
@@ -95,6 +99,7 @@ public class DevicesController {
         }
 
         deviceService.store(device);
+        server.setDbChangesFlag();
         status.setComplete();
         redirectAttributes.addFlashAttribute("msg", "Device '" + device.getName() + "' successfully saved.");
         redirectAttributes.addFlashAttribute("msgType", "success");
@@ -131,8 +136,14 @@ public class DevicesController {
     @RequestMapping(value = Views.ADMIN + "/writeUsers", method = RequestMethod.GET)
     public String writeDevices(final RedirectAttributes redirectAttributes) {
         if (deviceService.writeToConfig()) {
-            redirectAttributes.addFlashAttribute("msg", "Successfully written data to 'users' file.");
-            redirectAttributes.addFlashAttribute("msgType", "success");
+            if (server.restartService()) {
+                redirectAttributes.addFlashAttribute("msg", "Successfully applied changes.");
+                redirectAttributes.addFlashAttribute("msgType", "success");
+                server.unsetDbChangesFlag();
+            } else {
+                redirectAttributes.addFlashAttribute("msg", "Changes saved to 'users' file, but failed to restart freeradius service.");
+                redirectAttributes.addFlashAttribute("msgType", "danger");
+            }
         } else {
             redirectAttributes.addFlashAttribute("msg", "Error writing to data to 'users' file.");
             redirectAttributes.addFlashAttribute("msgType", "danger");

@@ -19,15 +19,23 @@ public class Server {
     public static final boolean SERVER_STATUS_DOWN = false;
 
     private boolean status;
-    private boolean changes;
+    private boolean dbChangesFlag;
     private LocalDateTime lastServiceReboot;
 
-    public boolean isChanges() {
-        return changes;
+    public Server() {
+        this.dbChangesFlag = false;
     }
 
-    public void setChanges(boolean changes) {
-        this.changes = changes;
+    public void setDbChangesFlag() {
+        this.dbChangesFlag = true;
+    }
+
+    public void unsetDbChangesFlag() {
+        this.dbChangesFlag = false;
+    }
+
+    public boolean getDbgChangesFlag() {
+        return this.dbChangesFlag;
     }
 
     public LocalDateTime getLastServiceReboot() {
@@ -36,10 +44,6 @@ public class Server {
 
     public void setLastServiceReboot(LocalDateTime lastServiceReboot) {
         this.lastServiceReboot = lastServiceReboot;
-    }
-
-    public Server() {
-        this.changes = false;
     }
 
     private Integer todayRejectedCount;
