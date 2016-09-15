@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Daniels on 03.09.2016..
@@ -18,12 +20,19 @@ public class Server {
     public static final boolean SERVER_STATUS_UP = true;
     public static final boolean SERVER_STATUS_DOWN = false;
 
-    private boolean status;
+    public static final String FREERADIUS = "freeradius";
+    public static final String TOMCAT = "tomcat";
+    public static final String MYSQL = "mysql";
+
+    private Map<String, Boolean> statuses;
     private boolean dbChangesFlag;
     private LocalDateTime lastServiceReboot;
 
     public Server() {
-        this.dbChangesFlag = false;
+        statuses = new HashMap<>();
+        statuses.put(FREERADIUS, false);
+        statuses.put(TOMCAT, false);
+        statuses.put(MYSQL, false);
     }
 
     public void setDbChangesFlag() {
@@ -49,14 +58,20 @@ public class Server {
     private Integer todayRejectedCount;
 
 
-    public boolean getStatus() {
-        updateStatus();
-        return this.status;
+    public boolean getStatus(String key) {
+        updateStatuses();
+        return this.statuses.get(key);
     }
 
-    public void updateStatus(){
-        String result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGREP);
-        this.status = !result.isEmpty();
+    public void updateStatuses(){
+        String result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_FREERADIUS);
+        this.statuses.put(FREERADIUS, !result.isEmpty());
+
+        result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_TOMCAT);
+        this.statuses.put(TOMCAT, !result.isEmpty());
+
+        result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_MYSQL);
+        this.statuses.put(MYSQL, !result.isEmpty());
     }
 
     public Integer getTodayRejectedCount() {
@@ -68,10 +83,10 @@ public class Server {
     }
 
     public boolean restartService(){
-        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_SERVER);
-        shellExecutor.executeCommand(ShellCommands.COMMAND_START_SERVER);
-        updateStatus();
-        if (getStatus() == SERVER_STATUS_UP) {
+        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_FREERADIUS);
+        shellExecutor.executeCommand(ShellCommands.COMMAND_START_FREERADIUS);
+        updateStatuses();
+        if (getStatus(FREERADIUS) == SERVER_STATUS_UP) {
             this.lastServiceReboot = LocalDateTime.now();
             return true;
         } else
@@ -79,9 +94,9 @@ public class Server {
     }
 
     public boolean startService(){
-        shellExecutor.executeCommand(ShellCommands.COMMAND_START_SERVER);
-        updateStatus();
-        if (getStatus() == SERVER_STATUS_UP) {
+        shellExecutor.executeCommand(ShellCommands.COMMAND_START_FREERADIUS);
+        updateStatuses();
+        if (getStatus(FREERADIUS) == SERVER_STATUS_UP) {
             this.lastServiceReboot = LocalDateTime.now();
             return true;
         } else
@@ -89,11 +104,15 @@ public class Server {
     }
 
     public boolean stopService(){
-        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_SERVER);
-        updateStatus();
-        if (getStatus() == SERVER_STATUS_DOWN) {
+        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_FREERADIUS);
+        updateStatuses();
+        if (getStatus(FREERADIUS) == SERVER_STATUS_DOWN) {
             return true;
         } else
             return false;
+    }
+
+    public String runCommand(String command){
+        return shellExecutor.executeCommand(command);
     }
 }

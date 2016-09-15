@@ -1,15 +1,15 @@
 1) Log Failed logins - DONE
-2) Server status
+2) Server status - DONE
 3) Devices -> button Update statistics - RECALLED
 4) on startup load/refresh clients, devices and logs (in that order!) - DONE
 5) Link to rejected not generated if rejected device is in database. Check uslovie creation of link - DONE
 6) go up link button arrow is not showing - DONE
-7) Save changes shown only if there is changes
+7) Save changes shown only if there is changes - DONE
 8) Scheduler - update statistics
 9) email alert about rejected devices
 10) alert in header about rejected devices count - DONE
 11) Load logs from archive - DONE
 12) after server restart CFRS incorect exception
 13) LogService implement log file name - DONE
-14) Apply button on navbar
+14) Apply button on navbar - RECALLED
 15) Logs - when loading old logs, delete from DB logs before storing new log records. - DONE

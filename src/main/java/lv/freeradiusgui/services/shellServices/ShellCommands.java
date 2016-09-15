@@ -7,10 +7,14 @@ public final class ShellCommands {
 
     //ps aux| grep free | wc -l //count
     //pgrep -fl free //pid
-    public static final String COMMAND_PGREP = "pgrep -fl freeradius";
+    public static final String COMMAND_PGRE_FREERADIUS = "pgrep -fl freeradius";
 
-    public static final String COMMAND_STOP_SERVER = "killall freeradius";
+    public static final String COMMAND_PGRE_TOMCAT = "pgrep -fl tomcat";
 
-    public static final String COMMAND_START_SERVER = "freeradius";
+    public static final String COMMAND_PGRE_MYSQL = "pgrep -fl mysqld";
+
+    public static final String COMMAND_STOP_FREERADIUS = "killall freeradius";
+
+    public static final String COMMAND_START_FREERADIUS = "freeradius";
 
 }

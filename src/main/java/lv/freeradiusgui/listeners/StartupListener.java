@@ -55,8 +55,10 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
         else
             logger.info("Log file - FAIL - " + result.message);
 
-        server.updateStatus();
-        logger.info("Server status: " + (server.getStatus() ? "UP" : "DOWN") );
+        server.updateStatuses();
+        logger.info("Freeradius status: " + (server.getStatus(Server.FREERADIUS) ? "UP" : "DOWN") );
+        logger.info("Tomcat status: " + (server.getStatus(Server.TOMCAT) ? "UP" : "DOWN") );
+        logger.info("Mysql status: " + (server.getStatus(Server.MYSQL) ? "UP" : "DOWN") );
 
         server.setTodayRejectedCount(logService.countRejected(logService.getByDate(LocalDateTime.now())));
         logger.info("Today rejected count: " + server.getTodayRejectedCount());

@@ -26,7 +26,7 @@
         </th:block>
     </div>
 
-    <div class="forms-200px">
+    <div class="width-300px">
     <form action="#" th:action="@{/switch/submit}" th:object="${aSwitch}" method="post">
         <div th:object="${aSwitch}" class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
             <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>

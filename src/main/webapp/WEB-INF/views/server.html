@@ -21,19 +21,48 @@
     <div class="page-header">
         <h1>Server</h1>
     </div>
-    <h4>Server status: <span th:text="${session.serverStatus == true} ? 'RUNNING' : 'DOWN'" th:classappend="${session.serverStatus == true ? 'text-success' : 'text-danger'}"/>
-        <th:block th:if="${session.serverStatus == false}">
-            <a role="button" class="btn btn-success btn-xs" th:href="@{/server/start}"><span class="glyphicon glyphicon-play-circle"></span> Start</a>
-        </th:block>
-        <th:block th:if="${session.serverStatus == true}">
-            <a role="button" class="btn btn-danger btn-xs" th:href="@{/server/stop}"><span class="glyphicon glyphicon-off"></span> Stop</a>
-        </th:block>
-    </h4>
 
-    <h4>Last freeradius service reboot time: <span th:text="${lastServiceReboot != null} ? ${#temporals.format(lastServiceReboot, 'dd.MM.yyyy HH:mm')} : 'N/a'"></span>
-    </h4>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Services status:</h3>
+        </div>
+        <div class="panel-body">
+            <h4>Freeradius: <span th:text="${session.freeradiusStatus == true} ? 'RUNNING' : 'DOWN'" th:classappend="${session.freeradiusStatus == true ? 'text-success' : 'text-danger'}"/>
+                <th:block th:if="${session.freeradiusStatus == false}">
+                    <a role="button" class="btn btn-success btn-xs" th:href="@{/server/start}"><span class="glyphicon glyphicon-play-circle"></span> Start</a>
+                </th:block>
+                <th:block th:if="${session.freeradiusStatus == true}">
+                    <a role="button" class="btn btn-danger btn-xs" th:href="@{/server/stop}"><span class="glyphicon glyphicon-off"></span> Stop</a>
+                </th:block>
+                <a role="button" class="btn btn-primary btn-xs" th:href="@{/server/restart}" title="Restart freeradius service."><span class="glyphicon glyphicon-repeat"></span> Restart</a>
+            </h4>
+            <h4>Last freeradius service reboot time: <span th:text="${lastServiceReboot != null} ? ${#temporals.format(lastServiceReboot, 'dd.MM.yyyy HH:mm')} : 'N/a'"></span></h4>
 
-    <a role="button" class="btn btn-primary" th:href="@{/server/restart}" title="Apply changes by restarting freeradius service."><span class="glyphicon glyphicon-repeat"></span> Restart freeradius service</a>
+            <h4>Tomcat: <span th:text="${tomcatStatus == true} ? 'RUNNING' : 'DOWN'" th:classappend="${tomcatStatus == true ? 'text-success' : 'text-danger'}"/></h4>
+            <h4>Mysql: <span th:text="${mysqlStatus == true} ? 'RUNNING' : 'DOWN'" th:classappend="${mysqlStatus == true ? 'text-success' : 'text-danger'}"/></h4>
+        </div>
+    </div>
+
+    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') == true}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Server console:</h3>
+        </div>
+        <div class="panel-body">
+
+            <textarea class="console" disabled="disabled" th:text="${consoleOutput != null} ? ${consoleOutput} : 'No output. Please enter and run command.'"></textarea>
+
+            <form class="form" method="post" th:action="@{/admin/runCommand}">
+                <div class="input-group">
+                    <input id="consoleInput" name="consoleInput" class="form-control" type="text" placeholder="Enter command"/>
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-play"/> Run</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    </th:block>
 
 
     <div class="space-20"></div>

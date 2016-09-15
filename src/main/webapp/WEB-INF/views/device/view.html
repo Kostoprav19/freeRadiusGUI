@@ -26,7 +26,7 @@
         </th:block>
     </div>
 
-    <div class="forms-200px">
+    <div class="width-300px">
     <form action="#" th:action="@{/device/submit}" th:object="${device}" method="post">
         <div th:object="${device}" class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
             <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>

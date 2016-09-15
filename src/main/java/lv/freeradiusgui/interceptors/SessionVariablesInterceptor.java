@@ -26,7 +26,7 @@ public class SessionVariablesInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
         if (server != null){
             request.getSession().setAttribute("todayRejectedCount", server.getTodayRejectedCount());
-            request.getSession().setAttribute("serverStatus", server.getStatus());
+            request.getSession().setAttribute("freeradiusStatus", server.getStatus(Server.FREERADIUS));
             request.getSession().setAttribute("dbChangesFlag", server.getDbgChangesFlag());
         }
     }
