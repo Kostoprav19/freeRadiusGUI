@@ -7,7 +7,6 @@ package lv.freeradiusgui.listeners;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,7 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public void onApplicationEvent(InteractiveAuthenticationSuccessEvent event) {
-        Object userName = event.getAuthentication().getPrincipal();
+        String userName = event.getAuthentication().getName();
         logger.info("Users logged in using USERNAME: '" + userName + "'");
 
     }

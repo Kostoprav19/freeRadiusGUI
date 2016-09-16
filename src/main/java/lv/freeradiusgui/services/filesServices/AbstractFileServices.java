@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -34,6 +35,9 @@ public abstract class AbstractFileServices<T> {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(pathString))) {
             //br returns as stream and convert it into a List
             listFromFile = reader.lines().collect(Collectors.toList());
+        } catch (NoSuchFileException e){
+            logger.error("No such file exception: '" + pathString +"'.");
+            return null;
         } catch (IOException e) {
             logger.error("Error reading file  '" + pathString + "'");
             logger.error("STACK TRACE: ",e);
@@ -51,6 +55,9 @@ public abstract class AbstractFileServices<T> {
                 writer.newLine();
             }
             writer.close();
+        }  catch (NoSuchFileException e){
+            logger.error("No such file exception: '" + pathString +"'.");
+            return false;
         } catch (IOException e) {
             logger.error("Error writing data to file  '" + pathString +"'.");
             logger.error("STACK TRACE: ",e);

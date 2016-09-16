@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
@@ -23,6 +24,7 @@ import javax.annotation.PostConstruct;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
+@EnableScheduling
 @Import({ThymeleafConfig.class, HybernateConfig.class, SecurityConfig.class})
 public class WebMVCConfig extends WebMvcConfigurerAdapter{
 

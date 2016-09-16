@@ -2,6 +2,8 @@ package lv.freeradiusgui.domain;
 
 import lv.freeradiusgui.services.shellServices.ShellCommands;
 import lv.freeradiusgui.services.shellServices.ShellExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,8 @@ public class Server {
     @Autowired
     ShellExecutor shellExecutor;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public static final boolean SERVER_STATUS_UP = true;
     public static final boolean SERVER_STATUS_DOWN = false;
 
@@ -27,12 +31,16 @@ public class Server {
     private Map<String, Boolean> statuses;
     private boolean dbChangesFlag;
     private LocalDateTime lastServiceReboot;
+    private int todayRejectedCount;
 
     public Server() {
         statuses = new HashMap<>();
         statuses.put(FREERADIUS, false);
         statuses.put(TOMCAT, false);
         statuses.put(MYSQL, false);
+        this.todayRejectedCount = 0;
+        this.lastServiceReboot = null;
+        this.dbChangesFlag = false;
     }
 
     public void setDbChangesFlag() {
@@ -55,11 +63,7 @@ public class Server {
         this.lastServiceReboot = lastServiceReboot;
     }
 
-    private Integer todayRejectedCount;
-
-
     public boolean getStatus(String key) {
-        updateStatuses();
         return this.statuses.get(key);
     }
 
@@ -72,14 +76,20 @@ public class Server {
 
         result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_MYSQL);
         this.statuses.put(MYSQL, !result.isEmpty());
+
+        logger.info("Freeradius status: " + (getStatus(Server.FREERADIUS) ? "UP" : "DOWN") );
+        logger.info("Tomcat status: " + (getStatus(Server.TOMCAT) ? "UP" : "DOWN") );
+        logger.info("Mysql status: " + (getStatus(Server.MYSQL) ? "UP" : "DOWN") );
     }
 
     public Integer getTodayRejectedCount() {
         return todayRejectedCount;
     }
 
-    public void setTodayRejectedCount(Integer todayRejectedCount) {
+    public boolean setTodayRejectedCount(int todayRejectedCount) {
+        boolean equal = (this.todayRejectedCount - todayRejectedCount) == 0;
         this.todayRejectedCount = todayRejectedCount;
+        return !equal;
     }
 
     public boolean restartService(){

@@ -37,30 +37,19 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         logger.info("---------------- Starting Application ----------------");
-        logger.info("Loading files:");
-        if (switchService.reloadFromConfig())
-            logger.info(appConfig.getPathToClientsConfFile() + " - OK");
-        else
-            logger.info(appConfig.getPathToClientsConfFile() + " - FAIL");
 
-        if (deviceService.reloadFromConfig())
-            logger.info(appConfig.getPathToUsersFile() + " - OK");
-        else
-            logger.info(appConfig.getPathToUsersFile() + " - FAIL");
+        logger.info("Loading clients.conf file");
+        switchService.reloadFromConfig();
+        logger.info("Loading users file");
+        deviceService.reloadFromConfig();
 
-        LocalDateTime date = LocalDateTime.now();
-        FileOperationResult result = logService.loadFromFile(date);
-        if (result.ok)
-            logger.info("Log file name '" + result.message + "' - OK");
-        else
-            logger.info("Log file - FAIL - " + result.message);
+        LocalDateTime today = LocalDateTime.now();
+        logger.info("Loading log file");
+        logService.loadFromFile(today);
 
-        server.updateStatuses();
-        logger.info("Freeradius status: " + (server.getStatus(Server.FREERADIUS) ? "UP" : "DOWN") );
-        logger.info("Tomcat status: " + (server.getStatus(Server.TOMCAT) ? "UP" : "DOWN") );
-        logger.info("Mysql status: " + (server.getStatus(Server.MYSQL) ? "UP" : "DOWN") );
+         server.updateStatuses();
 
-        server.setTodayRejectedCount(logService.countRejected(logService.getByDate(LocalDateTime.now())));
+        server.setTodayRejectedCount(logService.countRejected(logService.getByDate(today)));
         logger.info("Today rejected count: " + server.getTodayRejectedCount());
 
         logger.info("---------------- Application started----------------");
