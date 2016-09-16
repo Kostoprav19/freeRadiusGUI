@@ -14,3 +14,5 @@
 14) Apply button on navbar - RECALLED
 15) Logs - when loading old logs, delete from DB logs before storing new log records. - DONE
 16) Redo button to recover last step.
+
+17) Test updateDeviceListStatistics

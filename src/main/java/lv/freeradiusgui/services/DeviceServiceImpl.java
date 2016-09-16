@@ -71,7 +71,7 @@ public class DeviceServiceImpl implements DeviceService{
         return list;
     }
 
-    private List<Device> updateDeviceListStatistics(List<Device> list) {
+    private void updateDeviceListStatistics(List<Device> list) {
         List<Log> logList = logService.getToday();
         for (Device device : list){
             Log log = logService.getLastByMac(device.getMac(), logList);
@@ -83,7 +83,6 @@ public class DeviceServiceImpl implements DeviceService{
                 device.setLastSeen(log.getTimeOfRegistration());
             }
         }
-        return list;
     }
 
     @Override
