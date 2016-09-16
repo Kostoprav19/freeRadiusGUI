@@ -32,4 +32,6 @@ public interface DeviceService {
     boolean reloadFromConfig();
 
     boolean writeToConfig();
+
+    void updateStatistics();
 }

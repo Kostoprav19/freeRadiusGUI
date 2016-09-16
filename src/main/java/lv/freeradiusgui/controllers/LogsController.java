@@ -8,7 +8,6 @@ import lv.freeradiusgui.services.filesServices.FileOperationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,16 +56,15 @@ public class LogsController {
                            @PathVariable("date") String dateStr) {
 
         LocalDateTime date = convertStringToDateTime(dateStr, URLformatter);
-        LocalDate today = LocalDate.now();
 
-        List<Log> list = logService.getByDate(date);
+        List<Log> list = logService.getToday();
 
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
         model.addAttribute("date", date.format(displayFormatter));
         Integer rejectedCount = logService.countRejected(list);
         model.addAttribute("rejectedCount", rejectedCount);
-        if (date.toLocalDate().equals(today)) {
+        if (date.toLocalDate().equals(LocalDate.now())) {
             server.setTodayRejectedCount(rejectedCount);
         }
         return Views.LOGS_LIST;

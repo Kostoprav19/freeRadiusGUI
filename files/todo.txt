@@ -5,7 +5,7 @@
 5) Link to rejected not generated if rejected device is in database. Check uslovie creation of link - DONE
 6) go up link button arrow is not showing - DONE
 7) Save changes shown only if there is changes - DONE
-8) Scheduler - update statistics
+8) Scheduler - update statistics - PARTLY DONE
 9) email alert about rejected devices
 10) alert in header about rejected devices count - DONE
 11) Load logs from archive - DONE
@@ -13,3 +13,4 @@
 13) LogService implement log file name - DONE
 14) Apply button on navbar - RECALLED
 15) Logs - when loading old logs, delete from DB logs before storing new log records. - DONE
+16) Redo button to recover last step.

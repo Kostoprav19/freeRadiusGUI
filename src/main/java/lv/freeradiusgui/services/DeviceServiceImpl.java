@@ -71,8 +71,8 @@ public class DeviceServiceImpl implements DeviceService{
         return list;
     }
 
-    private List<Device> updateStatistics(List<Device> list) {
-        List<Log> logList = logService.getAll();
+    private List<Device> updateDeviceListStatistics(List<Device> list) {
+        List<Log> logList = logService.getToday();
         for (Device device : list){
             Log log = logService.getLastByMac(device.getMac(), logList);
             if (log != null) {
@@ -124,8 +124,8 @@ public class DeviceServiceImpl implements DeviceService{
         List<Device> listFromFile = usersFileService.readListFromFile();
         if (listFromFile == null) return false;
 
-        listFromFile = updateDeviceList(listFromFile);
-        listFromFile = updateStatistics(listFromFile);
+        mergeWithDbRecords(listFromFile);
+        updateDeviceListStatistics(listFromFile);
         deviceDAO.storeAll(listFromFile);
         return true;
     }
@@ -138,7 +138,12 @@ public class DeviceServiceImpl implements DeviceService{
         return usersFileService.saveListToFile(listFromDB);
     }
 
-    private List<Device> updateDeviceList(List<Device> listFromFile) {
+    @Override
+    public void updateStatistics() {
+
+    }
+
+    private void mergeWithDbRecords(List<Device> listFromFile) {
         List<Device> result = new ArrayList<>();
         List<Device> listFromDB = getAll();
 
@@ -156,6 +161,6 @@ public class DeviceServiceImpl implements DeviceService{
                 result.add(deviceFromFile);
             }
         }
-        return result;
+        listFromFile = result;
     }
 }

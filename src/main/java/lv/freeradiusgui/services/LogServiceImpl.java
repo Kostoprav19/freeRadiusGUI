@@ -58,6 +58,12 @@ public class LogServiceImpl implements LogService{
     }
 
     @Override
+    public List<Log> getToday() {
+        LocalDateTime today = LocalDateTime.now();
+        return getByDate(today);
+    }
+
+    @Override
     public boolean deleteByDate(LocalDateTime date) {
         List<Log> list = getByDate(date);
         boolean result = logDAO.deleteAll(list);
@@ -110,6 +116,12 @@ public class LogServiceImpl implements LogService{
     }
 
     @Override
+    public FileOperationResult loadFromFileToday() {
+        LocalDateTime today = LocalDateTime.now();
+        return loadFromFile(today);
+    }
+
+    @Override
     public Integer countRejected(List<Log> list) {
         if ( (list == null) || (list.isEmpty()) ) return 0;
         int count = 0;
@@ -119,4 +131,10 @@ public class LogServiceImpl implements LogService{
         return count;
     }
 
+    @Override
+    public Integer countRejectedToday() {
+        LocalDateTime today = LocalDateTime.now();
+        List<Log> list = getByDate(today);
+        return countRejected(list);
+    }
 }

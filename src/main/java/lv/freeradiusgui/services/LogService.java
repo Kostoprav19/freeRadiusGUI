@@ -19,6 +19,8 @@ public interface LogService {
 
     List<Log> getByDate(LocalDateTime date);
 
+    List<Log> getToday();
+
     boolean deleteByDate(LocalDateTime date);
 
     Log getLastByMac(String mac, List<Log> list);
@@ -31,5 +33,9 @@ public interface LogService {
 
     FileOperationResult loadFromFile(LocalDateTime date);
 
+    FileOperationResult loadFromFileToday();
+
     Integer countRejected(List<Log> list);
+
+    Integer countRejectedToday();
 }

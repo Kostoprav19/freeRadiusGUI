@@ -30,8 +30,6 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
     @Autowired
     LogService logService;
     @Autowired
-    AppConfig appConfig;
-    @Autowired
     Server server;
 
     @Override
@@ -43,13 +41,12 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
         logger.info("Loading users file");
         deviceService.reloadFromConfig();
 
-        LocalDateTime today = LocalDateTime.now();
         logger.info("Loading log file");
-        logService.loadFromFile(today);
+        logService.loadFromFileToday();
 
-         server.updateStatuses();
+        server.updateStatuses();
 
-        server.setTodayRejectedCount(logService.countRejected(logService.getByDate(today)));
+        server.setTodayRejectedCount(logService.countRejectedToday());
         logger.info("Today rejected count: " + server.getTodayRejectedCount());
 
         logger.info("---------------- Application started----------------");

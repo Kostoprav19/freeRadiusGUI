@@ -33,11 +33,9 @@ public class ScheduledTasks {
 
         server.updateStatuses();
 
-        LocalDateTime today = LocalDateTime.now();
-        logService.loadFromFile(today);
+        logService.loadFromFileToday();
 
-
-        if (server.setTodayRejectedCount(logService.countRejected(logService.getByDate(today)))) {
+        if (server.setTodayRejectedCount(logService.countRejectedToday())) {
             logger.info("Rejected device detected!");
         }
 
