@@ -16,3 +16,6 @@
 16) Redo button to recover last step.
 
 17) Test updateDeviceListStatistics
+
+18) update statistics scheduler
+19) logs reverse order

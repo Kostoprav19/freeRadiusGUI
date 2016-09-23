@@ -56,7 +56,7 @@ public class LogDAOImpl extends AbstractGenericBaseDao<Log> implements LogDAO {
     @Override
     public List<Log> getByDate(LocalDateTime sDate, LocalDateTime eDate) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(Log.class).addOrder(Order.asc("id"));
+        Criteria criteria = session.createCriteria(Log.class).addOrder(Order.desc("id")); //ORDER
         criteria.add(Restrictions.ge("timeOfRegistration", sDate));
         criteria.add(Restrictions.lt("timeOfRegistration", eDate));
         //criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

@@ -21,6 +21,7 @@ public class ClientsConfFileService extends AbstractFileServices implements File
     @Override
     public List<Switch> readListFromFile(){
         List<String> listFromFile = readFile(appConfig.getPathToClientsConfFile());
+        if (listFromFile == null) return null;
         listFromFile = removeComments(listFromFile);
         return parseList(listFromFile);
     }
