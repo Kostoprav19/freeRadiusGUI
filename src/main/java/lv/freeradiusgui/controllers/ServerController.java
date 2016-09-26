@@ -85,7 +85,7 @@ public class ServerController {
         String consoleOutput = server.runCommand(consoleInput);
 
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        logger.debug("User '" + currentUser + "' has runned console command: " + consoleInput);
+        logger.debug("User '" + currentUser + "' called console command: " + consoleInput);
 
         redirectAttributes.addFlashAttribute("consoleOutput", consoleOutput);
 
