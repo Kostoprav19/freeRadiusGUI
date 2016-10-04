@@ -57,7 +57,7 @@ public class LogsController {
 
         LocalDateTime date = convertStringToDateTime(dateStr, URLformatter);
 
-        List<Log> list = logService.getToday();
+        List<Log> list = logService.getByDate(date);
 
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());

@@ -18,4 +18,6 @@
 17) Test updateDeviceListStatistics
 
 18) update statistics scheduler
-19) logs reverse order
+19) logs reverse order - DONE
+20) log user ip
+21) sho username in nav bar
