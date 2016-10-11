@@ -21,3 +21,4 @@
 19) logs reverse order - DONE
 20) log user ip
 21) sho username in nav bar
+22) Switches - show current computers

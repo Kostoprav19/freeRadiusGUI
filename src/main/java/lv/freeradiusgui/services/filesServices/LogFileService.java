@@ -36,12 +36,13 @@ public class LogFileService extends AbstractFileServices implements FileService<
     private List<Device> deviceList;
     private List<Switch> switchList;
 
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy").withLocale(Locale.ENGLISH);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy").withLocale(Locale.ENGLISH);
+    DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("EEE MMM  d HH:mm:ss yyyy").withLocale(Locale.ENGLISH);
 
-    LocalDateTime currentLofFileDate;
+    LocalDateTime currentLogFileDateTime;
 
     public List<Log> readListFromFile(LocalDateTime date){
-        this.currentLofFileDate = date;
+        this.currentLogFileDateTime = date;
         List<String> listFromFile = readFile(getFileName(date));
         if (listFromFile == null) return null;
 
@@ -90,10 +91,21 @@ public class LogFileService extends AbstractFileServices implements FileService<
 
     private Log parseLog(List<String> list) {
         Log newLog = new Log();
-        newLog.setTimeOfRegistration(currentLofFileDate);
 
         for (int index = 0; index < list.size(); index ++){
                 String string = list.get(index);
+
+                if (string.contains(Integer.toString(LocalDateTime.now().getYear()))){
+
+                    LocalDateTime dateTime;
+                    try {
+                        dateTime = LocalDateTime.parse(string, formatter);
+                    } catch (DateTimeException e){
+                        dateTime = LocalDateTime.parse(string, formatter2);
+                    }
+                    newLog.setTimeOfRegistration(dateTime);
+                }
+
                 if (string.contains("Reply-Message")){
                     newLog.setMac(parseValue(list.get(index), MAC_PATTERN));
 
