@@ -59,6 +59,11 @@ public class LogsController {
 
         List<Log> list = logService.getByDate(date);
 
+        if (list.isEmpty()) {
+            logService.loadFromFile(date);
+            list = logService.getByDate(date);
+        }
+
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
         model.addAttribute("date", date.format(displayFormatter));

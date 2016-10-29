@@ -5,7 +5,7 @@
 5) Link to rejected not generated if rejected device is in database. Check uslovie creation of link - DONE
 6) go up link button arrow is not showing - DONE
 7) Save changes shown only if there is changes - DONE
-8) Scheduler - update statistics - PARTLY DONE
+8) Scheduler - update statistics - DONE
 9) email alert about rejected devices
 10) alert in header about rejected devices count - DONE
 11) Load logs from archive - DONE
@@ -17,7 +17,7 @@
 
 17) Test updateDeviceListStatistics
 
-18) update statistics scheduler
+18) update statistics scheduler - DONE
 19) logs reverse order - DONE
 20) log user ip
 21) sho username in nav bar

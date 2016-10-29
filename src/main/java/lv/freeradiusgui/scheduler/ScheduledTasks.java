@@ -2,6 +2,7 @@ package lv.freeradiusgui.scheduler;
 
 import lv.freeradiusgui.config.AppConfig;
 import lv.freeradiusgui.domain.Server;
+import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.filesServices.FileOperationResult;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class ScheduledTasks {
     LogService logService;
 
     @Autowired
+    DeviceService deviceService;
+
+    @Autowired
     Server server;
 
     @Scheduled(initialDelay=300000, fixedRate = 300000) //every 5 minutes
@@ -38,6 +42,9 @@ public class ScheduledTasks {
         if (server.setTodayRejectedCount(logService.countRejectedToday())) {
             logger.info("Rejected device detected!");
         }
+
+        logger.info("Updating device statistics");
+        deviceService.updateStatistics();
 
         logger.info("---------------- Scheduled task ended ----------------");
     }

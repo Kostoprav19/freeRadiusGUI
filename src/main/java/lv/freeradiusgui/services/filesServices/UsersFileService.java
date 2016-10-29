@@ -18,6 +18,7 @@ public class UsersFileService extends AbstractFileServices implements FileServic
     @Override
     public List<Device> readListFromFile(){
         List<String> listFromFile = readFile(appConfig.getPathToUsersFile());
+        if (listFromFile == null) return null;
         listFromFile = removeComments(listFromFile);
         return parseList(listFromFile);
     }
