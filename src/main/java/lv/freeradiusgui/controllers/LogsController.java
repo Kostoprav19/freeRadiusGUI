@@ -4,7 +4,7 @@ import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.LogService;
-import lv.freeradiusgui.services.filesServices.FileOperationResult;
+import lv.freeradiusgui.utils.OperationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,11 +67,15 @@ public class LogsController {
         model.addAttribute("logs", list);
         model.addAttribute("recordCount", list.size());
         model.addAttribute("date", date.format(displayFormatter));
-        Integer rejectedCount = logService.countRejected(list);
-        model.addAttribute("rejectedCount", rejectedCount);
+
+        Integer rejectedCount = 0;
         if (date.toLocalDate().equals(LocalDate.now())) {
-            server.setTodayRejectedCount(rejectedCount);
+            rejectedCount = server.getTodayRejectedCount();
+        } else {
+            rejectedCount = logService.countRejected(list);
         }
+        model.addAttribute("rejectedCount", rejectedCount);
+
         return Views.LOGS_LIST;
     }
 
@@ -79,7 +83,7 @@ public class LogsController {
     public String refreshLogs(final RedirectAttributes redirectAttributes,
                              @PathVariable("date") String dateStr) {
         LocalDateTime date = LocalDateTime.from(LocalDate.parse(dateStr, URLformatter).atStartOfDay());
-        FileOperationResult result = logService.loadFromFile(date);
+        OperationResult result = logService.loadFromFile(date);
         if (result.ok) {
             redirectAttributes.addFlashAttribute("msg", "Successfully loaded '" + result.message + "' file.");
             redirectAttributes.addFlashAttribute("msgType", "success");

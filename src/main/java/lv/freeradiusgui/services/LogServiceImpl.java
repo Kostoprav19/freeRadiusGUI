@@ -2,7 +2,8 @@ package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.dao.logDAO.LogDAO;
 import lv.freeradiusgui.domain.Log;
-import lv.freeradiusgui.services.filesServices.FileOperationResult;
+import lv.freeradiusgui.domain.Server;
+import lv.freeradiusgui.utils.OperationResult;
 import lv.freeradiusgui.services.filesServices.LogFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class LogServiceImpl implements LogService{
     @Autowired
     private LogFileService logFileService;
 
+    @Autowired
+    Server server;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -39,7 +43,7 @@ public class LogServiceImpl implements LogService{
         if (result) {
             logger.info("Successfully written log records to database.");
         } else {
-            logger.error("Failed to write log records to database");
+            logger.error("Failed to write log records to database.");
         }
         return result;
     }
@@ -101,10 +105,10 @@ public class LogServiceImpl implements LogService{
 
 
     @Override
-    public FileOperationResult loadFromFile(LocalDateTime date) {
-        FileOperationResult result = new FileOperationResult(true, logFileService.getFileName(date));
-
+    public OperationResult loadFromFile(LocalDateTime date) {
         List<Log> listFromFile = logFileService.readListFromFile(date);
+
+        OperationResult result = new OperationResult(true, logFileService.getFileName(date), listFromFile);
         if (listFromFile == null) {
             result.ok = false;
             return result;
@@ -116,25 +120,31 @@ public class LogServiceImpl implements LogService{
     }
 
     @Override
-    public FileOperationResult loadFromFileToday() {
+    public OperationResult loadFromFileToday() {
         LocalDateTime today = LocalDateTime.now();
-        return loadFromFile(today);
+        OperationResult<List<Log>> result =  loadFromFile(today);
+
+        if (!result.ok) return result;
+        
+        List<Log> rejectedLogsList = filterRejectedLogs(result.object);
+
+        server.setTodayRejected(rejectedLogsList);
+
+        return result;
+    }
+
+    private List<Log> filterRejectedLogs(List<Log> list) {
+        List<Log> result = new ArrayList<>();
+
+        for (Log log : list){
+            if (log.getStatus() == Log.STATUS_REJECT) result.add(log);
+        }
+        return result;
     }
 
     @Override
     public Integer countRejected(List<Log> list) {
-        if ( (list == null) || (list.isEmpty()) ) return 0;
-        int count = 0;
-        for (Log log : list){
-            if (log.getStatus() == Log.STATUS_REJECT) count++;
-        }
-        return count;
+        return filterRejectedLogs(list).size();
     }
 
-    @Override
-    public Integer countRejectedToday() {
-        LocalDateTime today = LocalDateTime.now();
-        List<Log> list = getByDate(today);
-        return countRejected(list);
-    }
 }

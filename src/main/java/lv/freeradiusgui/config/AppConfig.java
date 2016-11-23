@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.StringJoiner;
 
 /**
  * Created by Dan on 08.07.2016.
@@ -18,9 +19,12 @@ public class AppConfig {
     public static final String PROPERTIES_FILE = "config.properties";
     private final Properties configProp = new Properties();
 
+    //FREERADIUS
     private String pathToUsersFile;
     private String pathToClientsConfFile;
     private String pathToLogDirectory;
+
+    //DB
     private String dbDriverClass;
     private String dbUrl;
     private String dbUser;
@@ -30,6 +34,11 @@ public class AppConfig {
     private int dbCheckoutTimeout;
     private int dbMaxStatements;
     private int dbIdleConnectionTestPeriod;
+
+    //MAIL
+    private String mailFrom;
+    private String mailTo;
+    private String mailSmtpServer;
 
 
     public String getPathToUsersFile() {
@@ -80,6 +89,18 @@ public class AppConfig {
         return dbIdleConnectionTestPeriod;
     }
 
+    public String getMailFrom() {
+        return mailFrom;
+    }
+
+    public String getMailTo() {
+        return mailTo;
+    }
+
+    public String getMailSmtpServer() {
+        return mailSmtpServer;
+    }
+
     public AppConfig() {
         super();
         logger.info("---------------- Loading configuration ----------------");
@@ -100,16 +121,20 @@ public class AppConfig {
         logger.info("dbCheckoutTimeout = " + getDbCheckoutTimeout());
         logger.info("dbMaxStatements = " + getDbMaxStatements());
         logger.info("dbIdleConnectionTestPeriod = " + getDbIdleConnectionTestPeriod());
+        logger.info("mailFrom = " + getMailFrom());
+        logger.info("mailTo = " + getMailTo());
+        logger.info("mailSmtpServer = " + getMailSmtpServer());
 
         logger.info("---------------- Configuration loaded  ----------------");
     }
 
     private void setVariables() {
         readPropertyFile();
-        //PATHES
+        //FREERADIUS
         pathToClientsConfFile = getProperty("clientsfilepath");
         pathToUsersFile = getProperty("usersfilepath");
         pathToLogDirectory = getProperty("logfilesdirpath");
+
         //DATABASE
         dbDriverClass = getProperty("dbDriverClass");
         dbUrl = getProperty("dbUrl");
@@ -120,6 +145,11 @@ public class AppConfig {
         dbCheckoutTimeout = Integer.parseInt(getProperty("dbCheckoutTimeout"));
         dbMaxStatements = Integer.parseInt(getProperty("dbMaxStatements"));
         dbIdleConnectionTestPeriod = Integer.parseInt(getProperty("dbIdleConnectionTestPeriod"));
+
+        //MAIL
+        mailFrom = getProperty("mailFrom");
+        mailTo = getProperty("mailTo");
+        mailSmtpServer = getProperty("mailSmtpServer");
     }
 
     public String getProperty(String key){

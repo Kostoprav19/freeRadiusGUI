@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,14 +33,14 @@ public class Server {
     private Map<String, Boolean> statuses;
     private boolean dbChangesFlag;
     private LocalDateTime lastServiceReboot;
-    private int todayRejectedCount;
+    private List<Log> rejectedLogsToday;
 
     public Server() {
         statuses = new HashMap<>();
         statuses.put(FREERADIUS, false);
         statuses.put(TOMCAT, false);
         statuses.put(MYSQL, false);
-        this.todayRejectedCount = 0;
+        this.rejectedLogsToday = new ArrayList<>();
         this.lastServiceReboot = null;
         this.dbChangesFlag = false;
     }
@@ -83,12 +85,12 @@ public class Server {
     }
 
     public Integer getTodayRejectedCount() {
-        return todayRejectedCount;
+        return rejectedLogsToday.size();
     }
 
-    public boolean setTodayRejectedCount(int todayRejectedCount) {
-        boolean equal = (this.todayRejectedCount - todayRejectedCount) == 0;
-        this.todayRejectedCount = todayRejectedCount;
+    public boolean setTodayRejected(List<Log> logList) {
+        boolean equal = (this.rejectedLogsToday.size() - logList.size()) == 0;
+        this.rejectedLogsToday = logList;
         return !equal;
     }
 

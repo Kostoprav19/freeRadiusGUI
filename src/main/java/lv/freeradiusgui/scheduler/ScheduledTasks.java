@@ -1,17 +1,13 @@
 package lv.freeradiusgui.scheduler;
 
-import lv.freeradiusgui.config.AppConfig;
 import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
-import lv.freeradiusgui.services.filesServices.FileOperationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 /**
  * Created by Daniels on 16.09.2016..
@@ -38,10 +34,6 @@ public class ScheduledTasks {
         server.updateStatuses();
 
         logService.loadFromFileToday();
-
-        if (server.setTodayRejectedCount(logService.countRejectedToday())) {
-            logger.info("Rejected device detected!");
-        }
 
         logger.info("Updating device statistics");
         deviceService.updateStatistics();

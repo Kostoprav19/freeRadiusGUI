@@ -4,16 +4,12 @@ import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.SwitchService;
-import lv.freeradiusgui.services.filesServices.FileOperationResult;
-import lv.freeradiusgui.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 /**
  * Created by Dan on 17.08.2016.
@@ -45,9 +41,6 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
         logService.loadFromFileToday();
 
         server.updateStatuses();
-
-        server.setTodayRejectedCount(logService.countRejectedToday());
-        logger.info("Today rejected count: " + server.getTodayRejectedCount());
 
         logger.info("---------------- Application started----------------");
     }

@@ -1,7 +1,7 @@
 package lv.freeradiusgui.services;
 
 import lv.freeradiusgui.domain.Log;
-import lv.freeradiusgui.services.filesServices.FileOperationResult;
+import lv.freeradiusgui.utils.OperationResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,11 +31,9 @@ public interface LogService {
 
     Long getCount();
 
-    FileOperationResult loadFromFile(LocalDateTime date);
+    OperationResult loadFromFile(LocalDateTime date);
 
-    FileOperationResult loadFromFileToday();
+    OperationResult loadFromFileToday();
 
     Integer countRejected(List<Log> list);
-
-    Integer countRejectedToday();
 }
