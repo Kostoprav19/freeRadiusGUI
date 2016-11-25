@@ -4,6 +4,7 @@ import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.LogService;
+import lv.freeradiusgui.services.serverServices.ServerService;
 import lv.freeradiusgui.utils.OperationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class LogsController {
     LogService logService;
 
     @Autowired
-    Server server;
+    ServerService serverService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -70,7 +71,7 @@ public class LogsController {
 
         Integer rejectedCount = 0;
         if (date.toLocalDate().equals(LocalDate.now())) {
-            rejectedCount = server.getTodayRejectedCount();
+            rejectedCount = serverService.getRejectedLogsTodayCounter();
         } else {
             rejectedCount = logService.countRejected(list);
         }

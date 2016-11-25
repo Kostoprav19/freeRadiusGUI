@@ -1,10 +1,5 @@
 package lv.freeradiusgui.domain;
 
-import lv.freeradiusgui.services.shellServices.ShellCommands;
-import lv.freeradiusgui.services.shellServices.ShellExecutor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -18,10 +13,6 @@ import java.util.Map;
  */
 @Component
 public class Server {
-    @Autowired
-    ShellExecutor shellExecutor;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public static final boolean SERVER_STATUS_UP = true;
     public static final boolean SERVER_STATUS_DOWN = false;
@@ -33,16 +24,18 @@ public class Server {
     private Map<String, Boolean> statuses;
     private boolean dbChangesFlag;
     private LocalDateTime lastServiceReboot;
-    private List<Log> rejectedLogsToday;
+    private List<Log> rejectedLogsListToday;
+    private int rejectedLogsCounter;
 
     public Server() {
         statuses = new HashMap<>();
         statuses.put(FREERADIUS, false);
         statuses.put(TOMCAT, false);
         statuses.put(MYSQL, false);
-        this.rejectedLogsToday = new ArrayList<>();
+        this.rejectedLogsListToday = new ArrayList<>();
         this.lastServiceReboot = null;
         this.dbChangesFlag = false;
+        this.rejectedLogsCounter = 0;
     }
 
     public void setDbChangesFlag() {
@@ -69,62 +62,23 @@ public class Server {
         return this.statuses.get(key);
     }
 
-    public void updateStatuses(){
-        String result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_FREERADIUS);
-        this.statuses.put(FREERADIUS, !result.isEmpty());
-
-        result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_TOMCAT);
-        this.statuses.put(TOMCAT, !result.isEmpty());
-
-        result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_MYSQL);
-        this.statuses.put(MYSQL, !result.isEmpty());
-
-        logger.info("Freeradius status: " + (getStatus(Server.FREERADIUS) ? "UP" : "DOWN") );
-        logger.info("Tomcat status: " + (getStatus(Server.TOMCAT) ? "UP" : "DOWN") );
-        logger.info("Mysql status: " + (getStatus(Server.MYSQL) ? "UP" : "DOWN") );
+    public void setStatus(String key, Boolean value) {
+        this.statuses.put(key, value);
     }
 
-    public Integer getTodayRejectedCount() {
-        return rejectedLogsToday.size();
+    public void setTodayRejected(List<Log> logList) {
+        this.rejectedLogsListToday = logList;
     }
 
-    public boolean setTodayRejected(List<Log> logList) {
-        boolean equal = (this.rejectedLogsToday.size() - logList.size()) == 0;
-        this.rejectedLogsToday = logList;
-        return !equal;
+    public List<Log> getRejectedLogsListToday() {
+        return rejectedLogsListToday;
     }
 
-    public boolean restartService(){
-        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_FREERADIUS);
-        shellExecutor.executeCommand(ShellCommands.COMMAND_START_FREERADIUS);
-        updateStatuses();
-        if (getStatus(FREERADIUS) == SERVER_STATUS_UP) {
-            this.lastServiceReboot = LocalDateTime.now();
-            return true;
-        } else
-            return false;
+    public int getRejectedLogsCounter() {
+        return rejectedLogsCounter;
     }
 
-    public boolean startService(){
-        shellExecutor.executeCommand(ShellCommands.COMMAND_START_FREERADIUS);
-        updateStatuses();
-        if (getStatus(FREERADIUS) == SERVER_STATUS_UP) {
-            this.lastServiceReboot = LocalDateTime.now();
-            return true;
-        } else
-            return false;
-    }
-
-    public boolean stopService(){
-        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_FREERADIUS);
-        updateStatuses();
-        if (getStatus(FREERADIUS) == SERVER_STATUS_DOWN) {
-            return true;
-        } else
-            return false;
-    }
-
-    public String runCommand(String command){
-        return shellExecutor.executeCommand(command);
+    public void setRejectedLogsCounter(int rejectedLogsCounter) {
+        this.rejectedLogsCounter = rejectedLogsCounter;
     }
 }

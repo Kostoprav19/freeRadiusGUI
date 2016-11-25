@@ -2,6 +2,7 @@ package lv.freeradiusgui.controllers;
 
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Server;
+import lv.freeradiusgui.services.serverServices.ServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ServerController {
 
     @Autowired
-    Server server;
+    ServerService serverService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -32,17 +33,17 @@ public class ServerController {
 
     @RequestMapping(Views.SERVER)
     public String home(Model model) {
-        server.updateStatuses();
-        model.addAttribute("lastServiceReboot", server.getLastServiceReboot());
-        model.addAttribute("tomcatStatus", server.getStatus(Server.TOMCAT));
-        model.addAttribute("mysqlStatus", server.getStatus(Server.MYSQL));
+        serverService.updateStatuses();
+        model.addAttribute("lastServiceReboot", serverService.getLastServiceReboot());
+        model.addAttribute("tomcatStatus", serverService.getStatus(Server.TOMCAT));
+        model.addAttribute("mysqlStatus", serverService.getStatus(Server.MYSQL));
         return Views.SERVER;
     }
 
     @RequestMapping(Views.SERVER + "/start")
     public String startService(final RedirectAttributes redirectAttributes) {
-        server.startService();
-        if (server.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP){
+        serverService.startFreeradius();
+        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP){
             redirectAttributes.addFlashAttribute("msg", "Service 'freeradius' successfully started.");
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
@@ -54,8 +55,8 @@ public class ServerController {
 
     @RequestMapping(Views.SERVER + "/stop")
     public String stopService(final RedirectAttributes redirectAttributes) {
-        server.stopService();
-        if (server.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_DOWN){
+        serverService.stopFreeradius();
+        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_DOWN){
             redirectAttributes.addFlashAttribute("msg", "Service 'freeradius' successfully stopped.");
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
@@ -67,8 +68,8 @@ public class ServerController {
 
     @RequestMapping(Views.SERVER + "/restart")
     public String restartService(final RedirectAttributes redirectAttributes) {
-        server.restartService();
-        if (server.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP){
+        serverService.restartFreeradius();
+        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP){
             redirectAttributes.addFlashAttribute("msg", "Service 'freeradius' successfully restarted.");
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
@@ -82,7 +83,7 @@ public class ServerController {
     public String runCommand(final RedirectAttributes redirectAttributes,
                              @RequestParam("consoleInput") String consoleInput) {
 
-        String consoleOutput = server.runCommand(consoleInput);
+        String consoleOutput = serverService.runCommand(consoleInput);
 
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
         logger.debug("User '" + currentUser + "' called console command: " + consoleInput);

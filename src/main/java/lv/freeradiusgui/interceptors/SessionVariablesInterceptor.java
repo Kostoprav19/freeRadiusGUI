@@ -1,6 +1,7 @@
 package lv.freeradiusgui.interceptors;
 
 import lv.freeradiusgui.domain.Server;
+import lv.freeradiusgui.services.serverServices.ServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionVariablesInterceptor implements HandlerInterceptor {
 
     @Autowired
-    Server server;
+    ServerService serverService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -24,10 +25,10 @@ public class SessionVariablesInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-        if (server != null){
-            request.getSession().setAttribute("todayRejectedCount", server.getTodayRejectedCount());
-            request.getSession().setAttribute("freeradiusStatus", server.getStatus(Server.FREERADIUS));
-            request.getSession().setAttribute("dbChangesFlag", server.getDbgChangesFlag());
+        if (serverService != null){
+            request.getSession().setAttribute("todayRejectedCount", serverService.getRejectedLogsTodayCounter());
+            request.getSession().setAttribute("freeradiusStatus", serverService.getStatus(Server.FREERADIUS));
+            request.getSession().setAttribute("dbChangesFlag", serverService.getDbgChangesFlag());
         }
     }
 

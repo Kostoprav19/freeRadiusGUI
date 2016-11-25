@@ -4,6 +4,7 @@ import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.DeviceService;
+import lv.freeradiusgui.services.serverServices.ServerService;
 import lv.freeradiusgui.validators.DeviceFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ public class DevicesController {
     DeviceFormValidator deviceFormValidator;
 
     @Autowired
-    Server server;
+    ServerService serverService;
 
     @ModelAttribute("page")
     public String page() {
@@ -99,7 +100,7 @@ public class DevicesController {
         }
 
         deviceService.store(device);
-        server.setDbChangesFlag();
+        serverService.setDbChangesFlag();
         status.setComplete();
         redirectAttributes.addFlashAttribute("msg", "Device '" + device.getName() + "' successfully saved.");
         redirectAttributes.addFlashAttribute("msgType", "success");
@@ -136,10 +137,10 @@ public class DevicesController {
     @RequestMapping(value = Views.ADMIN + "/writeUsers", method = RequestMethod.GET)
     public String writeDevices(final RedirectAttributes redirectAttributes) {
         if (deviceService.writeToConfig()) {
-            if (server.restartService()) {
+            if (serverService.restartFreeradius()) {
                 redirectAttributes.addFlashAttribute("msg", "Successfully applied changes.");
                 redirectAttributes.addFlashAttribute("msgType", "success");
-                server.unsetDbChangesFlag();
+                serverService.unsetDbChangesFlag();
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Changes saved to 'users' file, but failed to restart freeradius service.");
                 redirectAttributes.addFlashAttribute("msgType", "danger");

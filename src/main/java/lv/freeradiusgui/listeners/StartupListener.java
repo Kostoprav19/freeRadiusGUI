@@ -4,6 +4,7 @@ import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.SwitchService;
+import lv.freeradiusgui.services.serverServices.ServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
     @Autowired
     LogService logService;
     @Autowired
-    Server server;
+    ServerService serverService;
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
@@ -40,7 +41,7 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
         logger.info("Loading log file");
         logService.loadFromFileToday();
 
-        server.updateStatuses();
+        serverService.updateStatuses();
 
         logger.info("---------------- Application started----------------");
     }

@@ -4,6 +4,7 @@ import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.domain.Switch;
 import lv.freeradiusgui.services.SwitchService;
+import lv.freeradiusgui.services.serverServices.ServerService;
 import lv.freeradiusgui.validators.SwitchFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ public class SwitchesController {
     SwitchFormValidator switchFormValidator;
 
     @Autowired
-    Server server;
+    ServerService serverService;
 
     @ModelAttribute("page")
     public String page() {
@@ -88,7 +89,7 @@ public class SwitchesController {
         }
 
         switchService.store(aSwitch);
-        server.setDbChangesFlag();
+        serverService.setDbChangesFlag();
         status.setComplete();
 
         redirectAttributes.addFlashAttribute("msg", "Switch '" + aSwitch.getName() + "' successfully saved.");
@@ -118,10 +119,10 @@ public class SwitchesController {
     @RequestMapping(value = Views.ADMIN + "/writeClients", method = RequestMethod.GET)
     public String writeSwitches(final RedirectAttributes redirectAttributes) {
         if (switchService.writeToConfig()) {
-            if (server.restartService()) {
+            if (serverService.restartFreeradius()) {
                 redirectAttributes.addFlashAttribute("msg", "Successfully applied changes.");
                 redirectAttributes.addFlashAttribute("msgType", "success");
-                server.unsetDbChangesFlag();
+                serverService.unsetDbChangesFlag();
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Changes saved to 'clinets.conf' file, but failed to restart freeradius service.");
                 redirectAttributes.addFlashAttribute("msgType", "danger");

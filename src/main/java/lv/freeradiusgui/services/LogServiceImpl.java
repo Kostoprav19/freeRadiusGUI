@@ -3,6 +3,8 @@ package lv.freeradiusgui.services;
 import lv.freeradiusgui.dao.logDAO.LogDAO;
 import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.domain.Server;
+import lv.freeradiusgui.services.mailServices.MailService;
+import lv.freeradiusgui.services.serverServices.ServerService;
 import lv.freeradiusgui.utils.OperationResult;
 import lv.freeradiusgui.services.filesServices.LogFileService;
 import org.slf4j.Logger;
@@ -10,10 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Dan on 29.04.2016.
@@ -28,7 +33,9 @@ public class LogServiceImpl implements LogService{
     private LogFileService logFileService;
 
     @Autowired
-    Server server;
+    ServerService serverService;
+
+    DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss").withLocale(Locale.ENGLISH);
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -72,9 +79,9 @@ public class LogServiceImpl implements LogService{
         List<Log> list = getByDate(date);
         boolean result = logDAO.deleteAll(list);
         if (result) {
-            logger.info("Successfully deleted log records from database by date: " + date);
+            logger.info("Successfully deleted log records from database by date: " + date.format(displayFormatter));
         } else {
-            logger.error("Failed to delete log records from database by date: " + date);
+            logger.error("Failed to delete log records from database by date: " + date.format(displayFormatter));
         }
         return result;
     }
@@ -116,21 +123,18 @@ public class LogServiceImpl implements LogService{
         deleteByDate(date);
         storeAll(listFromFile);
 
+        if (date.toLocalDate().equals(LocalDate.now())) {
+            List<Log> rejectedLogsList = filterRejectedLogs(listFromFile);
+            serverService.setTodayRejected(rejectedLogsList);
+        }
+
         return result;
     }
 
     @Override
     public OperationResult loadFromFileToday() {
         LocalDateTime today = LocalDateTime.now();
-        OperationResult<List<Log>> result =  loadFromFile(today);
-
-        if (!result.ok) return result;
-        
-        List<Log> rejectedLogsList = filterRejectedLogs(result.object);
-
-        server.setTodayRejected(rejectedLogsList);
-
-        return result;
+        return loadFromFile(today);
     }
 
     private List<Log> filterRejectedLogs(List<Log> list) {
