@@ -1,3 +1,3 @@
 # freeRadiusGUI
 
-GUI for the freeRADIUS server
+The Web GUI for the freeRADIUS server
