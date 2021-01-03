@@ -1,2 +1,3 @@
 # freeRadiusGUI
-GUI for freeRADIUS
+
+GUI for the freeRADIUS server
