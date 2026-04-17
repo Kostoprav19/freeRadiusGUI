@@ -1,32 +1,26 @@
 package lv.freeradiusgui.services;
 
-
+import java.time.LocalDateTime;
+import java.util.List;
 import lv.freeradiusgui.dao.accountDAO.AccountDAO;
 import lv.freeradiusgui.domain.Account;
 import lv.freeradiusgui.domain.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private AccountDAO accountDAO;
+    @Autowired private AccountDAO accountDAO;
 
-    @Autowired
-    RoleService roleService;
+    @Autowired RoleService roleService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Override
     public boolean store(Account account) {
@@ -58,9 +52,12 @@ public class AccountServiceImpl implements AccountService {
     public boolean delete(Account account) {
         boolean result = accountDAO.delete(account);
         if (result) {
-            logger.info("Successfully deleted switch records from database. Switch id: " + account.getId());
+            logger.info(
+                    "Successfully deleted switch records from database. Switch id: "
+                            + account.getId());
         } else {
-            logger.error("Failed to delete switch records from database. Switch id: " + account.getId());
+            logger.error(
+                    "Failed to delete switch records from database. Switch id: " + account.getId());
         }
         return result;
     }
@@ -81,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void fixRolesWithOutId(Account account) {
-        for (Role role: account.getRoles()){
+        for (Role role : account.getRoles()) {
             if (role.getId() == null) {
                 role.setId(roleService.getByName(role.getName()).getId());
             }

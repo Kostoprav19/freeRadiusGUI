@@ -51,6 +51,8 @@ Common tasks (run `mise tasks` to list all):
 | `mise run verify`       | Full compile + test + package                             |
 | `mise run run`          | Launch on embedded Tomcat 7 at http://localhost:8080/freeradiusgui |
 | `mise run clean`        | `mvn clean`                                               |
+| `mise run lint`         | Lint all Java files (Spotless + google-java-format AOSP)  |
+| `mise run format`       | Auto-fix formatting & imports on all Java files           |
 | `mise run docker:build` | Build the Docker image (`freeradiusgui:latest`)           |
 | `mise run docker:run`   | Run the container with host FreeRADIUS mounts             |
 | `mise run docker:run-dev` | Run the container without host mounts (DB‑only mode)    |
@@ -64,6 +66,20 @@ mvn clean package                   # build target/freeradiusgui.war
 mvn test                            # run tests
 mvn tomcat7:run                     # embedded Tomcat at :8080/freeradiusgui
 mvn -Dtest=DeviceDAOImplTest test   # single test
+mvn spotless:check                  # lint (AOSP style, google-java-format 1.7)
+mvn spotless:apply                  # auto-fix formatting
+```
+
+### Linting
+
+Spotless (with `google-java-format 1.7` AOSP style) lints every Java file
+under `src/main/java` and `src/test/java`. Rules: 4‑space indent, sorted
+imports, unused imports removed, trailing whitespace trimmed, files end
+with a newline.
+
+```bash
+mise run lint     # mvn spotless:check — read-only, non-zero on violations
+mise run format   # mvn spotless:apply — rewrites files in place
 ```
 
 ## Database Setup

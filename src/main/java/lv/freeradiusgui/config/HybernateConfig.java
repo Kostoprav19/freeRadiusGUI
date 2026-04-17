@@ -1,6 +1,9 @@
 package lv.freeradiusgui.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import java.beans.PropertyVetoException;
+import java.util.Properties;
+import javax.sql.DataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,17 +14,12 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.sql.DataSource;
-import java.beans.PropertyVetoException;
-import java.util.Properties;
-
 @Configuration
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableTransactionManagement
 public class HybernateConfig {
 
-    @Autowired
-    AppConfig appConfig;
+    @Autowired AppConfig appConfig;
 
     @Bean(destroyMethod = "close")
     public DataSource dataSource() throws PropertyVetoException {

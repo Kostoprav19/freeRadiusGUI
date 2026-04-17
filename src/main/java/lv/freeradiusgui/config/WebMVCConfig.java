@@ -1,9 +1,6 @@
 package lv.freeradiusgui.config;
 
-/**
- * Created by Dan on 21.01.2016.
- */
-
+import javax.annotation.PostConstruct;
 import lv.freeradiusgui.interceptors.SessionVariablesInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -17,50 +14,51 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import javax.annotation.PostConstruct;
-
-
 @Configuration
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = {"lv.freeradiusgui"})
+@ComponentScan(basePackages = { "lv.freeradiusgui" })
 @EnableScheduling
-@Import({ThymeleafConfig.class, HybernateConfig.class, SecurityConfig.class})
-public class WebMVCConfig extends WebMvcConfigurerAdapter{
+@Import({ ThymeleafConfig.class, HybernateConfig.class, SecurityConfig.class })
+public class WebMVCConfig extends WebMvcConfigurerAdapter {
 
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
+  @Override
+  public void configureDefaultServletHandling(
+    DefaultServletHandlerConfigurer configurer
+  ) {
+    configurer.enable();
+  }
 
+  @Override
+  public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+    registry
+      .addResourceHandler("/resources/**")
+      .addResourceLocations("/resources/");
+  }
 
-    @Override
-    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-    }
+  @Bean
+  public MessageSource messageSource() {
+    ResourceBundleMessageSource messageSource =
+      new ResourceBundleMessageSource();
+    messageSource.setBasename("messages");
+    return messageSource;
+  }
 
-    @Bean
-    public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages");
-        return messageSource;
-    }
+  @Autowired
+  private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
 
-    @Autowired
-    private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
+  @PostConstruct
+  public void init() {
+    requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
+  }
 
-    @PostConstruct
-    public void init() {
-        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
-    }
+  @Bean
+  public SessionVariablesInterceptor sessionVariablesInterceptor() {
+    return new SessionVariablesInterceptor();
+  }
 
-    @Bean
-    public SessionVariablesInterceptor sessionVariablesInterceptor() {
-        return new SessionVariablesInterceptor();
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sessionVariablesInterceptor());
-    }
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(sessionVariablesInterceptor());
+  }
 }

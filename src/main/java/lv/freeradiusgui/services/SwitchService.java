@@ -1,35 +1,30 @@
 package lv.freeradiusgui.services;
 
+import java.util.List;
 import lv.freeradiusgui.domain.Switch;
 
-import java.util.List;
-
-/**
- * Created by Dan on 29.04.2016.
- */
 public interface SwitchService {
+  boolean store(Switch sSwitch);
 
-    boolean store(Switch sSwitch);
+  boolean storeAll(List<Switch> switchList);
 
-    boolean storeAll(List<Switch> switchList);
+  Switch getById(Integer id);
 
-    Switch getById(Integer id);
+  Switch getByIp(String ip);
 
-    Switch getByIp(String ip);
+  Switch getByIp(String ip, List<Switch> list);
 
-    Switch getByIp(String ip, List<Switch> list);
+  List<Switch> getAll();
 
-    List<Switch> getAll();
+  List<Switch> getAllByCriteria(String fieldName, Object object);
 
-    List<Switch> getAllByCriteria(String fieldName, Object object);
+  boolean delete(Switch aSwitch);
 
-    boolean delete(Switch aSwitch);
+  Long getCount();
 
-    Long getCount();
+  Switch prepareNewSwitch();
 
-    Switch prepareNewSwitch();
+  boolean reloadFromConfig();
 
-    boolean reloadFromConfig();
-
-    boolean writeToConfig();
+  boolean writeToConfig();
 }

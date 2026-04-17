@@ -13,55 +13,39 @@ import org.springframework.validation.Validator;
 @Component("deviceFormValidator")
 public class DeviceFormValidator implements Validator {
 
-  @Autowired
-  DeviceService deviceService;
+    @Autowired DeviceService deviceService;
 
-  @Override
-  public boolean supports(Class<?> clazz) {
-    return Device.class.equals(clazz);
-  }
-
-  @Override
-  public void validate(Object target, Errors errors) {
-    Device device = (Device) target;
-
-    ValidationUtils.rejectIfEmptyOrWhitespace(
-      errors,
-      "mac",
-      "NotEmpty.deviceForm.mac"
-    );
-    ValidationUtils.rejectIfEmptyOrWhitespace(
-      errors,
-      "name",
-      "NotEmpty.deviceForm.name"
-    );
-    ValidationUtils.rejectIfEmptyOrWhitespace(
-      errors,
-      "access",
-      "NotEmpty.deviceForm.access"
-    );
-
-    if (!isMacValid(device.getMac())) {
-      errors.rejectValue("mac", "Pattern.deviceForm.mac");
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return Device.class.equals(clazz);
     }
 
-    if (
-      (device.getId() == null) &&
-      (deviceService.getByMac(device.getMac()) != null)
-    ) {
-      errors.rejectValue("mac", "Exist.deviceForm.mac");
+    @Override
+    public void validate(Object target, Errors errors) {
+        Device device = (Device) target;
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mac", "NotEmpty.deviceForm.mac");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.deviceForm.name");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "access", "NotEmpty.deviceForm.access");
+
+        if (!isMacValid(device.getMac())) {
+            errors.rejectValue("mac", "Pattern.deviceForm.mac");
+        }
+
+        if ((device.getId() == null) && (deviceService.getByMac(device.getMac()) != null)) {
+            errors.rejectValue("mac", "Exist.deviceForm.mac");
+        }
     }
-  }
 
-  private boolean isMacValid(String mac) {
-    Pattern pattern;
-    Matcher matcher;
+    private boolean isMacValid(String mac) {
+        Pattern pattern;
+        Matcher matcher;
 
-    mac = mac.replaceAll("[^a-fA-F0-9]", "");
+        mac = mac.replaceAll("[^a-fA-F0-9]", "");
 
-    pattern = Pattern.compile("^([0-9a-fA-F]){12}$");
+        pattern = Pattern.compile("^([0-9a-fA-F]){12}$");
 
-    matcher = pattern.matcher(mac);
-    return matcher.matches();
-  }
+        matcher = pattern.matcher(mac);
+        return matcher.matches();
+    }
 }

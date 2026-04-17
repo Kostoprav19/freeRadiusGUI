@@ -34,6 +34,14 @@ run = "mvn -B -ntp tomcat7:run"
 description = "Remove build artifacts"
 run = "mvn -B -ntp clean"
 
+[tasks.lint]
+description = "Lint all Java files (Spotless + google-java-format AOSP)"
+run = "mvn -B -ntp spotless:check"
+
+[tasks.format]
+description = "Auto-fix formatting & imports on all Java files in place"
+run = "mvn -B -ntp spotless:apply"
+
 # ---------- Docker -----------------------------------------------------------
 
 [tasks."docker:build"]

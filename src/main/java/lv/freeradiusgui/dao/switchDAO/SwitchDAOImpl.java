@@ -7,36 +7,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-/**
- * Created by Dan on 23.04.2016.
- */
-
 @Transactional
 @Repository
-public class SwitchDAOImpl extends AbstractGenericBaseDao<Switch> implements SwitchDAO {
+public class SwitchDAOImpl
+  extends AbstractGenericBaseDao<Switch>
+  implements SwitchDAO
+{
 
-    @Autowired
-    public SwitchDAOImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+  @Autowired
+  public SwitchDAOImpl(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
+  @Override
+  public Switch getById(Integer id) {
+    if (id == null || id < 0) {
+      return null;
     }
+    return getOneByCriteria("id", id);
+  }
 
-
-    @Override
-    public Switch getById(Integer id) {
-        if (id == null || id < 0) {
-            return null;
-        }
-        return getOneByCriteria("id", id);
+  @Override
+  public Switch getByIp(String ip) {
+    if ((ip == null) | ip.isEmpty()) {
+      return null;
     }
-
-    @Override
-    public Switch getByIp(String ip) {
-        if (ip == null | ip.isEmpty()) {
-            return null;
-        }
-        return getOneByCriteria("ip", ip);
-    }
-
+    return getOneByCriteria("ip", ip);
+  }
 }

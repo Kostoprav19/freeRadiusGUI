@@ -1,8 +1,7 @@
 package lv.freeradiusgui.services;
 
-import lv.freeradiusgui.domain.Account;
-
 import java.util.List;
+import lv.freeradiusgui.domain.Account;
 
 public interface AccountService {
 
@@ -23,7 +22,4 @@ public interface AccountService {
     Account prepareNewAccount();
 
     void fixRolesWithOutId(Account account);
-
 }
-
-
