@@ -1,0 +1,63 @@
+[tools]
+java  = "temurin-8"
+maven = "3.9.9"
+
+[env]
+# Keep Maven output quiet(ish) and avoid interactive prompts in CI.
+MAVEN_OPTS = "-Xmx1g"
+# Image name/tag used by the docker:* tasks below.
+IMAGE = "freeradiusgui:latest"
+
+# ---------- Maven / Java -----------------------------------------------------
+
+[tasks.build]
+description = "Compile and package the WAR (skips tests)"
+run = "mvn -B -ntp -DskipTests clean package"
+
+[tasks.test]
+description = "Run unit tests (JUnit 4, Surefire)"
+run = "mvn -B -ntp test"
+
+[tasks.verify]
+description = "Full verify: compile, test, package"
+run = "mvn -B -ntp clean verify"
+
+[tasks.package]
+description = "Produce target/freeradiusgui.war"
+run = "mvn -B -ntp clean package"
+
+[tasks.run]
+description = "Run locally on embedded Tomcat 7 (http://localhost:8080/freeradiusgui)"
+run = "mvn -B -ntp tomcat7:run"
+
+[tasks.clean]
+description = "Remove build artifacts"
+run = "mvn -B -ntp clean"
+
+# ---------- Docker -----------------------------------------------------------
+
+[tasks."docker:build"]
+description = "Build the Docker image ($IMAGE)"
+run = "docker build -t $IMAGE ."
+
+# ---------- Docker Compose (MySQL + optional app) ---------------------------
+
+[tasks."db:up"]
+description = "Start the MySQL container in the background"
+run = "docker compose up -d db"
+
+[tasks."db:down"]
+description = "Stop the compose stack (keep DB volume)"
+run = "docker compose down"
+
+[tasks."db:reset"]
+description = "Stop stack and delete the DB volume (re-seeds on next up)"
+run = "docker compose down -v"
+
+[tasks."compose:up"]
+description = "Run full stack (app + DB) via compose"
+run = "docker compose --profile app up --build"
+
+[tasks."compose:down"]
+description = "Stop the full compose stack"
+run = "docker compose --profile app down"

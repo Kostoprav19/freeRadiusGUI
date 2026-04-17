@@ -1,0 +1,60 @@
+name: freeradiusgui
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: freeradiusgui-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpw}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-freeradiusgui}
+      MYSQL_USER: ${MYSQL_USER:-freeradius}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-koJasmoJas2}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+      # --- Uncomment this block if you switch the image tag to mysql:8 ---
+      # - --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+      # Seeds schema + default admin/user accounts on first boot only.
+      - ./databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - localhost
+        - -uroot
+        - -p${MYSQL_ROOT_PASSWORD:-rootpw}
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # Enabled only with `docker compose --profile app up`.
+  app:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: freeradiusgui:latest
+    container_name: freeradiusgui-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC"
+    volumes:
+      # Override classpath config at runtime so dbUrl points at the `db`
+      - ./config/config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
+      - /etc/freeradius:/etc/freeradius
+      - /var/log/freeradius/radacct:/var/log/freeradius/radacct
+
+volumes:
+  db-data:

@@ -1,0 +1,40 @@
+# VCS / IDE
+.git
+.gitignore
+.idea
+*.iml
+.vscode
+.cursor
+
+# Build output
+target/
+*.class
+*.war
+*.jar
+
+# Legacy IDEA web module layout (Maven uses src/main/webapp/)
+web/
+
+# Sample / reference data (not needed in the image)
+files/
+
+# Docs & local tooling
+README.md
+AGENTS.md
+*.md
+.mise.toml
+mise.toml
+.mise.local.toml
+
+# Compose / env (not needed inside the build context)
+compose.yaml
+compose.yml
+docker-compose.yaml
+docker-compose.yml
+.env
+.env.example
+config/
+
+# OS junk
+.DS_Store
+Thumbs.db
