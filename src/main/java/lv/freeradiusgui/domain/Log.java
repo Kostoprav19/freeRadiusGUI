@@ -1,156 +1,172 @@
 package lv.freeradiusgui.domain;
 
-import org.hibernate.annotations.Formula;
+import java.time.LocalDateTime;
+import javax.persistence.*;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-
-/**
- * Created by Dan on 24.11.2015.
- */
 @Entity
 @Table(name = "logs")
 public class Log {
-    public static final int STATUS_ACCEPT = 1;
-    public static final int STATUS_REJECT = 0;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "log_id")
-    private Integer id;
+  public static final int STATUS_ACCEPT = 1;
+  public static final int STATUS_REJECT = 0;
 
-    @Column(name = "mac")
-    private String mac;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "log_id")
+  private Integer id;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "mac", referencedColumnName = "mac", insertable=false, updatable=false)
-    private Device device;
+  @Column(name = "mac")
+  private String mac;
 
-    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinColumn(name="switch_id")
-    private Switch aSwitch;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(
+    name = "mac",
+    referencedColumnName = "mac",
+    insertable = false,
+    updatable = false
+  )
+  private Device device;
 
-    @Column(name = "port")
-    private Integer switchPort;
+  @ManyToOne(
+    cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE }
+  )
+  @JoinColumn(name = "switch_id")
+  private Switch aSwitch;
 
-    @Column(name = "speed")
-    private Integer portSpeed;
+  @Column(name = "port")
+  private Integer switchPort;
 
-    @Column(name = "duplex")
-    private Integer duplex;
+  @Column(name = "speed")
+  private Integer portSpeed;
 
-    @Column(name = "tor")
-    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
-    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm:ss")
-    private LocalDateTime timeOfRegistration;
+  @Column(name = "duplex")
+  private Integer duplex;
 
-    @Column(name = "status")
-    private Integer status; // 1 - Accept, 0 - Reject
+  @Column(name = "tor")
+  @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+  @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+  private LocalDateTime timeOfRegistration;
 
-    public Integer getId() {
-        return id;
-    }
+  @Column(name = "status")
+  private Integer status; // 1 - Accept, 0 - Reject
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getMac() {
-        return mac;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setMac(String mac) {
-        mac = mac.replaceAll("[^a-fA-F0-9]", ""); //normalize
-        this.mac = mac;
-    }
+  public String getMac() {
+    return mac;
+  }
 
-    public Device getDevice() {
-        return device;
-    }
+  public void setMac(String mac) {
+    mac = mac.replaceAll("[^a-fA-F0-9]", ""); // normalize
+    this.mac = mac;
+  }
 
-    public void setDevice(Device device) {
-        this.device = device;
-    }
+  public Device getDevice() {
+    return device;
+  }
 
-    public Switch getSwitch() {
-        return aSwitch;
-    }
+  public void setDevice(Device device) {
+    this.device = device;
+  }
 
-    public void setSwitch(Switch aSwitch) {
-        this.aSwitch = aSwitch;
-    }
+  public Switch getSwitch() {
+    return aSwitch;
+  }
 
-    public Integer getSwitchPort() {
-        return switchPort;
-    }
+  public void setSwitch(Switch aSwitch) {
+    this.aSwitch = aSwitch;
+  }
 
-    public void setSwitchPort(Integer switchPort) {
-        this.switchPort = switchPort;
-    }
+  public Integer getSwitchPort() {
+    return switchPort;
+  }
 
-    public Integer getDuplex() {
-        return duplex;
-    }
+  public void setSwitchPort(Integer switchPort) {
+    this.switchPort = switchPort;
+  }
 
-    public void setDuplex(Integer duplex) {
-        this.duplex = duplex;
-    }
+  public Integer getDuplex() {
+    return duplex;
+  }
 
-    public Integer getPortSpeed() {
-        return portSpeed;
-    }
+  public void setDuplex(Integer duplex) {
+    this.duplex = duplex;
+  }
 
-    public void setPortSpeed(Integer portSpeed) {
-        this.portSpeed = portSpeed;
-    }
+  public Integer getPortSpeed() {
+    return portSpeed;
+  }
 
-    public LocalDateTime getTimeOfRegistration() {
-        return timeOfRegistration;
-    }
+  public void setPortSpeed(Integer portSpeed) {
+    this.portSpeed = portSpeed;
+  }
 
-    public void setTimeOfRegistration(LocalDateTime timeOfRegistration) {
-        this.timeOfRegistration = timeOfRegistration;
-    }
+  public LocalDateTime getTimeOfRegistration() {
+    return timeOfRegistration;
+  }
 
-    public Integer getStatus() {
-        return status;
-    }
+  public void setTimeOfRegistration(LocalDateTime timeOfRegistration) {
+    this.timeOfRegistration = timeOfRegistration;
+  }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+  public Integer getStatus() {
+    return status;
+  }
 
-    @Override
-    public String toString() {
-        return "Log{" +
-                "id=" + id +
-                ", mac='" + mac + '\'' +
-                ", aSwitch=" + aSwitch +
-                ", switchPort=" + switchPort +
-                ", portSpeed=" + portSpeed +
-                ", timeOfRegistration=" + timeOfRegistration +
-                ", status=" + status +
-                '}';
-    }
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public String toString() {
+    return (
+      "Log{" +
+      "id=" +
+      id +
+      ", mac='" +
+      mac +
+      '\'' +
+      ", aSwitch=" +
+      aSwitch +
+      ", switchPort=" +
+      switchPort +
+      ", portSpeed=" +
+      portSpeed +
+      ", timeOfRegistration=" +
+      timeOfRegistration +
+      ", status=" +
+      status +
+      '}'
+    );
+  }
 
-        Log log = (Log) o;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        if (mac != null ? !mac.equals(log.mac) : log.mac != null) return false;
-        return timeOfRegistration != null ? timeOfRegistration.equals(log.timeOfRegistration) : log.timeOfRegistration == null;
+    Log log = (Log) o;
 
-    }
+    if (mac != null ? !mac.equals(log.mac) : log.mac != null) return false;
+    return timeOfRegistration != null
+      ? timeOfRegistration.equals(log.timeOfRegistration)
+      : log.timeOfRegistration == null;
+  }
 
-    @Override
-    public int hashCode() {
-        int result = mac != null ? mac.hashCode() : 0;
-        result = 31 * result + (timeOfRegistration != null ? timeOfRegistration.hashCode() : 0);
-        return result;
-    }
+  @Override
+  public int hashCode() {
+    int result = mac != null ? mac.hashCode() : 0;
+    result =
+      31 * result +
+      (timeOfRegistration != null ? timeOfRegistration.hashCode() : 0);
+    return result;
+  }
 }

@@ -9,18 +9,14 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-/**
- * Created by Dan on 29.05.2016.
- */
 @Component("accountFormValidator")
-public class AccountFormValidator implements Validator{
+public class AccountFormValidator implements Validator {
 
     @Autowired
     @Qualifier("emailValidator")
     EmailValidator emailValidator;
 
-    @Autowired
-    AccountService accountService;
+    @Autowired AccountService accountService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -29,30 +25,28 @@ public class AccountFormValidator implements Validator{
 
     @Override
     public void validate(Object target, Errors errors) {
-
         Account account = (Account) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "login", "NotEmpty.accountForm.login");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.accountForm.name");
-        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.accountForm.email");
+        // ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.accountForm.email");
 
         if (account.getId() == null) {
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty.accountForm.password");
+            ValidationUtils.rejectIfEmptyOrWhitespace(
+                    errors, "password", "NotEmpty.accountForm.password");
         }
 
-        if ((!account.getEmail().isEmpty()) && (!emailValidator.valid(account.getEmail()))){
+        if ((!account.getEmail().isEmpty()) && (!emailValidator.valid(account.getEmail()))) {
             errors.rejectValue("email", "Pattern.accountForm.email");
         }
 
-        if ((account.getId() == null) && (accountService.getByLogin(account.getLogin()) != null)){
+        if ((account.getId() == null) && (accountService.getByLogin(account.getLogin()) != null)) {
             errors.rejectValue("login", "Duplicate.accountForm.login");
         }
-/*
-        if(account.getNumber()==null || account.getNumber()<=0){
-            errors.rejectValue("number", "NotEmpty.accountForm.number");
-        }
-  */
-
+        /*
+              if(account.getNumber()==null || account.getNumber()<=0){
+                  errors.rejectValue("number", "NotEmpty.accountForm.number");
+              }
+        */
     }
-
 }

@@ -1,10 +1,5 @@
 package lv.freeradiusgui.utils;
 
-import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.usertype.EnhancedUserType;
-
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,10 +9,14 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.usertype.EnhancedUserType;
 
 public class CustomLocalDateTime implements EnhancedUserType, Serializable {
 
-    private static final int[] SQL_TYPES = new int[]{Types.TIMESTAMP};
+    private static final int[] SQL_TYPES = new int[] {Types.TIMESTAMP};
 
     public int[] sqlTypes() {
         return SQL_TYPES;
@@ -43,9 +42,11 @@ public class CustomLocalDateTime implements EnhancedUserType, Serializable {
         return object.hashCode();
     }
 
-    public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
+    public Object nullSafeGet(
+            ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
             throws HibernateException, SQLException {
-        Object timestamp = StandardBasicTypes.TIMESTAMP.nullSafeGet(resultSet, names, session, owner);
+        Object timestamp =
+                StandardBasicTypes.TIMESTAMP.nullSafeGet(resultSet, names, session, owner);
         if (timestamp == null) {
             return null;
         }
@@ -54,7 +55,11 @@ public class CustomLocalDateTime implements EnhancedUserType, Serializable {
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
-    public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index, SessionImplementor session)
+    public void nullSafeSet(
+            PreparedStatement preparedStatement,
+            Object value,
+            int index,
+            SessionImplementor session)
             throws HibernateException, SQLException {
         if (value == null) {
             StandardBasicTypes.TIMESTAMP.nullSafeSet(preparedStatement, null, index, session);
@@ -97,5 +102,4 @@ public class CustomLocalDateTime implements EnhancedUserType, Serializable {
     public Object fromXMLString(String string) {
         return LocalDateTime.parse(string);
     }
-
 }

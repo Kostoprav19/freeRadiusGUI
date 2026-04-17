@@ -1,5 +1,6 @@
 package lv.freeradiusgui.config;
 
+import java.util.*;
 import lv.freeradiusgui.domain.Account;
 import lv.freeradiusgui.domain.Role;
 import lv.freeradiusgui.services.AccountService;
@@ -13,15 +14,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-
 @Service("userDetailsService")
 public class SecurityUserDetailsServiceImpl implements UserDetailsService {
 
     AccountService accountService;
 
     @Autowired
-    public SecurityUserDetailsServiceImpl(AccountService accountService){
+    public SecurityUserDetailsServiceImpl(AccountService accountService) {
 
         this.accountService = accountService;
     }
@@ -31,7 +30,7 @@ public class SecurityUserDetailsServiceImpl implements UserDetailsService {
 
         Account account = accountService.getByLogin(login);
 
-        if (account == null){
+        if (account == null) {
             throw new UsernameNotFoundException(login);
         }
         List<GrantedAuthority> authorities = buildUserAuthority(account.getRoles());
@@ -56,9 +55,9 @@ public class SecurityUserDetailsServiceImpl implements UserDetailsService {
                 account.getLogin(),
                 account.getPassword(),
                 account.isEnabled(),
-                true, true, true,
-                auth
-        );
+                true,
+                true,
+                true,
+                auth);
     }
-
 }

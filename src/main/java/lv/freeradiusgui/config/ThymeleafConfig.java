@@ -1,8 +1,7 @@
 package lv.freeradiusgui.config;
 
-/**
- * Created by Dan on 30.04.2016.
- */
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
@@ -11,51 +10,49 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import java.util.HashSet;
-import java.util.Set;
-
-
 @Configuration
 public class ThymeleafConfig {
 
-    @Bean
-    public Java8TimeDialect java8TimeDialect() {
-        return new Java8TimeDialect();
-    }
+  @Bean
+  public Java8TimeDialect java8TimeDialect() {
+    return new Java8TimeDialect();
+  }
 
-    @Bean
-    public ThymeleafViewResolver viewResolver() {
+  @Bean
+  public ThymeleafViewResolver viewResolver() {
+    ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+    resolver.setTemplateEngine(getTemplateEngine());
 
-        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-        resolver.setTemplateEngine(getTemplateEngine());
+    return resolver;
+  }
 
-        return resolver;
-    }
+  private SpringTemplateEngine getTemplateEngine() {
+    SpringTemplateEngine engine = new SpringTemplateEngine();
 
-    private SpringTemplateEngine getTemplateEngine() {
+    Set<ServletContextTemplateResolver> resolvers = new HashSet<
+      ServletContextTemplateResolver
+    >();
+    resolvers.add(createResolver("/WEB-INF/views/", 1));
+    engine.setTemplateResolvers(resolvers);
 
-        SpringTemplateEngine engine = new SpringTemplateEngine();
+    engine.addDialect(new Java8TimeDialect());
+    engine.addDialect(new SpringSecurityDialect());
 
-        Set<ServletContextTemplateResolver> resolvers = new HashSet<ServletContextTemplateResolver>();
-        resolvers.add(createResolver("/WEB-INF/views/", 1));
-        engine.setTemplateResolvers(resolvers);
+    return engine;
+  }
 
-        engine.addDialect(new Java8TimeDialect());
-        engine.addDialect(new SpringSecurityDialect());
+  private ServletContextTemplateResolver createResolver(
+    String prefix,
+    int order
+  ) {
+    ServletContextTemplateResolver templateResolver =
+      new ServletContextTemplateResolver();
+    templateResolver.setPrefix(prefix);
+    templateResolver.setSuffix(".html");
+    templateResolver.setTemplateMode("HTML5");
+    templateResolver.setCacheable(false);
+    templateResolver.setOrder(order);
 
-        return engine;
-    }
-
-    private ServletContextTemplateResolver createResolver(String prefix, int order) {
-
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-        templateResolver.setPrefix(prefix);
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML5");
-        templateResolver.setCacheable(false);
-        templateResolver.setOrder(order);
-
-        return templateResolver;
-    }
-
+    return templateResolver;
+  }
 }

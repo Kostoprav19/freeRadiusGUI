@@ -1,7 +1,5 @@
 package lv.freeradiusgui.scheduler;
 
-import lv.freeradiusgui.domain.Log;
-import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.DeviceService;
 import lv.freeradiusgui.services.LogService;
 import lv.freeradiusgui.services.mailServices.MailService;
@@ -12,44 +10,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
-
-/**
- * Created by Daniels on 16.09.2016..
- */
 @Component
 public class ScheduledTasks {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    LogService logService;
+  @Autowired
+  LogService logService;
 
-    @Autowired
-    DeviceService deviceService;
+  @Autowired
+  DeviceService deviceService;
 
-    @Autowired
-    ServerService serverService;
+  @Autowired
+  ServerService serverService;
 
-    @Autowired
-    MailService mailService;
+  @Autowired
+  MailService mailService;
 
+  @Scheduled(initialDelay = 300000, fixedRate = 300000) // every 5 minutes
+  public void refreshApplication() {
+    logger.info("---------------- Scheduled task started ----------------");
 
-    @Scheduled(initialDelay=300000, fixedRate = 300000) //every 5 minutes
-    public void refreshApplication() {
+    serverService.updateStatuses();
 
-        logger.info("---------------- Scheduled task started ----------------");
+    logService.loadFromFileToday();
 
-        serverService.updateStatuses();
+    logger.info("Updating device statistics");
+    deviceService.updateStatistics();
 
-        logService.loadFromFileToday();
-
-        logger.info("Updating device statistics");
-        deviceService.updateStatistics();
-
-        logger.info("---------------- Scheduled task ended ----------------");
-    }
-
+    logger.info("---------------- Scheduled task ended ----------------");
+  }
 }

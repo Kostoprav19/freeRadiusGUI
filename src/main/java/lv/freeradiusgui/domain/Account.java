@@ -1,14 +1,13 @@
 package lv.freeradiusgui.domain;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "accounts")
@@ -36,15 +35,18 @@ public class Account {
 
     @Column(name = "created")
     @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
-    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime creationDate;
 
     @Column(name = "enabled", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean enabled;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinTable(name = "accounts_roles",
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "accounts_roles",
             joinColumns = {@JoinColumn(name = "account_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     @Fetch(FetchMode.SUBSELECT)
@@ -122,10 +124,16 @@ public class Account {
         this.roles = roles;
     }
 
-    public Account() {
-    }
+    public Account() {}
 
-    public Account(String login, String password, String name, String surname, String email, LocalDateTime creationDate, boolean enabled) {
+    public Account(
+            String login,
+            String password,
+            String name,
+            String surname,
+            String email,
+            LocalDateTime creationDate,
+            boolean enabled) {
         this.login = login;
         this.password = password;
         this.name = name;
@@ -135,7 +143,7 @@ public class Account {
         this.enabled = enabled;
     }
 
-    public void addRole(Role role){
+    public void addRole(Role role) {
         this.roles.add(role);
     }
 
@@ -147,7 +155,6 @@ public class Account {
         Account account = (Account) o;
 
         return login != null ? login.equals(account.login) : account.login == null;
-
     }
 
     @Override
@@ -160,20 +167,35 @@ public class Account {
         StringBuilder rolesStr = new StringBuilder();
         if (roles != null) {
             for (Role role : this.roles) {
-                if (role != null) rolesStr.append("[ id:" + role.getId() + " | name:" + role.getName() + "]");
+                if (role != null)
+                    rolesStr.append("[ id:" + role.getId() + " | name:" + role.getName() + "]");
             }
         }
-        return "Account{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                ", creationDate=" + creationDate +
-                ", enabled=" + enabled +
-                ", roles=" + rolesStr.toString() +
-                '}';
+        return "Account{"
+                + "id="
+                + id
+                + ", login='"
+                + login
+                + '\''
+                + ", password='"
+                + password
+                + '\''
+                + ", name='"
+                + name
+                + '\''
+                + ", surname='"
+                + surname
+                + '\''
+                + ", email='"
+                + email
+                + '\''
+                + ", creationDate="
+                + creationDate
+                + ", enabled="
+                + enabled
+                + ", roles="
+                + rolesStr.toString()
+                + '}';
     }
 
     public static class AccountBuilder {
@@ -186,50 +208,49 @@ public class Account {
         private LocalDateTime creationDate;
         private boolean enabled;
 
-        private AccountBuilder(){
+        private AccountBuilder() {}
 
-        }
-
-        public static AccountBuilder createUser(){
+        public static AccountBuilder createUser() {
             return new AccountBuilder();
         }
 
-
-        public Account build(){
+        public Account build() {
             return new Account(login, password, name, surname, email, creationDate, enabled);
         }
 
-
-        public AccountBuilder withLogin(String login){
+        public AccountBuilder withLogin(String login) {
             this.login = login;
             return this;
         }
-        public AccountBuilder withPassword(String password){
+
+        public AccountBuilder withPassword(String password) {
             this.password = password;
             return this;
         }
 
-        public AccountBuilder withName(String name){
+        public AccountBuilder withName(String name) {
             this.name = name;
             return this;
         }
-        public AccountBuilder withSurname(String surname){
+
+        public AccountBuilder withSurname(String surname) {
             this.surname = surname;
             return this;
         }
 
-        public AccountBuilder withEmail(String email){
+        public AccountBuilder withEmail(String email) {
             this.email = email;
             return this;
         }
-        public AccountBuilder withCreationDate(LocalDateTime creationDate){
+
+        public AccountBuilder withCreationDate(LocalDateTime creationDate) {
             this.creationDate = creationDate;
             return this;
         }
-        public AccountBuilder withEnabled(boolean enabled){
+
+        public AccountBuilder withEnabled(boolean enabled) {
             this.enabled = enabled;
             return this;
         }
-
     }
 }

@@ -1,8 +1,5 @@
 package lv.freeradiusgui.utils;
 
-/**
- * Created by Daniels on 01.09.2016..
- */
 public class OperationResult<T> {
 
     public static final boolean SUCCESS = true;

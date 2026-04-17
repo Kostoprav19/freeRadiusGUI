@@ -4,3 +4,10 @@
 #IDEA ignore personal project settings
 .idea/
 *.iml
+
+# Local environment overrides
+.env
+.mise.local.toml
+
+# Maven build output
+target/

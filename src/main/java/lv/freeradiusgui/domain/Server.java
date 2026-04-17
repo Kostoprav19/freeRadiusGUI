@@ -1,16 +1,12 @@
 package lv.freeradiusgui.domain;
 
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
-/**
- * Created by Daniels on 03.09.2016..
- */
 @Component
 public class Server {
 

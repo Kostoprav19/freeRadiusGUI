@@ -1,30 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>local.rbp</groupId>
+    <groupId>lv.freeradiusgui</groupId>
     <artifactId>freeRadiusGui</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <repositories>
-        <repository>
-            <id>mvn-public</id>
-            <name>MVNRepository</name>
-            <url>http://mvnrepository.com</url>
-        </repository>
-    </repositories>
-
     <properties>
-
         <spring-version>4.2.3.RELEASE</spring-version>
         <spring-security-version>4.0.4.RELEASE</spring-security-version>
         <junit-version>4.12</junit-version>
         <javax-api-version>3.1.0</javax-api-version>
         <hibernate-version>5.1.0.Final</hibernate-version>
-        <httpcomponents-httpclient-version>4.5.2</httpcomponents-httpclient-version>
+        <httpcomponents-httpclient-version
+    >4.5.2</httpcomponents-httpclient-version>
         <httpcomponents-httpcore-version>4.4.4</httpcomponents-httpcore-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
         <mysql-connector-version>5.1.38</mysql-connector-version>
@@ -214,6 +208,37 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
+            </plugin>
+
+            <!--LINT / FORMAT-->
+            <!--
+              Spotless — runs on explicit invocation only, not bound to a phase,
+              so `mvn package` / `mvn test` / the Docker build are unaffected.
+                Check:   mvn spotless:check    (mise run lint)
+                Apply:   mvn spotless:apply    (mise run format)
+              Versions are pinned to the last JDK 8 compatible releases:
+                - spotless-maven-plugin 2.27.2  (2.30+ needs JDK 11 for the plugin)
+                - google-java-format   1.7      (1.8+ needs JDK 11)
+            -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.27.2</version>
+                <configuration>
+                    <java>
+                        <includes>
+                            <include>src/main/java/**/*.java</include>
+                            <include>src/test/java/**/*.java</include>
+                        </includes>
+                        <googleJavaFormat>
+                            <version>1.7</version>
+                            <style>AOSP</style>
+                        </googleJavaFormat>
+                        <removeUnusedImports />
+                        <trimTrailingWhitespace />
+                        <endWithNewline />
+                    </java>
+                </configuration>
             </plugin>
 
             <!--TESTS-->

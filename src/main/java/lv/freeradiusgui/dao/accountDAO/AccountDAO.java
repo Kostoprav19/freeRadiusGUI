@@ -1,27 +1,20 @@
 package lv.freeradiusgui.dao.accountDAO;
 
+import java.util.List;
 import lv.freeradiusgui.domain.Account;
 
-import java.util.List;
-
-/**
- * Created by Daniels on 25.11.2015..
- */
-
 public interface AccountDAO {
+  boolean store(Account account);
 
-    boolean store(Account account);
+  Account getById(Integer id);
 
-    Account getById(Integer id);
+  Account getByLogin(String login);
 
-    Account getByLogin(String login);
+  List<Account> getAll();
 
-    List<Account> getAll();
+  List<Account> getAllByCriteria(String fieldName, Object object);
 
-    List<Account> getAllByCriteria(String fieldName, Object object);
+  boolean delete(Account account);
 
-    boolean delete(Account account);
-
-    Long getCount();
-
+  Long getCount();
 }

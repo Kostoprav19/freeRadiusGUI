@@ -1,5 +1,7 @@
 package lv.freeradiusgui.validators;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +10,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
- * Created by Dan on 29.05.2016.
- */
 @Component("deviceFormValidator")
-public class DeviceFormValidator implements Validator{
+public class DeviceFormValidator implements Validator {
 
-    @Autowired
-    DeviceService deviceService;
+    @Autowired DeviceService deviceService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -27,24 +22,22 @@ public class DeviceFormValidator implements Validator{
 
     @Override
     public void validate(Object target, Errors errors) {
-
         Device device = (Device) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mac", "NotEmpty.deviceForm.mac");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.deviceForm.name");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "access", "NotEmpty.deviceForm.access");
 
-        if (!isMacValid(device.getMac())){
+        if (!isMacValid(device.getMac())) {
             errors.rejectValue("mac", "Pattern.deviceForm.mac");
         }
 
-        if ((device.getId() == null) && (deviceService.getByMac(device.getMac()) != null)){
+        if ((device.getId() == null) && (deviceService.getByMac(device.getMac()) != null)) {
             errors.rejectValue("mac", "Exist.deviceForm.mac");
         }
-
     }
 
-    private boolean isMacValid(String mac){
+    private boolean isMacValid(String mac) {
         Pattern pattern;
         Matcher matcher;
 
@@ -55,5 +48,4 @@ public class DeviceFormValidator implements Validator{
         matcher = pattern.matcher(mac);
         return matcher.matches();
     }
-
 }
