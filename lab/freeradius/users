@@ -1,29 +1,12 @@
-# FreeRADIUS `users` file consumed by BOTH:
-#   - freeradius container (bind-mounted at /etc/raddb/mods-config/files/authorize).
-#     With `Auth-Type := Accept`/`:= Reject`, FreeRADIUS short-circuits the
-#     Authenticate phase — no password is checked. Good enough for a dev
-#     stack that wants Accept / Reject traffic without user-credential setup.
-#   - freeradiusgui app  (bind-mounted at /etc/freeradius/users — the path in
-#     config.properties' `usersfilepath`). UsersFileService parses MAC-as-
-#     username records of exactly this shape, and the trailing DEFAULT record
-#     is mandatory (it's dropped as the DEFAULT entry).
-#
-# The Reply-Message format is the one LogFileService expects to parse out of
-# auth-detail log files — MAC:<hex>, Port: N,, Connection: CONNECT Ethernet
-# NMbps, Switch IP: x.x.x.x,. Radclient sends matching attributes so the
-# `%{...}` placeholders expand correctly at request time.
-
-001122334455	Auth-Type := Accept
-		Reply-Message = "seed-printer-office, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
-
-aabbccddeeff	Auth-Type := Accept
-		Reply-Message = "seed-workstation-lab, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
-
-ccddeeff0011	Auth-Type := Accept
-		Reply-Message = "seed-laptop-dev, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
-
-deadbeef1234	Auth-Type := Reject
-		Reply-Message = "seed-rogue-device, Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
-
-DEFAULT	Auth-Type := Reject
-		Reply-Message = "Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+001122334455 Auth-Type := Accept
+        Reply-Message = "seed-printer-office, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+aabbccddeeff Auth-Type := Accept
+        Reply-Message = "seed-workstation-lab, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+ccddeeff0011 Auth-Type := Accept
+        Reply-Message = "seed-laptop-dev, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+deadbeef1234 Auth-Type := Reject
+        Reply-Message = "seed-rogue-device, Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+feedface9999 Auth-Type := Accept
+        Reply-Message = "test, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+DEFAULT Auth-Type := Reject
+        Reply-Message = "Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
