@@ -71,14 +71,19 @@ public class LogFileService extends AbstractFileServices implements FileService<
         switchList = switchService.getAll();
         List<Log> logList = new ArrayList<>();
         Integer index = 0;
-        do {
+        while (index < list.size() - 1) {
             List<String> subList = findSubList(list, index);
+            // findSubList returns empty when there are no more Packet-Type
+            // records in the remainder of the file (e.g. only trailing
+            // Timestamp / blank lines left after the last record).
+            // Without this break parseList spins forever because index
+            // never advances past the tail — FreeRADIUS 3.2 always emits a
+            // synthetic Timestamp line after Reply-Message, so the tail is
+            // always hit on a non-empty file.
+            if (subList.isEmpty()) break;
             index = index + subList.size();
-
-            if (!subList.isEmpty()) {
-                logList.add(parseLog(subList));
-            }
-        } while (index < list.size() - 1);
+            logList.add(parseLog(subList));
+        }
 
         return logList;
     }
