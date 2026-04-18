@@ -129,8 +129,16 @@ public class LogFileService extends AbstractFileServices implements FileService<
     private List<String> findSubList(List<String> list, Integer index) {
         List<String> result = new ArrayList<>();
 
-        while (!list.get(index).contains("Packet-Type")) {
+        // Scan forward to the next Packet-Type line. FreeRADIUS 3.2 appends
+        // a synthetic Timestamp attribute after Reply-Message that the
+        // original 2.x-era parser wasn't expecting, so we have to tolerate
+        // trailing lines after the last record and bail instead of reading
+        // off the end of the list.
+        while (index < list.size() && !list.get(index).contains("Packet-Type")) {
             index++;
+        }
+        if (index >= list.size()) {
+            return result;
         }
         index--; // Because sublist starts in previous string;
 
@@ -138,6 +146,7 @@ public class LogFileService extends AbstractFileServices implements FileService<
 
         while (true) {
             index++;
+            if (index >= list.size()) break;
             String currentString = list.get(index);
             if (currentString.contains("Reply-Message")) {
                 result.add(currentString);

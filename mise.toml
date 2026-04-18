@@ -48,20 +48,25 @@ run = "docker build -t $IMAGE ."
 
 [tasks."db:up"]
 description = "Start the MySQL container in the background"
+dir = "lab"
 run = "docker compose up -d db"
 
 [tasks."db:down"]
 description = "Stop the compose stack (keep DB volume)"
+dir = "lab"
 run = "docker compose down"
 
 [tasks."db:reset"]
 description = "Stop stack and delete the DB volume (re-seeds on next up)"
+dir = "lab"
 run = "docker compose down -v"
 
 [tasks."compose:up"]
-description = "Run full stack (app + DB) via compose"
+description = "Run full stack (app + DB + FreeRADIUS + radclient) via compose"
+dir = "lab"
 run = "docker compose --profile app up --build"
 
 [tasks."compose:down"]
 description = "Stop the full compose stack"
+dir = "lab"
 run = "docker compose --profile app down"

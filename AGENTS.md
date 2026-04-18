@@ -39,7 +39,13 @@ This is **not** Spring Boot — bootstrapping is via
 .
 ├── pom.xml                         # Maven build
 ├── databaseCreationScript.sql      # MySQL schema + seed data (admin/user, pw: 123456)
-├── files/                          # Sample FreeRADIUS files (clients.conf, auth-detail-*, db.xlsx)
+├── lab/                            # Local dev/test stack — run docker compose from here
+│   ├── compose.yaml                #   (no compose file at repo root anymore)
+│   ├── .env.example                #   tracked template for local .env
+│   ├── config.properties           #   Lab-only config override (dbUrl = jdbc:mysql://db:3306/...)
+│   ├── freeradius/                 #   FreeRADIUS Dockerfile + overrides, radclient requests
+│   ├── dev-seed.sql                #   App DB dev-only seed (switches + devices)
+│   └── samples/                    #   Legacy reference data (auth-detail-*, stock clients.conf, db.xlsx)
 ├── web/WEB-INF/                    # (legacy IDEA web module dir — not used by Maven build)
 └── src/
     ├── main/
@@ -108,15 +114,34 @@ mvn -Dtest=DeviceDAOImplTest test   # run a single test
 
 ### Compose (MySQL + optional app)
 
-- `compose.yaml` defines two services:
-  - `db` — `mysql:5.7` with the `databaseCreationScript.sql` mounted into
+The whole dev/test stack lives under `lab/` — `compose.yaml`,
+`.env(.example)`, a lab-only `config.properties` override, the
+FreeRADIUS server image + overrides, and the dev-only DB seed. Run
+`docker compose` from inside `lab/` (or via the `mise run compose:*` /
+`radius:*` tasks, which `cd` there for you). The repo root no longer
+contains a compose file.
+
+- `lab/compose.yaml` defines:
+  - `db` — `mysql:5.7` with `../databaseCreationScript.sql` (the app's
+    real schema, at repo root) mounted into
     `/docker-entrypoint-initdb.d/`. Pinned to 5.7 because Connector/J
     5.1.38 can't handle MySQL 8's default `caching_sha2_password` auth.
   - `app` — gated behind the `app` Compose profile
-    (`docker compose --profile app up`). It bind-mounts
-    `config/config.properties` whose `dbUrl` points at `jdbc:mysql://db:3306/...`.
-- Credentials live in `.env` (copy `.env.example`); defaults match
-  `src/main/resources/config.properties`.
+    (`docker compose --profile app up`). Built from repo root
+    (`context: ..`, `dockerfile: Dockerfile`). Bind-mounts
+    `lab/config.properties` — a lab-only fork of
+    `src/main/resources/config.properties` with `dbUrl` pointed at
+    `jdbc:mysql://db:3306/...`. Also bind-mounts
+    `lab/freeradius/{clients.conf,users}` and shares
+    `/var/log/freeradius/radacct` (named volume `radius-logs`) with
+    `freeradius`, so the Logs page sees live data.
+  - `freeradius`, `radclient` — dev-only helpers, see README
+    "Local FreeRADIUS for development". Dev fixtures (`dev-seed.sql`)
+    are mounted into `db`'s initdb.d as `20-dev-seed.sql`.
+- Credentials live in `lab/.env` (copy `lab/.env.example`); defaults
+  match `src/main/resources/config.properties` and the
+  `${VAR:-default}` fallbacks in `compose.yaml`, so the stack works
+  with no `.env` at all.
 - `databaseCreationScript.sql` is idempotent, but MySQL only runs
   init scripts on an empty data dir — use `mise run db:reset` to wipe
   the volume and re-seed.

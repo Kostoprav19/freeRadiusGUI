@@ -1,12 +1,8 @@
 #java specific
 *.class
 
-#IDEA ignore personal project settings
-.idea/
-*.iml
-
 # Local environment overrides
-.env
+lab/.env
 .mise.local.toml
 
 # Maven build output

@@ -1,0 +1,36 @@
+# Override of /etc/raddb/mods-enabled/detail.log baked into the custom
+# freeradius image (see Dockerfile.freeradius). Differences from the stock
+# file:
+#
+#   - `reply_log` writes to a FLAT filename, `auth-detail-%Y%m%d`, because
+#     that's what lv.freeradiusgui.services.filesServices.LogFileService
+#     expects (no per-client-IP subdirectory).
+#   - Other detail instances (auth_log, pre_proxy_log, post_proxy_log) are
+#     kept for parity with the stock file but not called anywhere.
+
+detail auth_log {
+	filename = ${radacctdir}/auth-detail-%Y%m%d
+	permissions = 0600
+	suppress {
+		User-Password
+	}
+}
+
+detail reply_log {
+	filename = ${radacctdir}/auth-detail-%Y%m%d
+	permissions = 0600
+	# Note: FreeRADIUS 3.2 appends a synthetic `Timestamp = <epoch>` line
+	# after every Reply-Message. `suppress` can't filter it (it's not a
+	# dictionary attribute), so LogFileService#findSubList has been updated
+	# to tolerate trailing non-Packet-Type lines after the final record.
+}
+
+detail pre_proxy_log {
+	filename = ${radacctdir}/pre-proxy-detail-%Y%m%d
+	permissions = 0600
+}
+
+detail post_proxy_log {
+	filename = ${radacctdir}/post-proxy-detail-%Y%m%d
+	permissions = 0600
+}

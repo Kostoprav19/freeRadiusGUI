@@ -1,0 +1,42 @@
+# Custom FreeRADIUS image for the dev compose stack.
+#
+# Inherits everything from the upstream 3.2 image and layers on:
+#   1. detail.log override so `reply_log` writes a flat
+#      /var/log/freeradius/radacct/auth-detail-%Y%m%d file — which is exactly
+#      what lv.freeradiusgui.services.filesServices.LogFileService reads.
+#   2. A one-line patch to sites-enabled/default that un-comments the call
+#      to `reply_log` in post-auth, so every Access-Accept/Reject is logged.
+#
+# clients.conf and the `users` (mods-config/files/authorize) file are still
+# bind-mounted at runtime from compose.yaml, so tweaks to those don't need
+# a rebuild.
+
+FROM freeradius/freeradius-server:latest-3.2
+
+COPY detail.log /etc/raddb/mods-enabled/detail.log
+
+# Use `[[:space:]]` instead of `\t` because /bin/sh single-quoted strings
+# don't expand backslash escapes. The grep afterwards is a build-time
+# assertion that the sed actually matched — if upstream reformats that
+# line we want the build to fail loudly instead of silently shipping a
+# broken image.
+# 1) Un-comment `reply_log` in the happy-path post-auth section so every
+#    Access-Accept is logged.
+# 2) Also call `reply_log` inside Post-Auth-Type REJECT so Access-Rejects
+#    land in the same auth-detail file. Insert it right before the existing
+#    `attr_filter.access_reject` line (unique sentinel in that block).
+# The grep afterwards is a build-time assertion that both edits took effect
+# — if upstream reformats those lines the build fails loudly instead of
+# silently producing a broken image.
+RUN sed -i 's/^#[[:space:]]*reply_log$/\treply_log/' /etc/raddb/sites-enabled/default \
+ && sed -i '/^[[:space:]]*attr_filter\.access_reject$/i\\treply_log' /etc/raddb/sites-enabled/default \
+ && grep -E '^[[:space:]]+reply_log$' /etc/raddb/sites-enabled/default | wc -l | grep -q '^2$'
+
+# Entrypoint wrapper: chown radacct to the `freerad` user that the daemon
+# drops to, then exec the upstream entrypoint. Needed because the compose
+# named volume mounted at /var/log/freeradius/radacct is root-owned on
+# first creation, and reply_log fails with EACCES otherwise.
+COPY entrypoint-wrapper.sh /usr/local/bin/entrypoint-wrapper.sh
+RUN chmod 0755 /usr/local/bin/entrypoint-wrapper.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint-wrapper.sh"]

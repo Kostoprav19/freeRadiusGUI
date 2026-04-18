@@ -1,0 +1,40 @@
+# Access-Request packets fed to radclient in a loop.
+#
+# User-Name is the device MAC (12 hex chars, no separators) so the server's
+# `files` module matches the entries in lab/freeradius/users.
+#
+# NAS-IP-Address values match the `ip` column of the seeded switches in
+# databaseCreationScript.sql so LogFileService can resolve the Switch by IP.
+#
+# The last record has no matching MAC and lands on the DEFAULT line — an
+# Access-Reject that the GUI still logs.
+
+User-Name = "001122334455"
+NAS-IP-Address = 10.0.0.11
+NAS-Port = 7
+NAS-Identifier = "dev-sw-office"
+Connect-Info = "CONNECT Ethernet 100Mbps Full duplex"
+
+User-Name = "aabbccddeeff"
+NAS-IP-Address = 10.0.0.12
+NAS-Port = 14
+NAS-Identifier = "dev-sw-lab"
+Connect-Info = "CONNECT Ethernet 1000Mbps Full duplex"
+
+User-Name = "ccddeeff0011"
+NAS-IP-Address = 10.0.0.11
+NAS-Port = 23
+NAS-Identifier = "dev-sw-office"
+Connect-Info = "CONNECT Ethernet 1000Mbps Full duplex"
+
+User-Name = "deadbeef1234"
+NAS-IP-Address = 10.0.0.12
+NAS-Port = 4
+NAS-Identifier = "dev-sw-lab"
+Connect-Info = "CONNECT Ethernet 100Mbps Half duplex"
+
+User-Name = "feedface9999"
+NAS-IP-Address = 10.0.0.11
+NAS-Port = 48
+NAS-Identifier = "dev-sw-office"
+Connect-Info = "CONNECT Ethernet 1000Mbps Full duplex"

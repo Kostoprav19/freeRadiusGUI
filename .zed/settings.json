@@ -1,0 +1,24 @@
+// Project-local Zed settings.
+//
+// Zed's built-in Java formatter (driven by whichever Java LSP is active —
+// e.g. jdtls) does not match Spotless's google-java-format 1.7 in AOSP
+// style, which this project enforces (see pom.xml spotless-maven-plugin).
+// Saving a Java file in Zed with format-on-save enabled therefore reverts
+// Spotless-approved formatting and fails `mvn spotless:check` / `mise run lint`.
+//
+// To avoid the conflict we disable format-on-save for Java only. Format
+// Java files explicitly via:
+//
+//     mise run format        # mvn spotless:apply
+//     mvn spotless:apply
+//
+// Other languages keep whatever format-on-save behaviour the user has set
+// globally.
+{
+  "languages": {
+    "Java": {
+      "format_on_save": "off",
+      "formatter": "language_server"
+    }
+  }
+}
