@@ -1,0 +1,97 @@
+name: freeradiusgui
+
+services:
+  # MySQL 5.7 — schema + default accounts seeded on first boot only.
+  db:
+    image: mysql:5.7
+    container_name: freeradiusgui-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpw}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-freeradiusgui}
+      MYSQL_USER: ${MYSQL_USER:-freeradius}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-koJasmoJas2}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+    volumes:
+      - db-data:/var/lib/mysql
+      - ../databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - ./dev-seed.sql:/docker-entrypoint-initdb.d/20-dev-seed.sql:ro
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - localhost
+        - -uroot
+        - -p${MYSQL_ROOT_PASSWORD:-rootpw}
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # freeRadiusGUI web app (Tomcat 9 / Spring MVC). Enabled with `--profile app`.
+  app:
+    profiles: ["app"]
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: freeradiusgui:latest
+    container_name: freeradiusgui-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC"
+    volumes:
+      - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
+      - ./freeradius/clients.conf:/etc/freeradius/clients.conf
+      - ./freeradius/users:/etc/freeradius/users
+      - radius-logs:/var/log/freeradius/radacct
+
+  # FreeRADIUS 3.2 server with overrides so the GUI's Logs page can parse its output.
+  freeradius:
+    profiles: ["app"]
+    build:
+      context: ./freeradius
+      dockerfile: Dockerfile.freeradius
+    image: freeradiusgui-radius:latest
+    container_name: freeradiusgui-radius
+    restart: unless-stopped
+    command: ["-X"]
+    ports:
+      - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
+      - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
+    volumes:
+      - ./freeradius/clients.conf:/etc/raddb/clients.conf:ro
+      - ./freeradius/users:/etc/raddb/mods-config/files/authorize:ro
+      - radius-logs:/var/log/freeradius/radacct
+
+  # radclient loop — generates steady auth traffic for the Logs page.
+  radclient:
+    profiles: ["app"]
+    image: freeradius/freeradius-server:latest-3.2
+    container_name: freeradiusgui-radclient
+    restart: unless-stopped
+    depends_on:
+      - freeradius
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        sleep 5
+        while :; do
+          radclient -c 1 -r 1 freeradius:1812 auth testing123 < /requests.txt || true
+          sleep ${RADCLIENT_INTERVAL:-5}
+        done
+    volumes:
+      - ./freeradius/requests.txt:/requests.txt:ro
+
+volumes:
+  db-data:
+  radius-logs:

@@ -72,19 +72,23 @@ mise run format   # mvn spotless:apply — rewrites files in place
 ### Option A — MySQL via Docker Compose (recommended for dev)
 
 ```bash
-cp .env.example .env        # optional — tweak credentials / ports
-mise run db:up              # or: docker compose up -d db
+cp lab/.env.example lab/.env   # optional — tweak credentials / ports
+mise run db:up                 # or: (cd lab && docker compose up -d db)
 ```
 
 Useful tasks:
 
-| Task                   | Description                                  |
-|------------------------|----------------------------------------------|
-| `mise run db:up`       | Start MySQL in the background                |
-| `mise run db:down`     | Stop the stack (keeps the data volume)       |
-| `mise run db:reset`    | Stop stack **and** drop the volume (re‑seeds)|
-| `mise run compose:up`  | Start full stack (app + DB, `--profile app`) |
-| `mise run compose:down`| Stop the full stack                          |
+| Task                          | Description                                           |
+|-------------------------------|-------------------------------------------------------|
+| `mise run db:up`              | Start MySQL in the background                         |
+| `mise run db:down`            | Stop the stack (keeps the data volume)                |
+| `mise run db:reset`           | Stop stack **and** drop the volume (re‑seeds)         |
+| `mise run compose:up`         | Start full stack (app + DB + RADIUS, `--profile app`) |
+| `mise run compose:down`       | Stop the full compose stack                           |
+| `mise run radius:up`          | Start only FreeRADIUS + radclient (no app / DB)       |
+| `mise run radius:down`        | Stop FreeRADIUS + radclient                           |
+| `mise run radius:logs`        | Tail freeradius server debug output                   |
+| `mise run radius:client-logs` | Tail radclient Accept/Reject responses                |
 
 ### Option B — existing MySQL server
 
@@ -128,11 +132,14 @@ docker run --rm -it \
 
 ### Docker Compose (app + MySQL)
 
-Brings up the app and a matching `mysql:5.7` in one go. The app container
-reads [`config/config.properties`](config/config.properties), which points
-`dbUrl` at the compose `db` service.
+Brings up the app and a matching `mysql` in one go. The whole dev
+stack — compose file, `.env`, a lab-only `config.properties` override,
+and all FreeRADIUS/radclient fixtures — lives under [`lab/`](lab/).
+
+The `mise` tasks below `cd` into `lab/` for you. Invoking `docker
+compose` directly also works from inside `lab/`:
 
 ```bash
-mise run compose:up     # docker compose --profile app up --build
-mise run compose:down   # docker compose --profile app down
+mise run compose:up     # = (cd lab && docker compose --profile app up --build)
+mise run compose:down   # = (cd lab && docker compose --profile app down)
 ```

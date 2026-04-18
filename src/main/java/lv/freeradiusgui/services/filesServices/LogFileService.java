@@ -71,14 +71,19 @@ public class LogFileService extends AbstractFileServices implements FileService<
         switchList = switchService.getAll();
         List<Log> logList = new ArrayList<>();
         Integer index = 0;
-        do {
+        while (index < list.size() - 1) {
             List<String> subList = findSubList(list, index);
+            // findSubList returns empty when there are no more Packet-Type
+            // records in the remainder of the file (e.g. only trailing
+            // Timestamp / blank lines left after the last record).
+            // Without this break parseList spins forever because index
+            // never advances past the tail — FreeRADIUS 3.2 always emits a
+            // synthetic Timestamp line after Reply-Message, so the tail is
+            // always hit on a non-empty file.
+            if (subList.isEmpty()) break;
             index = index + subList.size();
-
-            if (!subList.isEmpty()) {
-                logList.add(parseLog(subList));
-            }
-        } while (index < list.size() - 1);
+            logList.add(parseLog(subList));
+        }
 
         return logList;
     }
@@ -129,8 +134,16 @@ public class LogFileService extends AbstractFileServices implements FileService<
     private List<String> findSubList(List<String> list, Integer index) {
         List<String> result = new ArrayList<>();
 
-        while (!list.get(index).contains("Packet-Type")) {
+        // Scan forward to the next Packet-Type line. FreeRADIUS 3.2 appends
+        // a synthetic Timestamp attribute after Reply-Message that the
+        // original 2.x-era parser wasn't expecting, so we have to tolerate
+        // trailing lines after the last record and bail instead of reading
+        // off the end of the list.
+        while (index < list.size() && !list.get(index).contains("Packet-Type")) {
             index++;
+        }
+        if (index >= list.size()) {
+            return result;
         }
         index--; // Because sublist starts in previous string;
 
@@ -138,6 +151,7 @@ public class LogFileService extends AbstractFileServices implements FileService<
 
         while (true) {
             index++;
+            if (index >= list.size()) break;
             String currentString = list.get(index);
             if (currentString.contains("Reply-Message")) {
                 result.add(currentString);

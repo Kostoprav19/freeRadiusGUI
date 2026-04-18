@@ -1,0 +1,12 @@
+001122334455 Auth-Type := Accept
+        Reply-Message = "seed-printer-office, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+aabbccddeeff Auth-Type := Accept
+        Reply-Message = "seed-workstation-lab, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+ccddeeff0011 Auth-Type := Accept
+        Reply-Message = "seed-laptop-dev, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+deadbeef1234 Auth-Type := Reject
+        Reply-Message = "seed-rogue-device, Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+feedface9999 Auth-Type := Accept
+        Reply-Message = "test, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+DEFAULT Auth-Type := Reject
+        Reply-Message = "Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"

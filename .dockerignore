@@ -15,8 +15,8 @@ target/
 # Legacy IDEA web module layout (Maven uses src/main/webapp/)
 web/
 
-# Sample / reference data (not needed in the image)
-files/
+# Local dev/test stack & sample / reference data (not needed in the image)
+lab/
 
 # Docs & local tooling
 README.md
@@ -26,14 +26,14 @@ AGENTS.md
 mise.toml
 .mise.local.toml
 
-# Compose / env (not needed inside the build context)
+# Compose / env (not needed inside the build context — the whole lab/
+# tree is already excluded above, this catches any stragglers at repo root)
 compose.yaml
 compose.yml
 docker-compose.yaml
 docker-compose.yml
 .env
 .env.example
-config/
 
 # OS junk
 .DS_Store

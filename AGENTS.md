@@ -17,18 +17,18 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 
 ## Tech Stack
 
-| Layer        | Tech                                                   |
-|--------------|--------------------------------------------------------|
-| Build        | Maven (`pom.xml`), packaging = `war`                   |
-| Language     | Java 8 (`source/target 1.8`)                           |
-| Web          | Spring Web MVC **4.2.3**, Spring Security **4.0.4**    |
-| Persistence  | Hibernate **5.1** + MySQL 5.x (`mysql-connector 5.1`)  |
-| View         | Thymeleaf 2.1 (+ spring‑security and java8time extras) |
-| DB pool      | c3p0, commons-dbcp                                     |
-| Logging      | SLF4J + Logback                                        |
-| Mail         | `javax.mail` 1.5                                       |
-| Tests        | JUnit 4.12, Spring Test, Surefire                      |
-| Servlet ctr. | Tomcat 7 (via `tomcat7-maven-plugin`)                  |
+| Layer        | Tech                                                          |
+|--------------|---------------------------------------------------------------|
+| Build        | Maven (`pom.xml`), packaging = `war`                          |
+| Language     | Java 8 (`source/target 1.8`)                                  |
+| Web          | Spring Web MVC **4.2.3**, Spring Security **4.0.4**           |
+| Persistence  | Hibernate **5.1** + MySQL 5.7/8 (`mysql-connector-j` **8.4**) |
+| View         | Thymeleaf 2.1 (+ spring‑security and java8time extras)        |
+| DB pool      | HikariCP **4.0.3** (4.x is the last JDK 8 line)               |
+| Logging      | SLF4J 1.7 + Logback 1.1                                       |
+| Mail         | `javax.mail` 1.5                                              |
+| Tests        | JUnit 4.12, Spring Test, Surefire                             |
+| Servlet ctr. | Tomcat 9 at runtime (via Docker image); no embedded plugin    |
 
 This is **not** Spring Boot — bootstrapping is via
 `WebApplicationInitializer` (`config/AppInitializer.java`), not a `main()`.
@@ -39,7 +39,13 @@ This is **not** Spring Boot — bootstrapping is via
 .
 ├── pom.xml                         # Maven build
 ├── databaseCreationScript.sql      # MySQL schema + seed data (admin/user, pw: 123456)
-├── files/                          # Sample FreeRADIUS files (clients.conf, auth-detail-*, db.xlsx)
+├── lab/                            # Local dev/test stack — run docker compose from here
+│   ├── compose.yaml                #   (no compose file at repo root anymore)
+│   ├── .env.example                #   tracked template for local .env
+│   ├── config.properties           #   Lab-only config override (dbUrl = jdbc:mysql://db:3306/...)
+│   ├── freeradius/                 #   FreeRADIUS Dockerfile + overrides, radclient requests
+│   ├── dev-seed.sql                #   App DB dev-only seed (switches + devices)
+│   └── samples/                    #   Legacy reference data (auth-detail-*, stock clients.conf, db.xlsx)
 ├── web/WEB-INF/                    # (legacy IDEA web module dir — not used by Maven build)
 └── src/
     ├── main/
@@ -73,26 +79,40 @@ This is **not** Spring Boot — bootstrapping is via
 
 ## Common Commands
 
-Preferred entry point is [`mise`](https://mise.jdx.dev/) (see `mise.toml`):
+Preferred entry point is [`mise`](https://mise.jdx.dev/) (see `mise.toml`).
+Run `mise tasks` for the authoritative list; the most-used tasks are:
 
 ```bash
 mise install                        # install pinned Java 8 + Maven 3.9
-mise run build                      # package WAR (skip tests)
-mise run test                       # run unit tests
-mise run run                        # embedded Tomcat 7 on :8080/freeradiusgui
+mise run build                      # mvn clean package (skips tests)
+mise run test                       # mvn test (needs MySQL up — see db:up)
+mise run verify                     # mvn clean verify (compile + test + package)
+mise run lint                       # mvn spotless:check
+mise run format                     # mvn spotless:apply (auto-fix formatting)
 mise run docker:build               # build Docker image (freeradiusgui:latest)
-mise run docker:run                 # run container with host FreeRADIUS mounts
-mise run docker:run-dev             # run container without host mounts (DB only)
+
+# Compose stack (from lab/, but mise cd's there for you):
+mise run db:up                      # just MySQL, for unit tests
+mise run db:down                    # stop stack, keep DB volume
+mise run db:reset                   # stop stack AND wipe DB volume (re-seeds)
+mise run compose:up                 # full stack: app + DB + FreeRADIUS + radclient
+mise run compose:down               # stop the full stack
 ```
 
 Raw Maven equivalents (no mise needed):
 
 ```bash
 mvn clean package                   # build target/freeradiusgui.war
-mvn tomcat7:run                     # run embedded Tomcat 7 on :8080/freeradiusgui
 mvn test                            # run unit tests (Surefire: *Test / *IT / *TestIT)
 mvn -Dtest=DeviceDAOImplTest test   # run a single test
+mvn spotless:check                  # lint
+mvn spotless:apply                  # format
 ```
+
+There is **no embedded-servlet entry point** — to run the app locally
+you either build the WAR and drop it into an external Tomcat 8/9, or
+use the full compose stack (`mise run compose:up`) which builds the
+app image and serves it from a Tomcat 9 container.
 
 ### Containerization
 
@@ -108,15 +128,38 @@ mvn -Dtest=DeviceDAOImplTest test   # run a single test
 
 ### Compose (MySQL + optional app)
 
-- `compose.yaml` defines two services:
-  - `db` — `mysql:5.7` with the `databaseCreationScript.sql` mounted into
-    `/docker-entrypoint-initdb.d/`. Pinned to 5.7 because Connector/J
-    5.1.38 can't handle MySQL 8's default `caching_sha2_password` auth.
+The whole dev/test stack lives under `lab/` — `compose.yaml`,
+`.env(.example)`, a lab-only `config.properties` override, the
+FreeRADIUS server image + overrides, and the dev-only DB seed. Run
+`docker compose` from inside `lab/` (or via the `mise run compose:*` /
+`db:*` tasks, which `cd` there for you). The repo root no longer
+contains a compose file.
+
+- `lab/compose.yaml` defines:
+  - `db` — `mysql:5.7` with `../databaseCreationScript.sql` (the app's
+    real schema, at repo root) mounted into
+    `/docker-entrypoint-initdb.d/`. Pinned to 5.7 because the smaller
+    image + `mysql_native_password` default means no extra auth config
+    is needed — `mysql-connector-j` 8.4 handles 5.7 and 8 interchangeably
+    at the JDBC URL level, so bumping the image tag to `mysql:8` is
+    safe if you want it (MySQL 8 needs `allowPublicKeyRetrieval=true`,
+    which is already in the URL).
   - `app` — gated behind the `app` Compose profile
-    (`docker compose --profile app up`). It bind-mounts
-    `config/config.properties` whose `dbUrl` points at `jdbc:mysql://db:3306/...`.
-- Credentials live in `.env` (copy `.env.example`); defaults match
-  `src/main/resources/config.properties`.
+    (`docker compose --profile app up`). Built from repo root
+    (`context: ..`, `dockerfile: Dockerfile`). Bind-mounts
+    `lab/config.properties` — a lab-only fork of
+    `src/main/resources/config.properties` with `dbUrl` pointed at
+    `jdbc:mysql://db:3306/...`. Also bind-mounts
+    `lab/freeradius/{clients.conf,users}` and shares
+    `/var/log/freeradius/radacct` (named volume `radius-logs`) with
+    `freeradius`, so the Logs page sees live data.
+  - `freeradius`, `radclient` — dev-only helpers, see README
+    "Local FreeRADIUS for development". Dev fixtures (`dev-seed.sql`)
+    are mounted into `db`'s initdb.d as `20-dev-seed.sql`.
+- Credentials live in `lab/.env` (copy `lab/.env.example`); defaults
+  match `src/main/resources/config.properties` and the
+  `${VAR:-default}` fallbacks in `compose.yaml`, so the stack works
+  with no `.env` at all.
 - `databaseCreationScript.sql` is idempotent, but MySQL only runs
   init scripts on an empty data dir — use `mise run db:reset` to wipe
   the volume and re-seed.
@@ -172,12 +215,12 @@ production credentials here.
 
 - **Tests need a live MySQL**: every test uses
   `@ContextConfiguration(classes = WebMVCConfig.class)` which transitively
-  boots `HybernateConfig` with a real c3p0 DataSource. Run
+  boots `HybernateConfig` with a real HikariCP `DataSource`. Run
   `mise run db:up` before `mise run test`. DAO tests fail with
   `CannotCreateTransaction — Could not open Hibernate session` when the
   DB is unreachable; service tests that only exercise pure helpers
   (`removeComments`, `parseValue`, …) pass even without MySQL because
-  context init doesn't connect lazily.
+  context init only touches the DB when a DAO is actually used.
 - **`@Transactional` + `@Rollback`** on `DeviceDAOImplTest` means the
   tests don't leave state behind in MySQL — safe to re‑run freely.
 - **DAO package casing inconsistency**: both `dao/deviceDAO/` and
@@ -190,9 +233,12 @@ production credentials here.
 - **`web/` directory at repo root** is a legacy IntelliJ IDEA web module
   layout. Maven uses `src/main/webapp/` — ignore `web/` for build
   changes.
-- **No `main()` method** — do not try to run this like Spring Boot. Use
-  `mvn tomcat7:run` or deploy the WAR to an external servlet container
-  (Tomcat 7/8 / Java EE 7 compatible).
+- **No `main()` method** — do not try to run this like Spring Boot.
+  There is no embedded-servlet Maven plugin anymore (`tomcat7-maven-plugin`
+  was dropped in the deps refresh). To run locally: `mise run compose:up`
+  (runs the WAR in Tomcat 9 inside Docker), or deploy
+  `target/freeradiusgui.war` into any external Servlet 3.1+ / JSP 2.3
+  container (Tomcat 8/9, or Java EE 7+).
 - **Old Spring 4.x / Thymeleaf 2.x**: APIs differ from Spring 5/6 and
   Thymeleaf 3. Do not copy snippets from modern docs without checking
   they exist in these versions. Avoid upgrading framework versions
@@ -200,9 +246,16 @@ production credentials here.
   5.1 ↔ Spring 4.2 ↔ Thymeleaf 2.1 ↔ spring‑security 4.0).
 - **Java 8 only**: do not introduce `var`, records, switch expressions,
   `Optional` features from 9+, or other post‑8 syntax.
-- **MySQL connector 5.1 / `useSSL=false`**: the JDBC URL format in
-  `config.properties` is the 5.1 dialect; do not switch to
-  `mysql-connector-j` 8 casually.
+- **JDBC URL params**: the JDBC URL already carries
+  `useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true` — required
+  combo for `mysql-connector-j` 8.x against either MySQL 5.7
+  (`mysql_native_password`, no TLS needed locally) or MySQL 8
+  (`caching_sha2_password`, which needs `allowPublicKeyRetrieval` when the
+  connection isn't TLS-protected). Don't drop any of these without
+  verifying against both server versions.
+- **Driver class is `com.mysql.cj.jdbc.Driver`** (Connector/J 8 series),
+  not the legacy `com.mysql.jdbc.Driver`. Kept that way deliberately;
+  do not "fix" it back.
 
 ## Testing
 
