@@ -105,7 +105,7 @@ public class MailServiceImpl implements MailService {
                             + "\n");
         }
 
-        sb.append("\nKeep calm and login to the System - http://freeradius.rbp.lv");
+        sb.append("\nKeep calm and login to the System - http://freeradius.local");
         return sb.toString();
     }
 }
