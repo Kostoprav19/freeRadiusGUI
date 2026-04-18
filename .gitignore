@@ -2,6 +2,7 @@
 *.class
 
 # Local environment overrides
+.env
 lab/.env
 .mise.local.toml
 
