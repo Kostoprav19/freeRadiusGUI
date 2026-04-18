@@ -6,29 +6,29 @@ import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.utils.OperationResult;
 
 public interface LogService {
-  boolean store(Log log);
+    boolean store(Log log);
 
-  boolean storeAll(List<Log> logList);
+    boolean storeAll(List<Log> logList);
 
-  Log getById(Integer id);
+    Log getById(Integer id);
 
-  List<Log> getByDate(LocalDateTime date);
+    List<Log> getByDate(LocalDateTime date);
 
-  List<Log> getToday();
+    List<Log> getToday();
 
-  boolean deleteByDate(LocalDateTime date);
+    boolean deleteByDate(LocalDateTime date);
 
-  Log getLastByMac(String mac, List<Log> list);
+    Log getLastByMac(String mac, List<Log> list);
 
-  List<Log> getAll();
+    List<Log> getAll();
 
-  List<Log> getAllByCriteria(String fieldName, Object object);
+    List<Log> getAllByCriteria(String fieldName, Object object);
 
-  Long getCount();
+    Long getCount();
 
-  OperationResult loadFromFile(LocalDateTime date);
+    OperationResult loadFromFile(LocalDateTime date);
 
-  OperationResult loadFromFileToday();
+    OperationResult loadFromFileToday();
 
-  Integer countRejected(List<Log> list);
+    Integer countRejected(List<Log> list);
 }

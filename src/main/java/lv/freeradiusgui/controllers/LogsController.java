@@ -24,119 +24,91 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @SessionAttributes("log")
 public class LogsController {
 
-  @Autowired
-  LogService logService;
+    @Autowired LogService logService;
 
-  @Autowired
-  ServerService serverService;
+    @Autowired ServerService serverService;
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  DateTimeFormatter URLformatter = DateTimeFormatter.ofPattern(
-    "ddMMyyyy"
-  ).withLocale(Locale.ENGLISH);
-  DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern(
-    "dd.MM.yyyy"
-  ).withLocale(Locale.ENGLISH);
+    DateTimeFormatter URLformatter =
+            DateTimeFormatter.ofPattern("ddMMyyyy").withLocale(Locale.ENGLISH);
+    DateTimeFormatter displayFormatter =
+            DateTimeFormatter.ofPattern("dd.MM.yyyy").withLocale(Locale.ENGLISH);
 
-  @ModelAttribute("page")
-  public String page() {
-    return "logs";
-  }
-
-  @RequestMapping(
-    value = { Views.LOGS_LIST, Views.LOGS },
-    method = RequestMethod.GET
-  )
-  public String showLogs() {
-    LocalDateTime date = LocalDateTime.now();
-    return "redirect:/" + Views.LOGS_LIST + "/" + date.format(URLformatter);
-  }
-
-  @RequestMapping(
-    value = Views.LOGS_LIST + "/{date}",
-    method = RequestMethod.GET
-  )
-  public String viewLogs(
-    Model model,
-    HttpServletRequest request,
-    @PathVariable("date") String dateStr
-  ) {
-    LocalDateTime date = convertStringToDateTime(dateStr, URLformatter);
-
-    List<Log> list = logService.getByDate(date);
-
-    if (list.isEmpty()) {
-      logService.loadFromFile(date);
-      list = logService.getByDate(date);
+    @ModelAttribute("page")
+    public String page() {
+        return "logs";
     }
 
-    model.addAttribute("logs", list);
-    model.addAttribute("recordCount", list.size());
-    model.addAttribute("date", date.format(displayFormatter));
-
-    Integer rejectedCount = 0;
-    if (date.toLocalDate().equals(LocalDate.now())) {
-      rejectedCount = serverService.getRejectedLogsTodayCounter();
-    } else {
-      rejectedCount = logService.countRejected(list);
+    @RequestMapping(
+            value = {Views.LOGS_LIST, Views.LOGS},
+            method = RequestMethod.GET)
+    public String showLogs() {
+        LocalDateTime date = LocalDateTime.now();
+        return "redirect:/" + Views.LOGS_LIST + "/" + date.format(URLformatter);
     }
-    model.addAttribute("rejectedCount", rejectedCount);
 
-    return Views.LOGS_LIST;
-  }
+    @RequestMapping(value = Views.LOGS_LIST + "/{date}", method = RequestMethod.GET)
+    public String viewLogs(
+            Model model, HttpServletRequest request, @PathVariable("date") String dateStr) {
+        LocalDateTime date = convertStringToDateTime(dateStr, URLformatter);
 
-  @RequestMapping(
-    value = Views.LOGS + "/refresh/{date}",
-    method = RequestMethod.GET
-  )
-  public String refreshLogs(
-    final RedirectAttributes redirectAttributes,
-    @PathVariable("date") String dateStr
-  ) {
-    LocalDateTime date = LocalDateTime.from(
-      LocalDate.parse(dateStr, URLformatter).atStartOfDay()
-    );
-    OperationResult result = logService.loadFromFile(date);
-    if (result.ok) {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Successfully loaded '" + result.message + "' file."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "success");
-    } else {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Error loading file - " + result.message
-      );
-      redirectAttributes.addFlashAttribute("msgType", "danger");
+        List<Log> list = logService.getByDate(date);
+
+        if (list.isEmpty()) {
+            logService.loadFromFile(date);
+            list = logService.getByDate(date);
+        }
+
+        model.addAttribute("logs", list);
+        model.addAttribute("recordCount", list.size());
+        model.addAttribute("date", date.format(displayFormatter));
+
+        Integer rejectedCount = 0;
+        if (date.toLocalDate().equals(LocalDate.now())) {
+            rejectedCount = serverService.getRejectedLogsTodayCounter();
+        } else {
+            rejectedCount = logService.countRejected(list);
+        }
+        model.addAttribute("rejectedCount", rejectedCount);
+
+        return Views.LOGS_LIST;
     }
-    return "redirect:/" + Views.LOGS_LIST + "/" + date.format(URLformatter);
-  }
 
-  @RequestMapping(
-    value = { Views.LOGS_LIST + "/submit" },
-    method = RequestMethod.POST
-  )
-  public String goToDate(@RequestParam("date") String dateStr) {
-    LocalDateTime date = convertStringToDateTime(dateStr, displayFormatter);
-    return "redirect:/" + Views.LOGS_LIST + "/" + date.format(URLformatter);
-  }
+    @RequestMapping(value = Views.LOGS + "/refresh/{date}", method = RequestMethod.GET)
+    public String refreshLogs(
+            final RedirectAttributes redirectAttributes, @PathVariable("date") String dateStr) {
+        LocalDateTime date =
+                LocalDateTime.from(LocalDate.parse(dateStr, URLformatter).atStartOfDay());
+        OperationResult result = logService.loadFromFile(date);
+        if (result.ok) {
+            redirectAttributes.addFlashAttribute(
+                    "msg", "Successfully loaded '" + result.message + "' file.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error loading file - " + result.message);
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.LOGS_LIST + "/" + date.format(URLformatter);
+    }
 
-  private LocalDateTime convertStringToDateTime(
-    String dateStr,
-    DateTimeFormatter formatter
-  ) {
-    LocalDateTime date;
-    if (dateStr != null || !dateStr.equals("")) {
-      try {
-        date = LocalDateTime.from(
-          LocalDate.parse(dateStr, formatter).atStartOfDay()
-        );
-      } catch (DateTimeParseException e) {
-        date = LocalDateTime.now();
-      }
-    } else date = LocalDateTime.now();
-    return date;
-  }
+    @RequestMapping(
+            value = {Views.LOGS_LIST + "/submit"},
+            method = RequestMethod.POST)
+    public String goToDate(@RequestParam("date") String dateStr) {
+        LocalDateTime date = convertStringToDateTime(dateStr, displayFormatter);
+        return "redirect:/" + Views.LOGS_LIST + "/" + date.format(URLformatter);
+    }
+
+    private LocalDateTime convertStringToDateTime(String dateStr, DateTimeFormatter formatter) {
+        LocalDateTime date;
+        if (dateStr != null || !dateStr.equals("")) {
+            try {
+                date = LocalDateTime.from(LocalDate.parse(dateStr, formatter).atStartOfDay());
+            } catch (DateTimeParseException e) {
+                date = LocalDateTime.now();
+            }
+        } else date = LocalDateTime.now();
+        return date;
+    }
 }

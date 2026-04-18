@@ -9,29 +9,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public class RoleDAOImpl
-  extends AbstractGenericBaseDao<Role>
-  implements RoleDAO
-{
+public class RoleDAOImpl extends AbstractGenericBaseDao<Role> implements RoleDAO {
 
-  @Autowired
-  public RoleDAOImpl(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
-  }
-
-  @Override
-  public Role getById(Integer id) {
-    if (id == null || id < 0) {
-      return null;
+    @Autowired
+    public RoleDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
-    return getOneByCriteria("id", id);
-  }
 
-  @Override
-  public Role getByName(String name) {
-    if (name == null || name.isEmpty()) {
-      return null;
+    @Override
+    public Role getById(Integer id) {
+        if (id == null || id < 0) {
+            return null;
+        }
+        return getOneByCriteria("id", id);
     }
-    return getOneByCriteria("name", name);
-  }
+
+    @Override
+    public Role getByName(String name) {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+        return getOneByCriteria("name", name);
+    }
 }

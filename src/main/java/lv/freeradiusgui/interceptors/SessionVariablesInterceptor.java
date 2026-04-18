@@ -10,49 +10,34 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class SessionVariablesInterceptor implements HandlerInterceptor {
 
-  @Autowired
-  ServerService serverService;
+    @Autowired ServerService serverService;
 
-  @Override
-  public boolean preHandle(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    Object handler
-  ) throws Exception {
-    return true;
-  }
-
-  @Override
-  public void postHandle(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    Object o,
-    ModelAndView modelAndView
-  ) throws Exception {
-    if (serverService != null) {
-      request
-        .getSession()
-        .setAttribute(
-          "todayRejectedCount",
-          serverService.getRejectedLogsTodayCounter()
-        );
-      request
-        .getSession()
-        .setAttribute(
-          "freeradiusStatus",
-          serverService.getStatus(Server.FREERADIUS)
-        );
-      request
-        .getSession()
-        .setAttribute("dbChangesFlag", serverService.getDbgChangesFlag());
+    @Override
+    public boolean preHandle(
+            HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        return true;
     }
-  }
 
-  @Override
-  public void afterCompletion(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    Object o,
-    Exception e
-  ) throws Exception {}
+    @Override
+    public void postHandle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Object o,
+            ModelAndView modelAndView)
+            throws Exception {
+        if (serverService != null) {
+            request.getSession()
+                    .setAttribute(
+                            "todayRejectedCount", serverService.getRejectedLogsTodayCounter());
+            request.getSession()
+                    .setAttribute("freeradiusStatus", serverService.getStatus(Server.FREERADIUS));
+            request.getSession().setAttribute("dbChangesFlag", serverService.getDbgChangesFlag());
+        }
+    }
+
+    @Override
+    public void afterCompletion(
+            HttpServletRequest request, HttpServletResponse response, Object o, Exception e)
+            throws Exception {}
 }

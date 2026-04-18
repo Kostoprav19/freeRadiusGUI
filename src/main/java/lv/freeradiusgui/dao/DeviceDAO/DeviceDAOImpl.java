@@ -9,29 +9,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public class DeviceDAOImpl
-  extends AbstractGenericBaseDao<Device>
-  implements DeviceDAO
-{
+public class DeviceDAOImpl extends AbstractGenericBaseDao<Device> implements DeviceDAO {
 
-  @Autowired
-  public DeviceDAOImpl(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
-  }
-
-  @Override
-  public Device getById(Integer id) {
-    if (id == null || id < 0) {
-      return null;
+    @Autowired
+    public DeviceDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
-    return getOneByCriteria("id", id);
-  }
 
-  @Override
-  public Device getByMac(String mac) {
-    if (mac == null || mac.isEmpty()) {
-      return null;
+    @Override
+    public Device getById(Integer id) {
+        if (id == null || id < 0) {
+            return null;
+        }
+        return getOneByCriteria("id", id);
     }
-    return getOneByCriteria("mac", mac);
-  }
+
+    @Override
+    public Device getByMac(String mac) {
+        if (mac == null || mac.isEmpty()) {
+            return null;
+        }
+        return getOneByCriteria("mac", mac);
+    }
 }

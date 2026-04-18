@@ -15,148 +15,137 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LogFileService
-  extends AbstractFileServices
-  implements FileService<Log>
-{
+public class LogFileService extends AbstractFileServices implements FileService<Log> {
 
-  public static final String MAC_PATTERN = "MAC:(([0-9a-fA-F]){12})";
-  public static final String ACCESS_PATTERN = "Packet-Type = Access-(\\w+)";
-  public static final String PORT_PATTERN = "Port: (\\d+),";
-  public static final String PORTSPEED_PATTERN =
-    "Connection: CONNECT Ethernet (.+?)M";
-  public static final String SWITCHIP_PATTERN = "Switch IP: (.+?),";
+    public static final String MAC_PATTERN = "MAC:(([0-9a-fA-F]){12})";
+    public static final String ACCESS_PATTERN = "Packet-Type = Access-(\\w+)";
+    public static final String PORT_PATTERN = "Port: (\\d+),";
+    public static final String PORTSPEED_PATTERN = "Connection: CONNECT Ethernet (.+?)M";
+    public static final String SWITCHIP_PATTERN = "Switch IP: (.+?),";
 
-  @Autowired
-  SwitchService switchService;
+    @Autowired SwitchService switchService;
 
-  @Autowired
-  DeviceService deviceService;
+    @Autowired DeviceService deviceService;
 
-  private List<Device> deviceList;
-  private List<Switch> switchList;
+    private List<Device> deviceList;
+    private List<Switch> switchList;
 
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-    "EEE MMM dd HH:mm:ss yyyy"
-  ).withLocale(Locale.ENGLISH);
-  DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern(
-    "EEE MMM  d HH:mm:ss yyyy"
-  ).withLocale(Locale.ENGLISH);
+    DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy").withLocale(Locale.ENGLISH);
+    DateTimeFormatter formatter2 =
+            DateTimeFormatter.ofPattern("EEE MMM  d HH:mm:ss yyyy").withLocale(Locale.ENGLISH);
 
-  LocalDateTime currentLogFileDateTime;
+    LocalDateTime currentLogFileDateTime;
 
-  public List<Log> readListFromFile(LocalDateTime date) {
-    this.currentLogFileDateTime = date;
-    List<String> listFromFile = readFile(getFileName(date));
-    if (listFromFile == null) return null;
+    public List<Log> readListFromFile(LocalDateTime date) {
+        this.currentLogFileDateTime = date;
+        List<String> listFromFile = readFile(getFileName(date));
+        if (listFromFile == null) return null;
 
-    listFromFile = removeComments(listFromFile);
-    return parseList(listFromFile);
-  }
+        listFromFile = removeComments(listFromFile);
+        return parseList(listFromFile);
+    }
 
-  @Override
-  public List<Log> readListFromFile() {
-    List<String> listFromFile = readFile(getFileName(LocalDateTime.now()));
-    if (listFromFile == null) return null;
+    @Override
+    public List<Log> readListFromFile() {
+        List<String> listFromFile = readFile(getFileName(LocalDateTime.now()));
+        if (listFromFile == null) return null;
 
-    listFromFile = removeComments(listFromFile);
-    return parseList(listFromFile);
-  }
+        listFromFile = removeComments(listFromFile);
+        return parseList(listFromFile);
+    }
 
-  @Override
-  public boolean saveListToFile(List<Log> list) {
-    return false;
-  }
+    @Override
+    public boolean saveListToFile(List<Log> list) {
+        return false;
+    }
 
-  public String getFileName(LocalDateTime date) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    String fileName = "auth-detail-" + date.format(formatter);
-    return appConfig.getPathToLogDirectory() + "/" + fileName;
-  }
+    public String getFileName(LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String fileName = "auth-detail-" + date.format(formatter);
+        return appConfig.getPathToLogDirectory() + "/" + fileName;
+    }
 
-  private List<Log> parseList(List<String> list) {
-    deviceList = deviceService.getAll();
-    switchList = switchService.getAll();
-    List<Log> logList = new ArrayList<>();
-    Integer index = 0;
-    do {
-      List<String> subList = findSubList(list, index);
-      index = index + subList.size();
+    private List<Log> parseList(List<String> list) {
+        deviceList = deviceService.getAll();
+        switchList = switchService.getAll();
+        List<Log> logList = new ArrayList<>();
+        Integer index = 0;
+        do {
+            List<String> subList = findSubList(list, index);
+            index = index + subList.size();
 
-      if (!subList.isEmpty()) {
-        logList.add(parseLog(subList));
-      }
-    } while (index < list.size() - 1);
+            if (!subList.isEmpty()) {
+                logList.add(parseLog(subList));
+            }
+        } while (index < list.size() - 1);
 
-    return logList;
-  }
+        return logList;
+    }
 
-  private Log parseLog(List<String> list) {
-    Log newLog = new Log();
+    private Log parseLog(List<String> list) {
+        Log newLog = new Log();
 
-    for (int index = 0; index < list.size(); index++) {
-      String string = list.get(index);
+        for (int index = 0; index < list.size(); index++) {
+            String string = list.get(index);
 
-      if (string.contains(Integer.toString(LocalDateTime.now().getYear()))) {
-        LocalDateTime dateTime;
-        try {
-          dateTime = LocalDateTime.parse(string, formatter);
-        } catch (DateTimeException e) {
-          dateTime = LocalDateTime.parse(string, formatter2);
+            if (string.contains(Integer.toString(LocalDateTime.now().getYear()))) {
+                LocalDateTime dateTime;
+                try {
+                    dateTime = LocalDateTime.parse(string, formatter);
+                } catch (DateTimeException e) {
+                    dateTime = LocalDateTime.parse(string, formatter2);
+                }
+                newLog.setTimeOfRegistration(dateTime);
+            }
+
+            if (string.contains("Reply-Message")) {
+                newLog.setMac(parseValue(list.get(index), MAC_PATTERN));
+
+                newLog.setDevice(deviceService.getByMac(newLog.getMac(), deviceList));
+
+                newLog.setSwitchPort(Integer.parseInt(parseValue(list.get(index), PORT_PATTERN)));
+
+                newLog.setPortSpeed(
+                        Integer.parseInt(parseValue(list.get(index), PORTSPEED_PATTERN)));
+
+                if (string.contains("Full duplex")) newLog.setDuplex(1);
+                else newLog.setDuplex(0);
+
+                String switchIP = parseValue(list.get(index), SWITCHIP_PATTERN);
+                newLog.setSwitch(switchService.getByIp(switchIP, switchList));
+            }
+            if (string.contains("Packet-Type")) {
+                if (parseValue(list.get(index), ACCESS_PATTERN).equals("Accept")) {
+                    newLog.setStatus(1);
+                } else {
+                    newLog.setStatus(0);
+                }
+            }
         }
-        newLog.setTimeOfRegistration(dateTime);
-      }
+        return newLog;
+    }
 
-      if (string.contains("Reply-Message")) {
-        newLog.setMac(parseValue(list.get(index), MAC_PATTERN));
+    private List<String> findSubList(List<String> list, Integer index) {
+        List<String> result = new ArrayList<>();
 
-        newLog.setDevice(deviceService.getByMac(newLog.getMac(), deviceList));
-
-        newLog.setSwitchPort(
-          Integer.parseInt(parseValue(list.get(index), PORT_PATTERN))
-        );
-
-        newLog.setPortSpeed(
-          Integer.parseInt(parseValue(list.get(index), PORTSPEED_PATTERN))
-        );
-
-        if (string.contains("Full duplex")) newLog.setDuplex(1);
-        else newLog.setDuplex(0);
-
-        String switchIP = parseValue(list.get(index), SWITCHIP_PATTERN);
-        newLog.setSwitch(switchService.getByIp(switchIP, switchList));
-      }
-      if (string.contains("Packet-Type")) {
-        if (parseValue(list.get(index), ACCESS_PATTERN).equals("Accept")) {
-          newLog.setStatus(1);
-        } else {
-          newLog.setStatus(0);
+        while (!list.get(index).contains("Packet-Type")) {
+            index++;
         }
-      }
+        index--; // Because sublist starts in previous string;
+
+        result.add(list.get(index));
+
+        while (true) {
+            index++;
+            String currentString = list.get(index);
+            if (currentString.contains("Reply-Message")) {
+                result.add(currentString);
+                break;
+            }
+            result.add(currentString);
+        }
+
+        return result;
     }
-    return newLog;
-  }
-
-  private List<String> findSubList(List<String> list, Integer index) {
-    List<String> result = new ArrayList<>();
-
-    while (!list.get(index).contains("Packet-Type")) {
-      index++;
-    }
-    index--; // Because sublist starts in previous string;
-
-    result.add(list.get(index));
-
-    while (true) {
-      index++;
-      String currentString = list.get(index);
-      if (currentString.contains("Reply-Message")) {
-        result.add(currentString);
-        break;
-      }
-      result.add(currentString);
-    }
-
-    return result;
-  }
 }

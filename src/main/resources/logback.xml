@@ -44,12 +44,6 @@
         <appender-ref ref="STDOUT" />
     </logger>
 
-    <logger name="com.mchange.v2.c3p0" level="WARN"
-            additivity="false">
-        <appender-ref ref="FILE" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
     <logger name="org.hibernate" level="WARN"
             additivity="false">
         <appender-ref ref="FILE" />

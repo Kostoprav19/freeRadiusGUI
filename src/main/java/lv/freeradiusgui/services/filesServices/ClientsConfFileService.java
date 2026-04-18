@@ -6,101 +6,98 @@ import lv.freeradiusgui.domain.Switch;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientsConfFileService
-  extends AbstractFileServices
-  implements FileService<Switch>
-{
+public class ClientsConfFileService extends AbstractFileServices implements FileService<Switch> {
 
-  public static final String CLIENT_PATTERN = "^client (.+)\\{";
-  public static final String SECRET_PATTERN = "^secret = (.+)$";
-  public static final String SHORTNAME_PATTERN = "^shortname = (.+)$";
-  public static final String IPADDR_PATTERN = "^ipaddr = (.+)$";
+    public static final String CLIENT_PATTERN = "^client (.+)\\{";
+    public static final String SECRET_PATTERN = "^secret = (.+)$";
+    public static final String SHORTNAME_PATTERN = "^shortname = (.+)$";
+    public static final String IPADDR_PATTERN = "^ipaddr = (.+)$";
 
-  @Override
-  public List<Switch> readListFromFile() {
-    List<String> listFromFile = readFile(appConfig.getPathToClientsConfFile());
-    if (listFromFile == null) return null;
-    listFromFile = removeComments(listFromFile);
-    return parseList(listFromFile);
-  }
-
-  @Override
-  public boolean saveListToFile(List<Switch> list) {
-    List<String> stringList = new ArrayList<>();
-
-    stringList.add("client localhost{");
-    stringList.add(" ipaddr = 127.0.0.1");
-    stringList.add(" secret = testing123");
-    stringList.add(" require_message_authenticator = no");
-    stringList.add(" nastype = other");
-    stringList.add("}");
-
-    for (Switch aSwitch : list) {
-      stringList.add("client " + aSwitch.getIp() + " {");
-      stringList.add(" secret = " + aSwitch.getSecret());
-      stringList.add(" shortname = " + aSwitch.getName());
-      stringList.add("}");
+    @Override
+    public List<Switch> readListFromFile() {
+        List<String> listFromFile = readFile(appConfig.getPathToClientsConfFile());
+        if (listFromFile == null) return null;
+        listFromFile = removeComments(listFromFile);
+        return parseList(listFromFile);
     }
 
-    return writeFile(stringList, appConfig.getPathToClientsConfFile());
-  }
+    @Override
+    public boolean saveListToFile(List<Switch> list) {
+        List<String> stringList = new ArrayList<>();
 
-  private List<Switch> parseList(List<String> list) {
-    List<Switch> switchList = new ArrayList<>();
-    Integer index = 0;
-    do {
-      List<String> subList = findSubList(list, index);
-      index = index + subList.size();
+        stringList.add("client localhost{");
+        stringList.add(" ipaddr = 127.0.0.1");
+        stringList.add(" secret = testing123");
+        stringList.add(" require_message_authenticator = no");
+        stringList.add(" nastype = other");
+        stringList.add("}");
 
-      if (!subList.isEmpty()) {
-        Switch aSwitch = parseSwitch(subList);
-        if (!aSwitch.getIp().equals("127.0.0.1")) switchList.add(aSwitch);
-      }
-    } while (index < list.size() - 1);
+        for (Switch aSwitch : list) {
+            stringList.add("client " + aSwitch.getIp() + " {");
+            stringList.add(" secret = " + aSwitch.getSecret());
+            stringList.add(" shortname = " + aSwitch.getName());
+            stringList.add("}");
+        }
 
-    return switchList;
-  }
-
-  private Switch parseSwitch(List<String> list) {
-    Switch newSwitch = new Switch();
-    for (int index = 0; index < list.size(); index++) {
-      String string = list.get(index);
-      if (string.contains("client")) {
-        newSwitch.setIp(parseValue(list.get(index), CLIENT_PATTERN));
-      }
-      if (string.contains("secret")) {
-        newSwitch.setSecret(parseValue(list.get(index), SECRET_PATTERN));
-      }
-      if (string.contains("shortname")) {
-        newSwitch.setName(parseValue(list.get(index), SHORTNAME_PATTERN));
-      }
-      if (string.contains("ipaddr")) {
-        newSwitch.setName(newSwitch.getIp());
-        newSwitch.setIp(parseValue(list.get(index), IPADDR_PATTERN));
-      }
-    }
-    return newSwitch;
-  }
-
-  private List<String> findSubList(List<String> list, Integer index) {
-    List<String> result = new ArrayList<>();
-
-    while (!list.get(index).contains("client")) {
-      index++;
+        return writeFile(stringList, appConfig.getPathToClientsConfFile());
     }
 
-    result.add(list.get(index));
+    private List<Switch> parseList(List<String> list) {
+        List<Switch> switchList = new ArrayList<>();
+        Integer index = 0;
+        do {
+            List<String> subList = findSubList(list, index);
+            index = index + subList.size();
 
-    while (true) {
-      index++;
-      String currentString = list.get(index);
-      if (currentString.contains("}")) {
-        result.add(currentString);
-        break;
-      }
-      result.add(currentString);
+            if (!subList.isEmpty()) {
+                Switch aSwitch = parseSwitch(subList);
+                if (!aSwitch.getIp().equals("127.0.0.1")) switchList.add(aSwitch);
+            }
+        } while (index < list.size() - 1);
+
+        return switchList;
     }
 
-    return result;
-  }
+    private Switch parseSwitch(List<String> list) {
+        Switch newSwitch = new Switch();
+        for (int index = 0; index < list.size(); index++) {
+            String string = list.get(index);
+            if (string.contains("client")) {
+                newSwitch.setIp(parseValue(list.get(index), CLIENT_PATTERN));
+            }
+            if (string.contains("secret")) {
+                newSwitch.setSecret(parseValue(list.get(index), SECRET_PATTERN));
+            }
+            if (string.contains("shortname")) {
+                newSwitch.setName(parseValue(list.get(index), SHORTNAME_PATTERN));
+            }
+            if (string.contains("ipaddr")) {
+                newSwitch.setName(newSwitch.getIp());
+                newSwitch.setIp(parseValue(list.get(index), IPADDR_PATTERN));
+            }
+        }
+        return newSwitch;
+    }
+
+    private List<String> findSubList(List<String> list, Integer index) {
+        List<String> result = new ArrayList<>();
+
+        while (!list.get(index).contains("client")) {
+            index++;
+        }
+
+        result.add(list.get(index));
+
+        while (true) {
+            index++;
+            String currentString = list.get(index);
+            if (currentString.contains("}")) {
+                result.add(currentString);
+                break;
+            }
+            result.add(currentString);
+        }
+
+        return result;
+    }
 }

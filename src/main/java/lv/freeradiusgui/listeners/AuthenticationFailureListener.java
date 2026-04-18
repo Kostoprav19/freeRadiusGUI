@@ -8,18 +8,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationFailureListener
-  implements ApplicationListener<AuthenticationFailureBadCredentialsEvent>
-{
+        implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Override
-  public void onApplicationEvent(
-    AuthenticationFailureBadCredentialsEvent event
-  ) {
-    Object userName = event.getAuthentication().getPrincipal();
-    Object credentials = event.getAuthentication().getCredentials();
-    logger.info("Failed login using USERNAME: '" + userName + "'");
-    logger.info("Failed login using PASSWORD: '" + credentials + "'");
-  }
+    @Override
+    public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
+        Object userName = event.getAuthentication().getPrincipal();
+        Object credentials = event.getAuthentication().getCredentials();
+        logger.info("Failed login using USERNAME: '" + userName + "'");
+        logger.info("Failed login using PASSWORD: '" + credentials + "'");
+    }
 }

@@ -13,22 +13,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class LoginController {
 
-  @RequestMapping(value = { Views.LOGIN, "/" }, method = RequestMethod.GET)
-  public String login() {
-    return Views.LOGIN;
-  }
-
-  @RequestMapping(value = "/logout", method = RequestMethod.GET)
-  public String logout(
-    HttpServletRequest request,
-    HttpServletResponse response
-  ) {
-    Authentication auth =
-      SecurityContextHolder.getContext().getAuthentication();
-    if (auth != null) {
-      new SecurityContextLogoutHandler().logout(request, response, auth);
+    @RequestMapping(
+            value = {Views.LOGIN, "/"},
+            method = RequestMethod.GET)
+    public String login() {
+        return Views.LOGIN;
     }
 
-    return "redirect:/";
-  }
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
+        return "redirect:/";
+    }
 }

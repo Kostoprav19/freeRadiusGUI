@@ -3,7 +3,7 @@ package lv.freeradiusgui.services.filesServices;
 import java.util.List;
 
 public interface FileService<T> {
-  List<T> readListFromFile();
+    List<T> readListFromFile();
 
-  boolean saveListToFile(List<T> list);
+    boolean saveListToFile(List<T> list);
 }

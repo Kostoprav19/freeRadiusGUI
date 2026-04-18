@@ -20,167 +20,132 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @SessionAttributes("device")
 public class DevicesController {
 
-  @Autowired
-  DeviceService deviceService;
+    @Autowired DeviceService deviceService;
 
-  @Autowired
-  DeviceFormValidator deviceFormValidator;
+    @Autowired DeviceFormValidator deviceFormValidator;
 
-  @Autowired
-  ServerService serverService;
+    @Autowired ServerService serverService;
 
-  @ModelAttribute("page")
-  public String page() {
-    return "devices";
-  }
-
-  @ModelAttribute("allTypes")
-  public List<String> allType() {
-    return Device.TYPE_ALL;
-  }
-
-  @InitBinder("device")
-  protected void initBinder(WebDataBinder binder) {
-    try {
-      if (deviceFormValidator.supports(binder.getTarget().getClass())) {
-        binder.setValidator(deviceFormValidator);
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @RequestMapping(
-    value = { Views.DEVICE_LIST, Views.DEVICE },
-    method = RequestMethod.GET
-  )
-  public String viewDevices(Model model) {
-    List<Device> list = deviceService.getAll();
-    model.addAttribute("devices", list);
-    model.addAttribute("recordCount", list.size());
-    return Views.DEVICE_LIST;
-  }
-
-  @RequestMapping(value = Views.DEVICE + "/{id}", method = RequestMethod.GET)
-  public String showDevice(@PathVariable("id") Integer deviceId, Model model) {
-    Device device = deviceService.getById(deviceId);
-    model.addAttribute("device", device);
-    return Views.DEVICE_VIEW;
-  }
-
-  @RequestMapping(
-    value = Views.DEVICE + "/delete/{id}",
-    method = RequestMethod.GET
-  )
-  public String deleteDevice(
-    @PathVariable("id") Integer deviceId,
-    final RedirectAttributes redirectAttributes
-  ) {
-    Device device = deviceService.getById(deviceId);
-
-    if (deviceService.delete(device)) {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Device '" + device.getName() + "' successfully deleted."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "success");
-    } else {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Error deleting device '" + device.getName() + "'."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "danger");
+    @ModelAttribute("page")
+    public String page() {
+        return "devices";
     }
 
-    return "redirect:/" + Views.DEVICE_LIST;
-  }
-
-  @RequestMapping(value = Views.DEVICE + "/submit", method = RequestMethod.POST)
-  public String storeDevice(
-    @ModelAttribute("device") @Validated Device device,
-    BindingResult result,
-    SessionStatus status,
-    Model model,
-    final RedirectAttributes redirectAttributes
-  ) {
-    if (result.hasErrors()) {
-      model.addAttribute("device", device);
-      return Views.DEVICE_VIEW;
+    @ModelAttribute("allTypes")
+    public List<String> allType() {
+        return Device.TYPE_ALL;
     }
 
-    deviceService.store(device);
-    serverService.setDbChangesFlag();
-    status.setComplete();
-    redirectAttributes.addFlashAttribute(
-      "msg",
-      "Device '" + device.getName() + "' successfully saved."
-    );
-    redirectAttributes.addFlashAttribute("msgType", "success");
-    return "redirect:/" + Views.DEVICE_LIST;
-  }
-
-  @RequestMapping(value = Views.DEVICE + "/add", method = RequestMethod.GET)
-  public String addDevice(Model model) {
-    Device device = deviceService.prepareNewDevice(null); // null - empty mac
-    model.addAttribute("device", device);
-    return Views.DEVICE_VIEW;
-  }
-
-  @RequestMapping(
-    value = Views.DEVICE + "/add/{mac}",
-    method = RequestMethod.GET
-  )
-  public String addDeviceWithMac(@PathVariable("mac") String mac, Model model) {
-    Device device = deviceService.prepareNewDevice(mac);
-    model.addAttribute("device", device);
-    return Views.DEVICE_VIEW;
-  }
-
-  @RequestMapping(value = Views.DEVICE + "/reload", method = RequestMethod.GET)
-  public String reloadDevices(final RedirectAttributes redirectAttributes) {
-    if (deviceService.reloadFromConfig()) {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Successfully loaded 'users' file."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "success");
-    } else {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Error loading 'users' file."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "danger");
+    @InitBinder("device")
+    protected void initBinder(WebDataBinder binder) {
+        try {
+            if (deviceFormValidator.supports(binder.getTarget().getClass())) {
+                binder.setValidator(deviceFormValidator);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    return "redirect:/" + Views.DEVICE_LIST;
-  }
 
-  @RequestMapping(
-    value = Views.ADMIN + "/writeUsers",
-    method = RequestMethod.GET
-  )
-  public String writeDevices(final RedirectAttributes redirectAttributes) {
-    if (deviceService.writeToConfig()) {
-      if (serverService.restartFreeradius()) {
+    @RequestMapping(
+            value = {Views.DEVICE_LIST, Views.DEVICE},
+            method = RequestMethod.GET)
+    public String viewDevices(Model model) {
+        List<Device> list = deviceService.getAll();
+        model.addAttribute("devices", list);
+        model.addAttribute("recordCount", list.size());
+        return Views.DEVICE_LIST;
+    }
+
+    @RequestMapping(value = Views.DEVICE + "/{id}", method = RequestMethod.GET)
+    public String showDevice(@PathVariable("id") Integer deviceId, Model model) {
+        Device device = deviceService.getById(deviceId);
+        model.addAttribute("device", device);
+        return Views.DEVICE_VIEW;
+    }
+
+    @RequestMapping(value = Views.DEVICE + "/delete/{id}", method = RequestMethod.GET)
+    public String deleteDevice(
+            @PathVariable("id") Integer deviceId, final RedirectAttributes redirectAttributes) {
+        Device device = deviceService.getById(deviceId);
+
+        if (deviceService.delete(device)) {
+            redirectAttributes.addFlashAttribute(
+                    "msg", "Device '" + device.getName() + "' successfully deleted.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute(
+                    "msg", "Error deleting device '" + device.getName() + "'.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+
+        return "redirect:/" + Views.DEVICE_LIST;
+    }
+
+    @RequestMapping(value = Views.DEVICE + "/submit", method = RequestMethod.POST)
+    public String storeDevice(
+            @ModelAttribute("device") @Validated Device device,
+            BindingResult result,
+            SessionStatus status,
+            Model model,
+            final RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("device", device);
+            return Views.DEVICE_VIEW;
+        }
+
+        deviceService.store(device);
+        serverService.setDbChangesFlag();
+        status.setComplete();
         redirectAttributes.addFlashAttribute(
-          "msg",
-          "Successfully applied changes."
-        );
+                "msg", "Device '" + device.getName() + "' successfully saved.");
         redirectAttributes.addFlashAttribute("msgType", "success");
-        serverService.unsetDbChangesFlag();
-      } else {
-        redirectAttributes.addFlashAttribute(
-          "msg",
-          "Changes saved to 'users' file, but failed to restart freeradius service."
-        );
-        redirectAttributes.addFlashAttribute("msgType", "danger");
-      }
-    } else {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Error writing to data to 'users' file."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "danger");
+        return "redirect:/" + Views.DEVICE_LIST;
     }
-    return "redirect:/" + Views.DEVICE_LIST;
-  }
+
+    @RequestMapping(value = Views.DEVICE + "/add", method = RequestMethod.GET)
+    public String addDevice(Model model) {
+        Device device = deviceService.prepareNewDevice(null); // null - empty mac
+        model.addAttribute("device", device);
+        return Views.DEVICE_VIEW;
+    }
+
+    @RequestMapping(value = Views.DEVICE + "/add/{mac}", method = RequestMethod.GET)
+    public String addDeviceWithMac(@PathVariable("mac") String mac, Model model) {
+        Device device = deviceService.prepareNewDevice(mac);
+        model.addAttribute("device", device);
+        return Views.DEVICE_VIEW;
+    }
+
+    @RequestMapping(value = Views.DEVICE + "/reload", method = RequestMethod.GET)
+    public String reloadDevices(final RedirectAttributes redirectAttributes) {
+        if (deviceService.reloadFromConfig()) {
+            redirectAttributes.addFlashAttribute("msg", "Successfully loaded 'users' file.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error loading 'users' file.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.DEVICE_LIST;
+    }
+
+    @RequestMapping(value = Views.ADMIN + "/writeUsers", method = RequestMethod.GET)
+    public String writeDevices(final RedirectAttributes redirectAttributes) {
+        if (deviceService.writeToConfig()) {
+            if (serverService.restartFreeradius()) {
+                redirectAttributes.addFlashAttribute("msg", "Successfully applied changes.");
+                redirectAttributes.addFlashAttribute("msgType", "success");
+                serverService.unsetDbChangesFlag();
+            } else {
+                redirectAttributes.addFlashAttribute(
+                        "msg",
+                        "Changes saved to 'users' file, but failed to restart freeradius service.");
+                redirectAttributes.addFlashAttribute("msgType", "danger");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Error writing to data to 'users' file.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.DEVICE_LIST;
+    }
 }
