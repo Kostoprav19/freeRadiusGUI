@@ -8,14 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationSuccessListener
-  implements ApplicationListener<InteractiveAuthenticationSuccessEvent>
-{
+        implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Override
-  public void onApplicationEvent(InteractiveAuthenticationSuccessEvent event) {
-    String userName = event.getAuthentication().getName();
-    logger.info("Users logged in using USERNAME: '" + userName + "'");
-  }
+    @Override
+    public void onApplicationEvent(InteractiveAuthenticationSuccessEvent event) {
+        String userName = event.getAuthentication().getName();
+        logger.info("Users logged in using USERNAME: '" + userName + "'");
+    }
 }

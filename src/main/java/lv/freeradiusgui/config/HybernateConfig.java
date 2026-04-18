@@ -1,7 +1,7 @@
 package lv.freeradiusgui.config;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import java.beans.PropertyVetoException;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.hibernate.SessionFactory;
@@ -22,20 +22,17 @@ public class HybernateConfig {
     @Autowired AppConfig appConfig;
 
     @Bean(destroyMethod = "close")
-    public DataSource dataSource() throws PropertyVetoException {
-
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setDriverClass(appConfig.getDbDriverClass());
-        dataSource.setJdbcUrl(appConfig.getDbUrl());
-        dataSource.setUser(appConfig.getDbUser());
-        dataSource.setPassword(appConfig.getDbPassword());
-        dataSource.setMaxPoolSize(appConfig.getDbMaxPoolSize());
-        dataSource.setMinPoolSize(appConfig.getDbMinPoolSize());
-        dataSource.setCheckoutTimeout(appConfig.getDbCheckoutTimeout());
-        dataSource.setMaxStatements(appConfig.getDbMaxStatements());
-        dataSource.setIdleConnectionTestPeriod(appConfig.getDbIdleConnectionTestPeriod());
-
-        return dataSource;
+    public DataSource dataSource() {
+        HikariConfig cfg = new HikariConfig();
+        cfg.setJdbcUrl(appConfig.getDbUrl());
+        cfg.setUsername(appConfig.getDbUser());
+        cfg.setPassword(appConfig.getDbPassword());
+        cfg.setDriverClassName(appConfig.getDbDriverClass());
+        cfg.setMaximumPoolSize(appConfig.getDbMaxPoolSize());
+        cfg.setMinimumIdle(appConfig.getDbMinPoolSize());
+        cfg.setConnectionTimeout(appConfig.getDbCheckoutTimeout());
+        cfg.setPoolName("freeradiusgui-hikari");
+        return new HikariDataSource(cfg);
     }
 
     private Properties hibernateProperties() {

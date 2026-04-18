@@ -15,7 +15,8 @@ auth logs from the browser.
 ## Tech Stack
 
 Java 8 · Spring MVC 4.2 · Spring Security 4.0 · Hibernate 5.1 · Thymeleaf 2.1
-· MySQL 5.x · Maven (WAR packaging) · Tomcat 7/8.5/9.
+· MySQL (mysql-connector-j 8.4) · HikariCP 4.0 · Maven (WAR packaging) ·
+Tomcat 9 (Docker image).
 
 > This is **not** Spring Boot — bootstrap is `WebApplicationInitializer`
 > (`config/AppInitializer.java`).
@@ -46,11 +47,13 @@ List available tasks with `mise tasks` and run one with `mise run <task>`.
 ```bash
 mvn clean package                   # build target/freeradiusgui.war
 mvn test                            # run tests
-mvn tomcat7:run                     # embedded Tomcat at :8080/freeradiusgui
 mvn -Dtest=DeviceDAOImplTest test   # single test
 mvn spotless:check                  # lint (AOSP style, google-java-format 1.7)
 mvn spotless:apply                  # auto-fix formatting
 ```
+
+For local dev, run the app via Docker Compose (`mise run compose:up`); the
+embedded Tomcat task was retired alongside the `tomcat7-maven-plugin`.
 
 ### Linting
 

@@ -5,31 +5,31 @@ import java.util.List;
 import lv.freeradiusgui.domain.Log;
 
 public interface ServerService {
-  void updateStatuses();
+    void updateStatuses();
 
-  boolean restartFreeradius();
+    boolean restartFreeradius();
 
-  boolean startFreeradius();
+    boolean startFreeradius();
 
-  boolean stopFreeradius();
+    boolean stopFreeradius();
 
-  String runCommand(String command);
+    String runCommand(String command);
 
-  boolean getStatus(String key);
+    boolean getStatus(String key);
 
-  LocalDateTime getLastServiceReboot();
+    LocalDateTime getLastServiceReboot();
 
-  void setDbChangesFlag();
+    void setDbChangesFlag();
 
-  void unsetDbChangesFlag();
+    void unsetDbChangesFlag();
 
-  boolean getDbgChangesFlag();
+    boolean getDbgChangesFlag();
 
-  boolean setTodayRejected(List<Log> logList);
+    boolean setTodayRejected(List<Log> logList);
 
-  int getRejectedLogsCounter();
+    int getRejectedLogsCounter();
 
-  int getRejectedLogsTodayCounter();
+    int getRejectedLogsTodayCounter();
 
-  List<Log> getRejectedLogsListToday();
+    List<Log> getRejectedLogsListToday();
 }

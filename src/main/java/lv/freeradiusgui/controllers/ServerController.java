@@ -18,106 +18,79 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class ServerController {
 
-  @Autowired
-  ServerService serverService;
+    @Autowired ServerService serverService;
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @ModelAttribute("page")
-  public String module() {
-    return "server";
-  }
-
-  @RequestMapping(Views.SERVER)
-  public String home(Model model) {
-    serverService.updateStatuses();
-    model.addAttribute(
-      "lastServiceReboot",
-      serverService.getLastServiceReboot()
-    );
-    model.addAttribute("tomcatStatus", serverService.getStatus(Server.TOMCAT));
-    model.addAttribute("mysqlStatus", serverService.getStatus(Server.MYSQL));
-    return Views.SERVER;
-  }
-
-  @RequestMapping(Views.SERVER + "/start")
-  public String startService(final RedirectAttributes redirectAttributes) {
-    serverService.startFreeradius();
-    if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Service 'freeradius' successfully started."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "success");
-    } else {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Failed to start service 'freeradius'."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "danger");
+    @ModelAttribute("page")
+    public String module() {
+        return "server";
     }
-    return "redirect:/" + Views.SERVER;
-  }
 
-  @RequestMapping(Views.SERVER + "/stop")
-  public String stopService(final RedirectAttributes redirectAttributes) {
-    serverService.stopFreeradius();
-    if (
-      serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_DOWN
-    ) {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Service 'freeradius' successfully stopped."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "success");
-    } else {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Failed to stop service 'freeradius'."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "danger");
+    @RequestMapping(Views.SERVER)
+    public String home(Model model) {
+        serverService.updateStatuses();
+        model.addAttribute("lastServiceReboot", serverService.getLastServiceReboot());
+        model.addAttribute("tomcatStatus", serverService.getStatus(Server.TOMCAT));
+        model.addAttribute("mysqlStatus", serverService.getStatus(Server.MYSQL));
+        return Views.SERVER;
     }
-    return "redirect:/" + Views.SERVER;
-  }
 
-  @RequestMapping(Views.SERVER + "/restart")
-  public String restartService(final RedirectAttributes redirectAttributes) {
-    serverService.restartFreeradius();
-    if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Service 'freeradius' successfully restarted."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "success");
-    } else {
-      redirectAttributes.addFlashAttribute(
-        "msg",
-        "Failed to restart service 'freeradius'."
-      );
-      redirectAttributes.addFlashAttribute("msgType", "danger");
+    @RequestMapping(Views.SERVER + "/start")
+    public String startService(final RedirectAttributes redirectAttributes) {
+        serverService.startFreeradius();
+        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
+            redirectAttributes.addFlashAttribute(
+                    "msg", "Service 'freeradius' successfully started.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Failed to start service 'freeradius'.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.SERVER;
     }
-    return "redirect:/" + Views.SERVER;
-  }
 
-  @RequestMapping(
-    value = { Views.ADMIN + "/runCommand" },
-    method = RequestMethod.POST
-  )
-  public String runCommand(
-    final RedirectAttributes redirectAttributes,
-    @RequestParam("consoleInput") String consoleInput
-  ) {
-    String consoleOutput = serverService.runCommand(consoleInput);
+    @RequestMapping(Views.SERVER + "/stop")
+    public String stopService(final RedirectAttributes redirectAttributes) {
+        serverService.stopFreeradius();
+        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_DOWN) {
+            redirectAttributes.addFlashAttribute(
+                    "msg", "Service 'freeradius' successfully stopped.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Failed to stop service 'freeradius'.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.SERVER;
+    }
 
-    String currentUser = SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getName();
-    logger.debug(
-      "User '" + currentUser + "' called console command: " + consoleInput
-    );
+    @RequestMapping(Views.SERVER + "/restart")
+    public String restartService(final RedirectAttributes redirectAttributes) {
+        serverService.restartFreeradius();
+        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
+            redirectAttributes.addFlashAttribute(
+                    "msg", "Service 'freeradius' successfully restarted.");
+            redirectAttributes.addFlashAttribute("msgType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Failed to restart service 'freeradius'.");
+            redirectAttributes.addFlashAttribute("msgType", "danger");
+        }
+        return "redirect:/" + Views.SERVER;
+    }
 
-    redirectAttributes.addFlashAttribute("consoleOutput", consoleOutput);
+    @RequestMapping(
+            value = {Views.ADMIN + "/runCommand"},
+            method = RequestMethod.POST)
+    public String runCommand(
+            final RedirectAttributes redirectAttributes,
+            @RequestParam("consoleInput") String consoleInput) {
+        String consoleOutput = serverService.runCommand(consoleInput);
 
-    return "redirect:/" + Views.SERVER;
-  }
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        logger.debug("User '" + currentUser + "' called console command: " + consoleInput);
+
+        redirectAttributes.addFlashAttribute("consoleOutput", consoleOutput);
+
+        return "redirect:/" + Views.SERVER;
+    }
 }

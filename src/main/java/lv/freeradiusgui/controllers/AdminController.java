@@ -10,17 +10,16 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class AdminController {
 
-  @Autowired
-  AccountService accountService;
+    @Autowired AccountService accountService;
 
-  @ModelAttribute("page")
-  public String page() {
-    return "admin";
-  }
+    @ModelAttribute("page")
+    public String page() {
+        return "admin";
+    }
 
-  @RequestMapping(value = Views.ADMIN, method = RequestMethod.GET)
-  public String adminView(Model model) {
-    model.addAttribute("accounts", accountService.getAll());
-    return Views.ADMIN;
-  }
+    @RequestMapping(value = Views.ADMIN, method = RequestMethod.GET)
+    public String adminView(Model model) {
+        model.addAttribute("accounts", accountService.getAll());
+        return Views.ADMIN;
+    }
 }

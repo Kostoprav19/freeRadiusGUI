@@ -17,15 +17,12 @@
         <junit-version>4.12</junit-version>
         <javax-api-version>3.1.0</javax-api-version>
         <hibernate-version>5.1.0.Final</hibernate-version>
-        <httpcomponents-httpclient-version
-    >4.5.2</httpcomponents-httpclient-version>
-        <httpcomponents-httpcore-version>4.4.4</httpcomponents-httpcore-version>
-        <commons-dbcp-version>1.4</commons-dbcp-version>
-        <mysql-connector-version>5.1.38</mysql-connector-version>
+        <mysql-connector-version>8.4.0</mysql-connector-version>
+        <!-- HikariCP 4.x is the last line with JDK 8 support; 5.x needs JDK 11. -->
+        <hikaricp-version>4.0.3</hikaricp-version>
         <thymeleaf-version>2.1.4.RELEASE</thymeleaf-version>
         <thymeleaf-security>2.1.2.RELEASE</thymeleaf-security>
         <thymeleaf-extras-java8time>2.1.0.RELEASE</thymeleaf-extras-java8time>
-        <c3p0-version>0.9.1.2</c3p0-version>
         <slf4j-version>1.7.21</slf4j-version>
         <logback-version>1.1.7</logback-version>
         <javax.mail-version>1.5.6</javax.mail-version>
@@ -46,24 +43,17 @@
             <version>${logback-version}</version>
         </dependency>
 
-        <!-- DONT KNOW-->
+        <!--CONNECTION POOL-->
         <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>${commons-dbcp-version}</version>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikaricp-version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>c3p0</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>${c3p0-version}</version>
-        </dependency>
-
 
         <!--MYSQL-->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <version>${mysql-connector-version}</version>
         </dependency>
 
@@ -81,16 +71,6 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax-api-version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <version>${httpcomponents-httpcore-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpcomponents-httpclient-version}</version>
         </dependency>
 
         <!--SPRING-->
@@ -193,21 +173,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <verbose>true</verbose>
-                    <fork>true</fork>
-                    <executable><!-- path-to-javac --></executable>
-                    <compilerVersion>1.8</compilerVersion>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
 
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
             </plugin>
 
             <!--LINT / FORMAT-->
@@ -245,14 +221,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>2.19.1</version>
-                    </dependency>
-                </dependencies>
+                <version>3.2.5</version>
                 <configuration>
                     <includes>
                         <include>**/*IT.java</include>

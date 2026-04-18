@@ -12,38 +12,32 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StartupListener
-  implements ApplicationListener<ContextRefreshedEvent>
-{
+public class StartupListener implements ApplicationListener<ContextRefreshedEvent> {
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired
-  SwitchService switchService;
+    @Autowired SwitchService switchService;
 
-  @Autowired
-  DeviceService deviceService;
+    @Autowired DeviceService deviceService;
 
-  @Autowired
-  LogService logService;
+    @Autowired LogService logService;
 
-  @Autowired
-  ServerService serverService;
+    @Autowired ServerService serverService;
 
-  @Override
-  public void onApplicationEvent(final ContextRefreshedEvent event) {
-    logger.info("---------------- Starting Application ----------------");
+    @Override
+    public void onApplicationEvent(final ContextRefreshedEvent event) {
+        logger.info("---------------- Starting Application ----------------");
 
-    logger.info("Loading clients.conf file");
-    switchService.reloadFromConfig();
-    logger.info("Loading users file");
-    deviceService.reloadFromConfig();
+        logger.info("Loading clients.conf file");
+        switchService.reloadFromConfig();
+        logger.info("Loading users file");
+        deviceService.reloadFromConfig();
 
-    logger.info("Loading log file");
-    logService.loadFromFileToday();
+        logger.info("Loading log file");
+        logService.loadFromFileToday();
 
-    serverService.updateStatuses();
+        serverService.updateStatuses();
 
-    logger.info("---------------- Application started----------------");
-  }
+        logger.info("---------------- Application started----------------");
+    }
 }

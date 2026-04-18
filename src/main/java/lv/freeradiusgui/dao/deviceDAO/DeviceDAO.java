@@ -4,19 +4,19 @@ import java.util.List;
 import lv.freeradiusgui.domain.Device;
 
 public interface DeviceDAO {
-  boolean store(Device device);
+    boolean store(Device device);
 
-  boolean storeAll(List<Device> deviceList);
+    boolean storeAll(List<Device> deviceList);
 
-  Device getById(Integer id);
+    Device getById(Integer id);
 
-  Device getByMac(String mac);
+    Device getByMac(String mac);
 
-  List<Device> getAll();
+    List<Device> getAll();
 
-  List<Device> getAllByCriteria(String fieldName, Object object);
+    List<Device> getAllByCriteria(String fieldName, Object object);
 
-  boolean delete(Device device);
+    boolean delete(Device device);
 
-  Long getCount();
+    Long getCount();
 }

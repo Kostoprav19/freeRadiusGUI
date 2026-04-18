@@ -26,10 +26,6 @@ run = "mvn -B -ntp clean verify"
 description = "Produce target/freeradiusgui.war"
 run = "mvn -B -ntp clean package"
 
-[tasks.run]
-description = "Run locally on embedded Tomcat 7 (http://localhost:8080/freeradiusgui)"
-run = "mvn -B -ntp tomcat7:run"
-
 [tasks.clean]
 description = "Remove build artifacts"
 run = "mvn -B -ntp clean"

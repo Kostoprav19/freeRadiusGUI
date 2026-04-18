@@ -17,48 +17,42 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @Configuration
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = { "lv.freeradiusgui" })
+@ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableScheduling
-@Import({ ThymeleafConfig.class, HybernateConfig.class, SecurityConfig.class })
+@Import({ThymeleafConfig.class, HybernateConfig.class, SecurityConfig.class})
 public class WebMVCConfig extends WebMvcConfigurerAdapter {
 
-  @Override
-  public void configureDefaultServletHandling(
-    DefaultServletHandlerConfigurer configurer
-  ) {
-    configurer.enable();
-  }
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
 
-  @Override
-  public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-    registry
-      .addResourceHandler("/resources/**")
-      .addResourceLocations("/resources/");
-  }
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
 
-  @Bean
-  public MessageSource messageSource() {
-    ResourceBundleMessageSource messageSource =
-      new ResourceBundleMessageSource();
-    messageSource.setBasename("messages");
-    return messageSource;
-  }
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        return messageSource;
+    }
 
-  @Autowired
-  private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
+    @Autowired private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
 
-  @PostConstruct
-  public void init() {
-    requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
-  }
+    @PostConstruct
+    public void init() {
+        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
+    }
 
-  @Bean
-  public SessionVariablesInterceptor sessionVariablesInterceptor() {
-    return new SessionVariablesInterceptor();
-  }
+    @Bean
+    public SessionVariablesInterceptor sessionVariablesInterceptor() {
+        return new SessionVariablesInterceptor();
+    }
 
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(sessionVariablesInterceptor());
-  }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(sessionVariablesInterceptor());
+    }
 }

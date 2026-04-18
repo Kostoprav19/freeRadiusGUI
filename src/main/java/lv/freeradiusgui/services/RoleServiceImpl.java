@@ -9,21 +9,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-  @Autowired
-  private RoleDAO roleDAO;
+    @Autowired private RoleDAO roleDAO;
 
-  @Override
-  public List<Role> getAll() {
-    return roleDAO.getAll();
-  }
+    @Override
+    public List<Role> getAll() {
+        return roleDAO.getAll();
+    }
 
-  @Override
-  public Role getByName(String name) {
-    return roleDAO.getByName(name);
-  }
+    @Override
+    public Role getByName(String name) {
+        return roleDAO.getByName(name);
+    }
 
-  @Override
-  public Role getById(Integer id) {
-    return roleDAO.getById(id);
-  }
+    @Override
+    public Role getById(Integer id) {
+        return roleDAO.getById(id);
+    }
 }

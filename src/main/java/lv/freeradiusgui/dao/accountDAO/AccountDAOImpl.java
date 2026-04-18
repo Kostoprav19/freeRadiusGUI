@@ -9,29 +9,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public class AccountDAOImpl
-  extends AbstractGenericBaseDao<Account>
-  implements AccountDAO
-{
+public class AccountDAOImpl extends AbstractGenericBaseDao<Account> implements AccountDAO {
 
-  @Autowired
-  public AccountDAOImpl(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
-  }
-
-  @Override
-  public Account getById(Integer id) {
-    if (id == null || id < 0) {
-      return null;
+    @Autowired
+    public AccountDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
-    return getOneByCriteria("id", id);
-  }
 
-  @Override
-  public Account getByLogin(String login) {
-    if (login == null || login.isEmpty()) {
-      return null;
+    @Override
+    public Account getById(Integer id) {
+        if (id == null || id < 0) {
+            return null;
+        }
+        return getOneByCriteria("id", id);
     }
-    return getOneByCriteria("login", login);
-  }
+
+    @Override
+    public Account getByLogin(String login) {
+        if (login == null || login.isEmpty()) {
+            return null;
+        }
+        return getOneByCriteria("login", login);
+    }
 }

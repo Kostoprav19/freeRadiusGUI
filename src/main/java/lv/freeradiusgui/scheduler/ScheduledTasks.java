@@ -13,31 +13,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduledTasks {
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired
-  LogService logService;
+    @Autowired LogService logService;
 
-  @Autowired
-  DeviceService deviceService;
+    @Autowired DeviceService deviceService;
 
-  @Autowired
-  ServerService serverService;
+    @Autowired ServerService serverService;
 
-  @Autowired
-  MailService mailService;
+    @Autowired MailService mailService;
 
-  @Scheduled(initialDelay = 300000, fixedRate = 300000) // every 5 minutes
-  public void refreshApplication() {
-    logger.info("---------------- Scheduled task started ----------------");
+    @Scheduled(initialDelay = 300000, fixedRate = 300000) // every 5 minutes
+    public void refreshApplication() {
+        logger.info("---------------- Scheduled task started ----------------");
 
-    serverService.updateStatuses();
+        serverService.updateStatuses();
 
-    logService.loadFromFileToday();
+        logService.loadFromFileToday();
 
-    logger.info("Updating device statistics");
-    deviceService.updateStatistics();
+        logger.info("Updating device statistics");
+        deviceService.updateStatistics();
 
-    logger.info("---------------- Scheduled task ended ----------------");
-  }
+        logger.info("---------------- Scheduled task ended ----------------");
+    }
 }

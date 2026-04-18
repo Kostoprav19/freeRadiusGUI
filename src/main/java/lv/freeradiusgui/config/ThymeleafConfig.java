@@ -13,46 +13,41 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 @Configuration
 public class ThymeleafConfig {
 
-  @Bean
-  public Java8TimeDialect java8TimeDialect() {
-    return new Java8TimeDialect();
-  }
+    @Bean
+    public Java8TimeDialect java8TimeDialect() {
+        return new Java8TimeDialect();
+    }
 
-  @Bean
-  public ThymeleafViewResolver viewResolver() {
-    ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-    resolver.setTemplateEngine(getTemplateEngine());
+    @Bean
+    public ThymeleafViewResolver viewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(getTemplateEngine());
 
-    return resolver;
-  }
+        return resolver;
+    }
 
-  private SpringTemplateEngine getTemplateEngine() {
-    SpringTemplateEngine engine = new SpringTemplateEngine();
+    private SpringTemplateEngine getTemplateEngine() {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
 
-    Set<ServletContextTemplateResolver> resolvers = new HashSet<
-      ServletContextTemplateResolver
-    >();
-    resolvers.add(createResolver("/WEB-INF/views/", 1));
-    engine.setTemplateResolvers(resolvers);
+        Set<ServletContextTemplateResolver> resolvers =
+                new HashSet<ServletContextTemplateResolver>();
+        resolvers.add(createResolver("/WEB-INF/views/", 1));
+        engine.setTemplateResolvers(resolvers);
 
-    engine.addDialect(new Java8TimeDialect());
-    engine.addDialect(new SpringSecurityDialect());
+        engine.addDialect(new Java8TimeDialect());
+        engine.addDialect(new SpringSecurityDialect());
 
-    return engine;
-  }
+        return engine;
+    }
 
-  private ServletContextTemplateResolver createResolver(
-    String prefix,
-    int order
-  ) {
-    ServletContextTemplateResolver templateResolver =
-      new ServletContextTemplateResolver();
-    templateResolver.setPrefix(prefix);
-    templateResolver.setSuffix(".html");
-    templateResolver.setTemplateMode("HTML5");
-    templateResolver.setCacheable(false);
-    templateResolver.setOrder(order);
+    private ServletContextTemplateResolver createResolver(String prefix, int order) {
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+        templateResolver.setPrefix(prefix);
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCacheable(false);
+        templateResolver.setOrder(order);
 
-    return templateResolver;
-  }
+        return templateResolver;
+    }
 }

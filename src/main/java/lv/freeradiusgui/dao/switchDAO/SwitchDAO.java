@@ -4,19 +4,19 @@ import java.util.List;
 import lv.freeradiusgui.domain.Switch;
 
 public interface SwitchDAO {
-  boolean store(Switch sSwitch);
+    boolean store(Switch sSwitch);
 
-  boolean storeAll(List<Switch> switchList);
+    boolean storeAll(List<Switch> switchList);
 
-  Switch getById(Integer id);
+    Switch getById(Integer id);
 
-  Switch getByIp(String ip);
+    Switch getByIp(String ip);
 
-  List<Switch> getAll();
+    List<Switch> getAll();
 
-  List<Switch> getAllByCriteria(String fieldName, Object object);
+    List<Switch> getAllByCriteria(String fieldName, Object object);
 
-  boolean delete(Switch aSwitch);
+    boolean delete(Switch aSwitch);
 
-  Long getCount();
+    Long getCount();
 }
