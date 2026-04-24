@@ -1,5 +1,5 @@
 # ---------- Build stage ------------------------------------------------------
-FROM maven:3.9-eclipse-temurin-8 AS build
+FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /src
 
@@ -17,7 +17,7 @@ RUN mkdir -p /build/ROOT \
 
 
 # ---------- Runtime stage ----------------------------------------------------
-FROM tomcat:9.0-jdk8-temurin
+FROM tomcat:9.0-jdk17-temurin
 
 # Tools the app shells out to (pgrep -> procps, killall -> psmisc).
 RUN apt-get update \
@@ -34,7 +34,15 @@ COPY --from=build /build/ROOT/ "$CATALINA_HOME/webapps/ROOT/"
 RUN mkdir -p /etc/freeradius /var/log/freeradius/radacct \
  && touch /etc/freeradius/users /etc/freeradius/clients.conf
 
-ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC"
+# --add-opens: required by Hibernate 5.6 + Spring 5.3 under JDK 17 strong
+# encapsulation. Without these, first sessionFactory.openSession() throws
+# InaccessibleObjectException. Mirror in pom.xml surefire <argLine>.
+ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC \
+    --add-opens=java.base/java.lang=ALL-UNNAMED \
+    --add-opens=java.base/java.lang.reflect=ALL-UNNAMED \
+    --add-opens=java.base/java.lang.invoke=ALL-UNNAMED \
+    --add-opens=java.base/java.util=ALL-UNNAMED \
+    --add-opens=java.base/java.math=ALL-UNNAMED"
 
 EXPOSE 8080
 
