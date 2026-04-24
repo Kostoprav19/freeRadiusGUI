@@ -14,8 +14,8 @@ auth logs from the browser.
 
 ## Tech Stack
 
-Java 8 · Spring MVC 4.2 · Spring Security 4.0 · Hibernate 5.1 · Thymeleaf 2.1
-· MySQL (mysql-connector-j 8.4) · HikariCP 4.0 · Maven (WAR packaging) ·
+Java 8 · Spring MVC 5.3 · Spring Security 5.8 · Hibernate 5.6 · Thymeleaf 3.1
+· MySQL 8.0 (mysql-connector-j 8.4) · HikariCP 4.0 · Maven (WAR packaging) ·
 Tomcat 9 (Docker image).
 
 > This is **not** Spring Boot — bootstrap is `WebApplicationInitializer`
@@ -26,7 +26,7 @@ Tomcat 9 (Docker image).
 | For              | Need                                                       |
 |------------------|------------------------------------------------------------|
 | Local build/run  | JDK 8, Maven 3.9 (or [`mise`](https://mise.jdx.dev/))      |
-| Runtime          | MySQL 5.x reachable per `config.properties`                |
+| Runtime          | MySQL 8.0 reachable per `config.properties`                |
 | Full operation   | A FreeRADIUS install on the same host / in a sidecar       |
 
 ## Quick Start with mise (recommended)

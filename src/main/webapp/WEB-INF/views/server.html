@@ -27,11 +27,11 @@
             <h3 class="panel-title">Services status:</h3>
         </div>
         <div class="panel-body">
-            <h4>Freeradius: <span th:text="${session.freeradiusStatus == true} ? 'RUNNING' : 'DOWN'" th:classappend="${session.freeradiusStatus == true ? 'text-success' : 'text-danger'}"/>
-                <th:block th:if="${session.freeradiusStatus == false}">
+            <h4>Freeradius: <span th:text="${freeradiusStatus == true} ? 'RUNNING' : 'DOWN'" th:classappend="${freeradiusStatus == true ? 'text-success' : 'text-danger'}"/>
+                <th:block th:if="${freeradiusStatus == false}">
                     <a role="button" class="btn btn-success btn-xs" th:href="@{/server/start}"><span class="glyphicon glyphicon-play-circle"></span> Start</a>
                 </th:block>
-                <th:block th:if="${session.freeradiusStatus == true}">
+                <th:block th:if="${freeradiusStatus == true}">
                     <a role="button" class="btn btn-danger btn-xs" th:href="@{/server/stop}"><span class="glyphicon glyphicon-off"></span> Stop</a>
                 </th:block>
                 <a role="button" class="btn btn-primary btn-xs" th:href="@{/server/restart}" title="Restart freeradius service."><span class="glyphicon glyphicon-repeat"></span> Restart</a>

@@ -21,9 +21,9 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 |--------------|---------------------------------------------------------------|
 | Build        | Maven (`pom.xml`), packaging = `war`                          |
 | Language     | Java 8 (`source/target 1.8`)                                  |
-| Web          | Spring Web MVC **4.2.3**, Spring Security **4.0.4**           |
-| Persistence  | Hibernate **5.1** + MySQL 5.7/8 (`mysql-connector-j` **8.4**) |
-| View         | Thymeleaf 2.1 (+ spring‑security and java8time extras)        |
+| Web          | Spring Web MVC **5.3.39**, Spring Security **5.8.15**         |
+| Persistence  | Hibernate **5.6.15.Final** + MySQL **8.0** (`mysql-connector-j` **8.4**) |
+| View         | Thymeleaf **3.1.4** (+ `thymeleaf-extras-springsecurity5` **3.1.3**) |
 | DB pool      | HikariCP **4.0.3** (4.x is the last JDK 8 line)               |
 | Logging      | SLF4J 1.7 + Logback 1.1                                       |
 | Mail         | `javax.mail` 1.5                                              |
@@ -136,14 +136,15 @@ FreeRADIUS server image + overrides, and the dev-only DB seed. Run
 contains a compose file.
 
 - `lab/compose.yaml` defines:
-  - `db` — `mysql:5.7` with `../databaseCreationScript.sql` (the app's
-    real schema, at repo root) mounted into
-    `/docker-entrypoint-initdb.d/`. Pinned to 5.7 because the smaller
-    image + `mysql_native_password` default means no extra auth config
-    is needed — `mysql-connector-j` 8.4 handles 5.7 and 8 interchangeably
-    at the JDBC URL level, so bumping the image tag to `mysql:8` is
-    safe if you want it (MySQL 8 needs `allowPublicKeyRetrieval=true`,
-    which is already in the URL).
+  - `db` — `mysql:8.0` with `--character-set-server=utf8mb4
+    --collation-server=utf8mb4_0900_ai_ci` and
+    `../databaseCreationScript.sql` (the app's real schema, at repo
+    root) mounted into `/docker-entrypoint-initdb.d/`. `caching_sha2_password`
+    is the default auth plugin on 8.0 — `mysql-connector-j` 8.4
+    handles it, and the lab JDBC URL already carries
+    `allowPublicKeyRetrieval=true` for it. Downgrading the image to
+    `mysql:5.7` is no longer supported — the volume holds 8.0 data
+    dirs; wipe with `mise run db:reset` first.
   - `app` — gated behind the `app` Compose profile
     (`docker compose --profile app up`). Built from repo root
     (`context: ..`, `dockerfile: Dockerfile`). Bind-mounts
@@ -193,10 +194,12 @@ production credentials here.
 - **View names**: always reference through
   `lv.freeradiusgui.constants.Views` constants — do not hard‑code view
   name strings in controllers.
-- **Entities**: JPA annotations + Hibernate. Use
-  `lv.freeradiusgui.utils.CustomLocalDateTime` as the `@Type` for
-  `LocalDateTime` columns (Hibernate 5.1 predates native JSR‑310 support
-  here).
+- **Entities**: JPA annotations + Hibernate. `LocalDateTime` columns
+  use `lv.freeradiusgui.utils.CustomLocalDateTime` as the `@Type`.
+  Hibernate 5.6 ships native JSR‑310 support, so the custom
+  `EnhancedUserType` is retained only for migration minimality — it
+  can be dropped whenever entities are willing to switch to plain
+  `@Column LocalDateTime` (no Hibernate-6 blocker here).
 - **Validators**: one per form/entity in `validators/`, wired via
   `@InitBinder` in the controller (see `DevicesController`).
 - **Shell calls**: go through `ShellExecutor` with constants from
@@ -239,11 +242,22 @@ production credentials here.
   (runs the WAR in Tomcat 9 inside Docker), or deploy
   `target/freeradiusgui.war` into any external Servlet 3.1+ / JSP 2.3
   container (Tomcat 8/9, or Java EE 7+).
-- **Old Spring 4.x / Thymeleaf 2.x**: APIs differ from Spring 5/6 and
-  Thymeleaf 3. Do not copy snippets from modern docs without checking
-  they exist in these versions. Avoid upgrading framework versions
-  unless explicitly asked — the dep set is tightly coupled (Hibernate
-  5.1 ↔ Spring 4.2 ↔ Thymeleaf 2.1 ↔ spring‑security 4.0).
+- **Spring 5.3 / Thymeleaf 3.1 — still `javax`, still JDK 8**: do not
+  mix snippets from Spring 6 / Spring Security 6 / Hibernate 6 /
+  Thymeleaf 3.2+ docs — those are all `jakarta` + JDK 17 and will
+  either fail to compile or blow up at runtime here. Avoid upgrading
+  framework versions unless explicitly asked — the dep set is tightly
+  coupled on the last javax line (Hibernate 5.6 ↔ Spring 5.3 ↔
+  Thymeleaf 3.1 ↔ spring‑security 5.8 ↔ `thymeleaf-extras-springsecurity5`
+  3.1.x). Moving past any of these requires JDK 11+ and a synchronized
+  jump of all of them (Phase 3).
+- **Thymeleaf 3.1 removed `#request` / `#session` / `#servletContext` /
+  `#response`** from default expression objects, and the
+  `ServletContextTemplateResolver` class too. Templates use
+  controller-provided model attributes instead (see
+  `SessionVariablesInterceptor` for the header badge pattern +
+  `LoginController` for `loginError`); `ThymeleafConfig` uses
+  `SpringResourceTemplateResolver` from `thymeleaf-spring5`.
 - **Java 8 only**: do not introduce `var`, records, switch expressions,
   `Optional` features from 9+, or other post‑8 syntax.
 - **JDBC URL params**: the JDBC URL already carries

@@ -17,12 +17,12 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${session.todayRejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.todayRejectedCount}"/></a></li>
+                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${todayRejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${todayRejectedCount}"/></a></li>
                 <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/device/list}">Devices</a></li>
                 <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
                 <li th:classappend="${page == 'server' ? 'active' : ''}">
-                    <a href="#" th:href="@{/server}">Server <span class="label" th:classappend="${session.freeradiusStatus == true ? 'label-success' : 'label-warning'}" th:text="${session.freeradiusStatus == true} ? 'RUNNING' : 'DOWN'"/>
-                        <th:block th:if="${session.dbChangesFlag == true}">
+                    <a href="#" th:href="@{/server}">Server <span class="label" th:classappend="${freeradiusStatus == true ? 'label-success' : 'label-warning'}" th:text="${freeradiusStatus == true} ? 'RUNNING' : 'DOWN'"/>
+                        <th:block th:if="${dbChangesFlag == true}">
                             <span class="label label-info">Changes!</span>
                         </th:block>
                     </a>
@@ -48,12 +48,12 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${session.todayRejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${session.todayRejectedCount}"/></a></li>
+                <li th:classappend="${page == 'logs' ? 'active' : ''}"><a href="#" th:href="@{/logs/list}">Radius logs <span class="label" th:classappend="${todayRejectedCount == 0 ? 'label-success' : 'label-warning'}" th:text="${todayRejectedCount}"/></a></li>
                 <li th:classappend="${page == 'devices' ? 'active' : ''}"><a href="#" th:href="@{/device/list}">Devices</a></li>
                 <li th:classappend="${page == 'switches' ? 'active' : ''}"><a href="#" th:href="@{/switch/list}">Switches</a></li>
                 <li th:classappend="${page == 'server' ? 'active' : ''}">
-                    <a href="#" th:href="@{/server}">Server <span class="label" th:classappend="${session.freeradiusStatus == true ? 'label-success' : 'label-warning'}" th:text="${session.freeradiusStatus == true} ? 'RUNNING' : 'DOWN'"/>
-                        <th:block th:if="${session.dbChangesFlag == true}">
+                    <a href="#" th:href="@{/server}">Server <span class="label" th:classappend="${freeradiusStatus == true ? 'label-success' : 'label-warning'}" th:text="${freeradiusStatus == true} ? 'RUNNING' : 'DOWN'"/>
+                        <th:block th:if="${dbChangesFlag == true}">
                             <span class="label label-info">Changes!</span>
                         </th:block>
                     </a>

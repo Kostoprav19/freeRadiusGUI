@@ -28,7 +28,7 @@
 
     <a role="button" class="btn btn-success" th:href="@{/switch/add}"><span class="glyphicon glyphicon-plus"></span> Add</a>
     <a role="button" class="btn btn-primary" th:href="@{/switch/reload}" title="Reload from 'clients.conf' file."><span class="glyphicon glyphicon-refresh"></span> Reload</a>
-    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') == true and session.dbChangesFlag == true}">
+    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') == true and dbChangesFlag == true}">
         <a role="button" class="btn btn-warning" th:href="@{/admin/writeClients}" title="Write to clients.conf file and reload freeradius service"><span class="glyphicon glyphicon-floppy-save"></span> Apply changes</a>
     </th:block>
 
