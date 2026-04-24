@@ -15,7 +15,7 @@
 <body class="loginBody">
 
 <form class="form-narrow form-horizontal" action="/j_spring_security_check" method="post" th:action="@{/j_spring_security_check}">
-    <th:block th:if="${param.error != null}">
+    <th:block th:if="${loginError}">
         <div th:replace="fragments/alert :: alert (type='danger', message='Sign in error. Please try again.')">Alert</div>
     </th:block>
     <fieldset>

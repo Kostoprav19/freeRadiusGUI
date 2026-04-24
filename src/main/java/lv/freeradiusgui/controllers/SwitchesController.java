@@ -87,7 +87,10 @@ public class SwitchesController {
         status.setComplete();
 
         redirectAttributes.addFlashAttribute(
-                "msg", "Switch '" + aSwitch.getName() + "' successfully saved.");
+                "msg",
+                "Switch '"
+                        + aSwitch.getName()
+                        + "' saved to database. Click 'Apply changes' to push to freeradius.");
         redirectAttributes.addFlashAttribute("msgType", "success");
         return "redirect:/" + Views.SWITCH_LIST;
     }

@@ -38,7 +38,7 @@ public class HybernateConfig {
     private Properties hibernateProperties() {
 
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         properties.put("hibernate.show_sql", "false");
         properties.put("hibernate.format_sql", "true");
 

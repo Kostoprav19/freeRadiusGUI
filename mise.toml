@@ -70,3 +70,9 @@ run = "docker compose --profile app up --build"
 description = "Stop the full compose stack"
 dir = "lab"
 run = "docker compose --profile app down"
+
+# ---------- Smoke test ------------------------------------------------------
+
+[tasks.smoke]
+description = "Full-lifecycle smoke test: db:reset + compose:up + login + page walk + report"
+run = "bash tests/smoke-test.sh"

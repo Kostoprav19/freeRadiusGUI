@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.EnhancedUserType;
 
@@ -43,7 +43,10 @@ public class CustomLocalDateTime implements EnhancedUserType, Serializable {
     }
 
     public Object nullSafeGet(
-            ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
+            ResultSet resultSet,
+            String[] names,
+            SharedSessionContractImplementor session,
+            Object owner)
             throws HibernateException, SQLException {
         Object timestamp =
                 StandardBasicTypes.TIMESTAMP.nullSafeGet(resultSet, names, session, owner);
@@ -59,7 +62,7 @@ public class CustomLocalDateTime implements EnhancedUserType, Serializable {
             PreparedStatement preparedStatement,
             Object value,
             int index,
-            SessionImplementor session)
+            SharedSessionContractImplementor session)
             throws HibernateException, SQLException {
         if (value == null) {
             StandardBasicTypes.TIMESTAMP.nullSafeSet(preparedStatement, null, index, session);

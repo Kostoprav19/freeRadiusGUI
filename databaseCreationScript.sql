@@ -2,7 +2,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=`TRADITIONAL,ALLOW_INVALID_DATES`;
 
-CREATE SCHEMA IF NOT EXISTS `freeradiusgui` DEFAULT CHARACTER SET utf8;
+CREATE SCHEMA IF NOT EXISTS `freeradiusgui` DEFAULT CHARACTER SET utf8mb4;
 USE `freeradiusgui` ;
 
 -- -----------------------------------------------------
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusgui`.`logs` (
   PRIMARY KEY (`log_id`)
 )
   ENGINE = InnoDB
-DEFAULT CHARSET=utf8;
+DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `freeradiusgui`.`devices`
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusgui`.`devices` (
   PRIMARY KEY (`device_id`, `mac`)
 )
   ENGINE = InnoDB
-DEFAULT CHARSET=utf8;
+DEFAULT CHARSET=utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusgui`.`switches` (
   PRIMARY KEY (`switch_id`)
 )
   ENGINE = InnoDB
-DEFAULT CHARSET=utf8;
+DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `freeradiusgui`.`accounts`
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusgui`.`accounts` (
   PRIMARY KEY (`account_id`)
 )
   ENGINE = InnoDB
-DEFAULT CHARSET=utf8;
+DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `freeradiusgui`.`roles`
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `freeradiusgui`.`roles` (
   PRIMARY KEY (`role_id`)
 )
   ENGINE = InnoDB
-DEFAULT CHARSET=utf8;
+DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `freeradiusgui`.`accounts_roles`
@@ -118,7 +118,7 @@ CONSTRAINT `FK_to_accounts`
   ON DELETE CASCADE
   ON UPDATE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------

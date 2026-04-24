@@ -26,13 +26,11 @@ public class SessionVariablesInterceptor implements HandlerInterceptor {
             Object o,
             ModelAndView modelAndView)
             throws Exception {
-        if (serverService != null) {
-            request.getSession()
-                    .setAttribute(
-                            "todayRejectedCount", serverService.getRejectedLogsTodayCounter());
-            request.getSession()
-                    .setAttribute("freeradiusStatus", serverService.getStatus(Server.FREERADIUS));
-            request.getSession().setAttribute("dbChangesFlag", serverService.getDbgChangesFlag());
+        if (serverService != null && modelAndView != null) {
+            modelAndView.addObject(
+                    "todayRejectedCount", serverService.getRejectedLogsTodayCounter());
+            modelAndView.addObject("freeradiusStatus", serverService.getStatus(Server.FREERADIUS));
+            modelAndView.addObject("dbChangesFlag", serverService.getDbgChangesFlag());
         }
     }
 

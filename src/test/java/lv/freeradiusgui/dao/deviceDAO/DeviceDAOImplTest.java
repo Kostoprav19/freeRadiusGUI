@@ -164,17 +164,19 @@ public class DeviceDAOImplTest {
 
     @Test
     public void testGetAll() throws Exception {
+        long startCount = deviceDAO.getCount();
         assertTrue(deviceDAO.store(device1));
         assertTrue(deviceDAO.store(device2));
         assertTrue(deviceDAO.store(device3));
 
-        List<Device> list = new ArrayList<>();
-        list.add(device1);
-        list.add(device2);
-        list.add(device3);
+        List<Device> inserted = new ArrayList<>();
+        inserted.add(device1);
+        inserted.add(device2);
+        inserted.add(device3);
 
         List<Device> storedList = deviceDAO.getAll();
-        assertEquals(list, storedList);
+        assertEquals(startCount + 3, storedList.size());
+        assertTrue(storedList.containsAll(inserted));
     }
 
     @Test
@@ -183,11 +185,14 @@ public class DeviceDAOImplTest {
         assertTrue(deviceDAO.store(device2));
         assertTrue(deviceDAO.store(device3));
 
-        List<Device> list = new ArrayList<>();
-        list.add(device2);
-        list.add(device3);
+        List<Device> inserted = new ArrayList<>();
+        inserted.add(device2);
+        inserted.add(device3);
 
         List<Device> storedList = deviceDAO.getAllByCriteria("portSpeed", 1000);
-        assertEquals(list, storedList);
+        assertTrue(storedList.containsAll(inserted));
+        for (Device d : storedList) {
+            assertEquals(Integer.valueOf(1000), d.getPortSpeed());
+        }
     }
 }

@@ -98,7 +98,10 @@ public class DevicesController {
         serverService.setDbChangesFlag();
         status.setComplete();
         redirectAttributes.addFlashAttribute(
-                "msg", "Device '" + device.getName() + "' successfully saved.");
+                "msg",
+                "Device '"
+                        + device.getName()
+                        + "' saved to database. Click 'Apply changes' to push to freeradius.");
         redirectAttributes.addFlashAttribute("msgType", "success");
         return "redirect:/" + Views.DEVICE_LIST;
     }
