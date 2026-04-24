@@ -318,6 +318,48 @@ production credentials here.
   `google-java-format` 1.26.0 (1.27.0+ requires JDK 21). Bumping past
   these requires Phase 4 (JDK 21).
 
+## Pre-commit workflow (mandatory for agents)
+
+Before running `git commit` on anything non-trivial, AI agents MUST
+run the `reviewer` subagent on the staged changes and act on its
+findings. This is the same gate human reviewers would apply in a PR,
+moved earlier so broken diffs never reach the history.
+
+The sequence is:
+
+1. Stage the changes (`git add …`). Review the staged diff yourself
+   first (`git diff --staged`) — the reviewer is a second opinion,
+   not a first one.
+2. Launch the `reviewer` subagent in readonly mode with:
+   - the branch / commit range being reviewed,
+   - the plan file the work is executing against (if any),
+   - a short summary of scope and verification already performed
+     (`mvn test` / `mvn spotless:check` / `mise run smoke` / …).
+3. If the reviewer returns **BLOCKING** findings, fix them and loop
+   back to step 1. Do not commit a diff with open BLOCKING findings.
+4. If the reviewer returns only **SUGGESTED** / **NITS**, decide per
+   finding whether to fold them into the current commit, defer them
+   to a follow-up commit on the same branch, or explicitly skip them
+   (with a short reason in the final summary to the user).
+5. Only then run `git commit`. Reference the reviewer verdict in the
+   session summary so the user can see it was gated.
+
+When the workflow may be skipped:
+
+- Pure docs-only commits to `README.md` / `AGENTS.md` that are trivial
+  (typo fixes, one-line wording tweaks) — but still mention the skip.
+- Reverts of a commit that was itself reviewer-approved (the revert
+  diff is the inverse of an already-audited diff).
+- When the user explicitly overrides (`"skip the reviewer, just
+  commit"`) — honour that, but call out that it was overridden.
+
+Multi-commit work on a plan: the gate is **per commit** — run the
+reviewer before each logically distinct commit, not just once at the
+end of a branch. An end-of-phase audit covering the whole branch is
+encouraged as an *additional* safety net before push, but it does
+not replace the per-commit reviews, because an issue caught at the
+end is harder to fix cleanly once it's split across several commits.
+
 ## What NOT to do
 
 - Don't convert this to Spring Boot as a side effect of another task.

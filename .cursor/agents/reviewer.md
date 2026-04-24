@@ -116,9 +116,11 @@ Walk through every applicable item. Cite `file:line` for each finding.
 Look up the current pinned versions in `AGENTS.md` ("Tech Stack" /
 "Gotchas") and `pom.xml` before judging — do not assume from memory.
 
-- [ ] No Java syntax newer than the pinned `source/target` (e.g.
-      flag `var`, records, switch expressions, text blocks, post-8
-      `Optional` features if the pin is still 1.8).
+- [ ] No Java syntax or API newer than the `<release>` currently
+      pinned in `pom.xml`'s `maven-compiler-plugin` (read the actual
+      value — do not assume from memory). If the pin is raised or
+      lowered in the reviewed diff, flag that as a scope question
+      regardless of correctness.
 - [ ] No APIs or JDBC URL options that only exist in framework
       versions newer than what `pom.xml` pins (Spring, Thymeleaf,
       Hibernate, MySQL connector).
