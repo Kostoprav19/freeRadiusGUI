@@ -14,9 +14,9 @@ auth logs from the browser.
 
 ## Tech Stack
 
-Java 8 · Spring MVC 5.3 · Spring Security 5.8 · Hibernate 5.6 · Thymeleaf 3.1
-· MySQL 8.0 (mysql-connector-j 8.4) · HikariCP 4.0 · Maven (WAR packaging) ·
-Tomcat 9 (Docker image).
+Java 17 (javax namespace) · Spring MVC 5.3 · Spring Security 5.8 · Hibernate 5.6
+· Thymeleaf 3.1 · MySQL 8.0 (mysql-connector-j 8.4) · HikariCP 4.0 · Logback 1.2
+· Maven (WAR packaging) · Tomcat 9 (Docker image).
 
 > This is **not** Spring Boot — bootstrap is `WebApplicationInitializer`
 > (`config/AppInitializer.java`).
@@ -25,7 +25,7 @@ Tomcat 9 (Docker image).
 
 | For              | Need                                                       |
 |------------------|------------------------------------------------------------|
-| Local build/run  | JDK 8, Maven 3.9 (or [`mise`](https://mise.jdx.dev/))      |
+| Local build/run  | JDK 17, Maven 3.9 (or [`mise`](https://mise.jdx.dev/))     |
 | Runtime          | MySQL 8.0 reachable per `config.properties`                |
 | Full operation   | A FreeRADIUS install on the same host / in a sidecar       |
 
@@ -37,7 +37,7 @@ project (`mise.toml`).
 ```bash
 curl https://mise.jdx.dev/install.sh | sh      # one-time
 mise trust                                     # one-time, per clone
-mise install                                   # fetches Java 8 + Maven 3.9
+mise install                                   # fetches Java 17 + Maven 3.9
 ```
 
 List available tasks with `mise tasks` and run one with `mise run <task>`.
@@ -48,7 +48,7 @@ List available tasks with `mise tasks` and run one with `mise run <task>`.
 mvn clean package                   # build target/freeradiusgui.war
 mvn test                            # run tests
 mvn -Dtest=DeviceDAOImplTest test   # single test
-mvn spotless:check                  # lint (AOSP style, google-java-format 1.7)
+mvn spotless:check                  # lint (AOSP style, google-java-format 1.26.0)
 mvn spotless:apply                  # auto-fix formatting
 ```
 
@@ -57,7 +57,7 @@ embedded Tomcat task was retired alongside the `tomcat7-maven-plugin`.
 
 ### Linting
 
-Spotless (with `google-java-format 1.7` AOSP style) lints every Java file
+Spotless (with `google-java-format 1.26.0` AOSP style) lints every Java file
 under `src/main/java` and `src/test/java`. Rules: 4‑space indent, sorted
 imports, unused imports removed, trailing whitespace trimmed, files end
 with a newline.
@@ -85,10 +85,7 @@ Useful tasks:
 | `mise run db:reset`           | Stop stack **and** drop the volume (re‑seeds)         |
 | `mise run compose:up`         | Start full stack (app + DB + RADIUS, `--profile app`) |
 | `mise run compose:down`       | Stop the full compose stack                           |
-| `mise run radius:up`          | Start only FreeRADIUS + radclient (no app / DB)       |
-| `mise run radius:down`        | Stop FreeRADIUS + radclient                           |
-| `mise run radius:logs`        | Tail freeradius server debug output                   |
-| `mise run radius:client-logs` | Tail radclient Accept/Reject responses                |
+| `mise run smoke`              | Full-lifecycle smoke test (compose up → probe → down) |
 
 ### Option B — existing MySQL server
 

@@ -20,12 +20,12 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 | Layer        | Tech                                                          |
 |--------------|---------------------------------------------------------------|
 | Build        | Maven (`pom.xml`), packaging = `war`                          |
-| Language     | Java 8 (`source/target 1.8`)                                  |
+| Language     | Java 17 (`<release>17</release>`), javax namespace            |
 | Web          | Spring Web MVC **5.3.39**, Spring Security **5.8.15**         |
 | Persistence  | Hibernate **5.6.15.Final** + MySQL **8.0** (`mysql-connector-j` **8.4**) |
 | View         | Thymeleaf **3.1.4** (+ `thymeleaf-extras-springsecurity5` **3.1.3**) |
-| DB pool      | HikariCP **4.0.3** (4.x is the last JDK 8 line)               |
-| Logging      | SLF4J 1.7 + Logback 1.1                                       |
+| DB pool      | HikariCP **4.0.3** (last javax-aligned line)                  |
+| Logging      | SLF4J 1.7 + Logback 1.2.13                                    |
 | Mail         | `javax.mail` 1.5                                              |
 | Tests        | JUnit 4.12, Spring Test, Surefire                             |
 | Servlet ctr. | Tomcat 9 at runtime (via Docker image); no embedded plugin    |
@@ -83,7 +83,7 @@ Preferred entry point is [`mise`](https://mise.jdx.dev/) (see `mise.toml`).
 Run `mise tasks` for the authoritative list; the most-used tasks are:
 
 ```bash
-mise install                        # install pinned Java 8 + Maven 3.9
+mise install                        # install pinned Java 17 + Maven 3.9
 mise run build                      # mvn clean package (skips tests)
 mise run test                       # mvn test (needs MySQL up — see db:up)
 mise run verify                     # mvn clean verify (compile + test + package)
@@ -116,7 +116,12 @@ app image and serves it from a Tomcat 9 container.
 
 ### Containerization
 
-- `Dockerfile` — multi-stage: Maven 3.9/JDK 8 build → Tomcat 9/JRE 8 runtime.
+- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 9/JDK 17 runtime.
+  The runtime stage sets `JAVA_OPTS` with five `--add-opens` flags that
+  Hibernate 5.6 + Spring 5.3 need under JDK 17 strong encapsulation
+  (`java.base/java.lang`, `…/java.lang.reflect`, `…/java.lang.invoke`,
+  `…/java.util`, `…/java.math`). Mirrored in `pom.xml`'s surefire
+  `<argLine>`. Do not drop any of them without testing DAO reflection.
 - The WAR is exploded into `$CATALINA_HOME/webapps/ROOT/` at image build
   time. To override config without rebuilding, bind-mount over
   `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
@@ -242,15 +247,25 @@ production credentials here.
   (runs the WAR in Tomcat 9 inside Docker), or deploy
   `target/freeradiusgui.war` into any external Servlet 3.1+ / JSP 2.3
   container (Tomcat 8/9, or Java EE 7+).
-- **Spring 5.3 / Thymeleaf 3.1 — still `javax`, still JDK 8**: do not
-  mix snippets from Spring 6 / Spring Security 6 / Hibernate 6 /
-  Thymeleaf 3.2+ docs — those are all `jakarta` + JDK 17 and will
-  either fail to compile or blow up at runtime here. Avoid upgrading
-  framework versions unless explicitly asked — the dep set is tightly
-  coupled on the last javax line (Hibernate 5.6 ↔ Spring 5.3 ↔
-  Thymeleaf 3.1 ↔ spring‑security 5.8 ↔ `thymeleaf-extras-springsecurity5`
-  3.1.x). Moving past any of these requires JDK 11+ and a synchronized
-  jump of all of them (Phase 3).
+- **JDK 17 runtime, javax namespace**: do not mix snippets from Spring
+  6 / Spring Security 6 / Hibernate 6 / Thymeleaf 3.2+ / Tomcat 10
+  docs — those are all `jakarta.*` and will either fail to compile or
+  blow up at runtime here. Avoid upgrading framework versions unless
+  explicitly asked — the dep set is tightly coupled on the last
+  javax line (Hibernate 5.6 ↔ Spring 5.3 ↔ Thymeleaf 3.1 ↔
+  spring‑security 5.8 ↔ `thymeleaf-extras-springsecurity5` 3.1.x).
+  Moving past any of these requires a synchronized jakarta jump of
+  all of them + Tomcat 10 (Phase 4).
+- **`javax.annotation.PostConstruct` requires an explicit artifact**:
+  removed from the JDK in Java 11 by JEP 320, so `pom.xml` carries
+  `javax.annotation:javax.annotation-api:1.3.2`. Don't drop it — two
+  classes (`WebMVCConfig`, `MailServiceImpl`) import it.
+- **`--add-opens` is load-bearing**: Hibernate 5.6 proxies + Spring
+  5.3 reflective scans fail with `InaccessibleObjectException` on
+  JDK 17 without the five `--add-opens` flags in `Dockerfile`
+  `JAVA_OPTS` and surefire `<argLine>`. If a new DAO test throws
+  `InaccessibleObjectException` on some other package, add a matching
+  `--add-opens` in both places.
 - **Thymeleaf 3.1 removed `#request` / `#session` / `#servletContext` /
   `#response`** from default expression objects, and the
   `ServletContextTemplateResolver` class too. Templates use
@@ -258,8 +273,11 @@ production credentials here.
   `SessionVariablesInterceptor` for the header badge pattern +
   `LoginController` for `loginError`); `ThymeleafConfig` uses
   `SpringResourceTemplateResolver` from `thymeleaf-spring5`.
-- **Java 8 only**: do not introduce `var`, records, switch expressions,
-  `Optional` features from 9+, or other post‑8 syntax.
+- **Java 17 source level**: `var`, records, switch expressions,
+  text blocks, and sealed classes all compile — but keep new code
+  consistent with the existing plain-Java-8 style unless a feature
+  materially improves readability (this is a legacy codebase being
+  modernized in phases, not a greenfield project).
 - **JDBC URL params**: the JDBC URL already carries
   `useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true` — required
   combo for `mysql-connector-j` 8.x against either MySQL 5.7
@@ -282,7 +300,7 @@ production credentials here.
 ## Coding Style
 
 - Formatting is enforced by **Spotless** (`mvn spotless:check` /
-  `mise run lint`) using `google-java-format 1.7` in **AOSP** style —
+  `mise run lint`) using `google-java-format 1.26.0` in **AOSP** style —
   4-space indent, braces on same line, specific import order. It lints
   every Java file under `src/main/java` and `src/test/java`, no ratchet.
 - Run `mvn spotless:apply` (or `mise run format`) before committing new
@@ -295,9 +313,10 @@ production credentials here.
   `System.out` / `printStackTrace` in new code (some legacy code does;
   don't extend that pattern).
 - Keep controller methods thin — delegate to services.
-- Spotless/google-java-format versions are pinned to the last JDK 8
-  compatible releases (plugin 2.27.2, formatter 1.7). Do not upgrade
-  without also bumping the project to JDK 11+.
+- Spotless/GJF are pinned to the newest JDK 17-compatible line:
+  `spotless-maven-plugin` 2.44.5 (2.31.0+ requires JRE 11+) and
+  `google-java-format` 1.26.0 (1.27.0+ requires JDK 21). Bumping past
+  these requires Phase 4 (JDK 21).
 
 ## What NOT to do
 
