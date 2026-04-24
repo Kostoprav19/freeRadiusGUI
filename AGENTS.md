@@ -5,7 +5,7 @@ Guidance for AI agents working in this repository.
 ## Project Overview
 
 `freeRadiusGui` is a Spring MVC web application that provides a browser UI
-for administering a **FreeRADIUS** server running on versionsthe same host. It
+for administering a **FreeRADIUS** server running on the same host. It
 manages MAC‑based device access, RADIUS clients (switches), users/accounts,
 auth logs, and can restart the FreeRADIUS service after config changes.
 
