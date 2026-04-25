@@ -17,7 +17,10 @@ RUN mkdir -p /build/ROOT \
 
 
 # ---------- Runtime stage ----------------------------------------------------
-FROM tomcat:9.0-jdk17-temurin
+# Tomcat 10.1 = Servlet 6.0 / Jakarta EE 10. Pairs with our jakarta.* webapp
+# from Phase 4. Tomcat 11 = Servlet 6.1 / Jakarta EE 11 + JDK 21 minimum
+# (deferred to Phase 8). Tomcat 10.0 is EOL; do not pin to it.
+FROM tomcat:10.1-jdk17-temurin
 
 # Tools the app shells out to (pgrep -> procps, killall -> psmisc).
 RUN apt-get update \
@@ -34,15 +37,18 @@ COPY --from=build /build/ROOT/ "$CATALINA_HOME/webapps/ROOT/"
 RUN mkdir -p /etc/freeradius /var/log/freeradius/radacct \
  && touch /etc/freeradius/users /etc/freeradius/clients.conf
 
-# --add-opens: required by Hibernate 5.6 + Spring 5.3 under JDK 17 strong
+# --add-opens: required by Hibernate 5.6 + Spring 6.1 under JDK 17 strong
 # encapsulation. Without these, first sessionFactory.openSession() throws
 # InaccessibleObjectException. Mirror in pom.xml surefire <argLine>.
+# Phase 3 added a fifth open for java.base/java.math preemptively; Phase 4
+# verified it's unused (mvn test green without it) and dropped it.
+# Hibernate 6 (Phase 5) reflects through MethodHandles instead of direct
+# field access for most cases — most of the four below can drop then.
 ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC \
     --add-opens=java.base/java.lang=ALL-UNNAMED \
     --add-opens=java.base/java.lang.reflect=ALL-UNNAMED \
     --add-opens=java.base/java.lang.invoke=ALL-UNNAMED \
-    --add-opens=java.base/java.util=ALL-UNNAMED \
-    --add-opens=java.base/java.math=ALL-UNNAMED"
+    --add-opens=java.base/java.util=ALL-UNNAMED"
 
 EXPOSE 8080
 

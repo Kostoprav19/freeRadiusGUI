@@ -253,10 +253,13 @@
 
             <!--TESTS-->
             <!--
-              argLine opens java.base packages that Hibernate 5.6 + Spring 5.3
+              argLine opens java.base packages that Hibernate 5.6 + Spring 6.1
               reflect into. Required under JDK 17 (strong encapsulation); without
               these, DAO tests throw InaccessibleObjectException at first
               sessionFactory.openSession(). Mirrored in the Dockerfile JAVA_OPTS.
+              Phase 3 included a fifth open (java.base/java.math) preemptively;
+              Phase 4 dropped it after verifying tests pass without it. Phase 5
+              (Hibernate 6 + MethodHandles) is expected to drop most of these.
             -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -268,7 +271,6 @@
                         --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
                         --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
                         --add-opens=java.base/java.util=ALL-UNNAMED
-                        --add-opens=java.base/java.math=ALL-UNNAMED
                     </argLine>
                     <includes>
                         <include>**/*IT.java</include>

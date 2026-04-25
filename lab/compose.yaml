@@ -34,7 +34,7 @@ services:
       retries: 10
       start_period: 30s
 
-  # freeRadiusGUI web app (Tomcat 9 / Spring MVC). Enabled with `--profile app`.
+  # freeRadiusGUI web app (Tomcat 10.1 / Spring 6 MVC). Enabled with `--profile app`.
   app:
     profiles: ["app"]
     build:

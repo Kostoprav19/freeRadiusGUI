@@ -20,15 +20,15 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 | Layer        | Tech                                                          |
 |--------------|---------------------------------------------------------------|
 | Build        | Maven (`pom.xml`), packaging = `war`                          |
-| Language     | Java 17 (`<release>17</release>`), javax namespace            |
-| Web          | Spring Web MVC **5.3.39**, Spring Security **5.8.15**         |
-| Persistence  | Hibernate **5.6.15.Final** + MySQL **8.0** (`mysql-connector-j` **8.4**) |
-| View         | Thymeleaf **3.1.4** (+ `thymeleaf-extras-springsecurity5` **3.1.3**) |
-| DB pool      | HikariCP **4.0.3** (last javax-aligned line)                  |
+| Language     | Java 17 (`<release>17</release>`), jakarta namespace          |
+| Web          | Spring Web MVC **6.1.14**, Spring Security **6.3.4**          |
+| Persistence  | Hibernate **5.6.15.Final** *jakarta artifact* + MySQL **8.0** (`mysql-connector-j` **8.4**) |
+| View         | Thymeleaf **3.1.4** (+ `thymeleaf-spring6` + `thymeleaf-extras-springsecurity6` **3.1.3**) |
+| DB pool      | HikariCP **5.1.0**                                            |
 | Logging      | SLF4J 1.7 + Logback 1.2.13                                    |
-| Mail         | `javax.mail` 1.5                                              |
+| Mail         | `jakarta.mail` 2.0.2                                          |
 | Tests        | JUnit 4.12, Spring Test, Surefire                             |
-| Servlet ctr. | Tomcat 9 at runtime (via Docker image); no embedded plugin    |
+| Servlet ctr. | Tomcat 10.1 at runtime (via Docker image); no embedded plugin |
 
 This is **not** Spring Boot — bootstrapping is via
 `WebApplicationInitializer` (`config/AppInitializer.java`), not a `main()`.
@@ -110,18 +110,20 @@ mvn spotless:apply                  # format
 ```
 
 There is **no embedded-servlet entry point** — to run the app locally
-you either build the WAR and drop it into an external Tomcat 8/9, or
+you either build the WAR and drop it into an external Tomcat 10.1, or
 use the full compose stack (`mise run compose:up`) which builds the
-app image and serves it from a Tomcat 9 container.
+app image and serves it from a Tomcat 10.1 container.
 
 ### Containerization
 
-- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 9/JDK 17 runtime.
-  The runtime stage sets `JAVA_OPTS` with five `--add-opens` flags that
-  Hibernate 5.6 + Spring 5.3 need under JDK 17 strong encapsulation
+- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 10.1/JDK 17 runtime.
+  The runtime stage sets `JAVA_OPTS` with four `--add-opens` flags that
+  Hibernate 5.6 + Spring 6.1 need under JDK 17 strong encapsulation
   (`java.base/java.lang`, `…/java.lang.reflect`, `…/java.lang.invoke`,
-  `…/java.util`, `…/java.math`). Mirrored in `pom.xml`'s surefire
-  `<argLine>`. Do not drop any of them without testing DAO reflection.
+  `…/java.util`). Mirrored in `pom.xml`'s surefire `<argLine>`. Phase
+  3 added a fifth open for `java.base/java.math` preemptively; Phase
+  4 verified `mvn test` is green without it and dropped it. Do not
+  drop any of the remaining four without testing DAO reflection.
 - The WAR is exploded into `$CATALINA_HOME/webapps/ROOT/` at image build
   time. To override config without rebuilding, bind-mount over
   `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
@@ -244,35 +246,65 @@ production credentials here.
 - **No `main()` method** — do not try to run this like Spring Boot.
   There is no embedded-servlet Maven plugin anymore (`tomcat7-maven-plugin`
   was dropped in the deps refresh). To run locally: `mise run compose:up`
-  (runs the WAR in Tomcat 9 inside Docker), or deploy
-  `target/freeradiusgui.war` into any external Servlet 3.1+ / JSP 2.3
-  container (Tomcat 8/9, or Java EE 7+).
-- **JDK 17 runtime, javax namespace**: do not mix snippets from Spring
-  6 / Spring Security 6 / Hibernate 6 / Thymeleaf 3.2+ / Tomcat 10
-  docs — those are all `jakarta.*` and will either fail to compile or
-  blow up at runtime here. Avoid upgrading framework versions unless
-  explicitly asked — the dep set is tightly coupled on the last
-  javax line (Hibernate 5.6 ↔ Spring 5.3 ↔ Thymeleaf 3.1 ↔
-  spring‑security 5.8 ↔ `thymeleaf-extras-springsecurity5` 3.1.x).
-  Moving past any of these requires a synchronized jakarta jump of
-  all of them + Tomcat 10 (Phase 4).
-- **`javax.annotation.PostConstruct` requires an explicit artifact**:
-  removed from the JDK in Java 11 by JEP 320, so `pom.xml` carries
-  `javax.annotation:javax.annotation-api:1.3.2`. Don't drop it — two
-  classes (`WebMVCConfig`, `MailServiceImpl`) import it.
+  (runs the WAR in Tomcat 10.1 inside Docker), or deploy
+  `target/freeradiusgui.war` into any external Servlet 5.0+ / Jakarta EE
+  9+ container (Tomcat 10.1, or any other compliant Jakarta runtime).
+- **JDK 17 + jakarta namespace**: post-Phase-4 the codebase is on
+  Spring 6.1.x / Spring Security 6.3.x / Hibernate **5.6 jakarta
+  artifact** (still 5.6.x bytecode, just `jakarta.persistence`
+  imports) / Thymeleaf 3.1 *with `-spring6` integration extras* /
+  jakarta.mail 2.0.2 / Tomcat 10.1 (Servlet 6.0). Do **not** bump
+  Hibernate past 5.6.15.Final without a Phase 5 plan — Hibernate 6
+  removes the `Criteria` API, changes `EnhancedUserType` (we have
+  `CustomLocalDateTime` riding that), and moves the dialect classes.
+  Tomcat 11 / Servlet 6.1 / Jakarta EE 11 also runs on JDK 17, so
+  the version-pin gate isn't a JDK question — it's that Spring 6.1
+  + Spring Security 6.3 are aligned to Servlet 6.0 (Jakarta EE 10),
+  not 6.1, and bumping the runtime past Tomcat 10.1 alone is not
+  worth the risk surface here. Spring 6.2 has additional breaking
+  changes — stay on 6.1.x.
+- **`hasRole(...)` prepends `ROLE_` automatically**: in
+  `SecurityConfig` the role names are passed bare (`"ADMIN"`,
+  `"USER"`) because `.hasRole(X)` and `.hasAnyRole(X, …)` prepend
+  `ROLE_` internally. The DB stores roles as `ROLE_ADMIN` /
+  `ROLE_USER`. Passing `"ROLE_ADMIN"` here would produce
+  `ROLE_ROLE_ADMIN` checks and deny every request to the matched URL
+  (fail-closed, not a bypass). The legacy SpEL `.access("hasRole('ROLE_X')")`
+  form tolerated the prefix; the new lambda DSL does not.
+- **Spring Security 6 dropped the implicit `formLogin().loginPage()`
+  permitAll**: in 5.x the configured login page was auto-permitted;
+  in 6.x it isn't, and you get an infinite redirect loop. `SecurityConfig`
+  has an explicit `requestMatchers("/login").permitAll()` for this —
+  don't remove it.
+- **`jakarta.annotation.PostConstruct` requires an explicit artifact**:
+  removed from the JDK in Java 11 by JEP 320, and `jakarta.annotation`
+  lives entirely outside the JDK, so `pom.xml` carries
+  `jakarta.annotation:jakarta.annotation-api:2.1.1`. Don't drop it —
+  two classes (`WebMVCConfig`, `MailServiceImpl`) import it.
 - **`--add-opens` is load-bearing**: Hibernate 5.6 proxies + Spring
-  5.3 reflective scans fail with `InaccessibleObjectException` on
-  JDK 17 without the five `--add-opens` flags in `Dockerfile`
-  `JAVA_OPTS` and surefire `<argLine>`. If a new DAO test throws
+  6.1 reflective scans fail with `InaccessibleObjectException` on
+  JDK 17 without the four `--add-opens` flags in `Dockerfile`
+  `JAVA_OPTS` and surefire `<argLine>`. (Phase 3 added a fifth for
+  `java.base/java.math` preemptively; Phase 4 verified it's unused
+  and dropped it.) If a new DAO test throws
   `InaccessibleObjectException` on some other package, add a matching
   `--add-opens` in both places.
+- **`jakarta.servlet-api 6.0.0` is pinned to match Tomcat 10.1**:
+  Spring 6.1 declares Servlet 5.0+ as its baseline, but Tomcat 10.1
+  ships Servlet 6 and exposes `jakarta.servlet.ServletConnection`
+  which Spring's reflective scan touches. Pinning the API jar at
+  6.0.0 (`provided` scope, runtime supplied by Tomcat) keeps compile
+  and runtime aligned. Tomcat 11 / Servlet 6.1 also runs on JDK 17,
+  but the actual blocker for moving past 10.1 is that Spring 6.1 is
+  aligned to Servlet 6.0; Spring 6.2+ would be the gate for that.
 - **Thymeleaf 3.1 removed `#request` / `#session` / `#servletContext` /
   `#response`** from default expression objects, and the
   `ServletContextTemplateResolver` class too. Templates use
   controller-provided model attributes instead (see
   `SessionVariablesInterceptor` for the header badge pattern +
   `LoginController` for `loginError`); `ThymeleafConfig` uses
-  `SpringResourceTemplateResolver` from `thymeleaf-spring5`.
+  `SpringResourceTemplateResolver` from `thymeleaf-spring6` (the
+  jakarta-aligned integration jar — same Thymeleaf core 3.1.4).
 - **Java 17 source level**: `var`, records, switch expressions,
   text blocks, and sealed classes all compile — but keep new code
   consistent with the existing plain-Java-8 style unless a feature

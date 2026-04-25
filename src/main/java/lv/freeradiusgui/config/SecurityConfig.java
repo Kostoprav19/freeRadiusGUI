@@ -38,14 +38,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Role names below are passed without the ROLE_ prefix because
-        // .hasRole(...) / .hasAnyRole(...) prepend it internally. The DB
-        // stores roles as ROLE_ADMIN / ROLE_USER (databaseCreationScript.sql);
-        // passing "ROLE_ADMIN" here would produce ROLE_ROLE_ADMIN checks and
-        // deny every request to the matched URL (fail-closed, not bypass).
+        // Notes for future readers:
+        //  - Role names are passed without the ROLE_ prefix because
+        //    .hasRole(...) / .hasAnyRole(...) prepend it internally. The DB
+        //    stores roles as ROLE_ADMIN / ROLE_USER
+        //    (databaseCreationScript.sql); passing "ROLE_ADMIN" here would
+        //    produce ROLE_ROLE_ADMIN checks and deny every request to the
+        //    matched URL (fail-closed, not bypass).
+        //  - /login* is explicitly permitAll. Spring Security 5 auto-permitted
+        //    .formLogin().loginPage(...) targets; Spring Security 6 dropped
+        //    that auto-permit, so without this rule the /login page itself
+        //    requires authentication and the redirect chain loops infinitely.
         http.authorizeHttpRequests(
                         auth ->
-                                auth.requestMatchers("/admin/**")
+                                auth.requestMatchers("/login")
+                                        .permitAll()
+                                        .requestMatchers("/admin/**")
                                         .hasRole("ADMIN")
                                         .requestMatchers("/account/**")
                                         .hasRole("ADMIN")
