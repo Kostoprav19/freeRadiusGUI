@@ -14,9 +14,10 @@ auth logs from the browser.
 
 ## Tech Stack
 
-Java 17 (javax namespace) · Spring MVC 5.3 · Spring Security 5.8 · Hibernate 5.6
-· Thymeleaf 3.1 · MySQL 8.0 (mysql-connector-j 8.4) · HikariCP 4.0 · Logback 1.2
-· Maven (WAR packaging) · Tomcat 9 (Docker image).
+Java 17 (jakarta namespace) · Spring MVC 6.1 · Spring Security 6.3 · Hibernate 5.6
+*jakarta artifact* · Thymeleaf 3.1 (+ `thymeleaf-spring6`) · MySQL 8.0
+(mysql-connector-j 8.4) · HikariCP 5.1 · Logback 1.2 · Maven (WAR packaging) ·
+Tomcat 10.1 (Docker image).
 
 > This is **not** Spring Boot — bootstrap is `WebApplicationInitializer`
 > (`config/AppInitializer.java`).
@@ -53,7 +54,7 @@ mvn spotless:apply                  # auto-fix formatting
 ```
 
 For local dev, run the app via Docker Compose (`mise run compose:up`); the
-embedded Tomcat task was retired alongside the `tomcat7-maven-plugin`.
+embedded Tomcat task was retired with the migration to Tomcat 10.1 / jakarta.
 
 ### Linting
 

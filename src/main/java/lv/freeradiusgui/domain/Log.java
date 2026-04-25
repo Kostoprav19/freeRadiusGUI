@@ -1,7 +1,7 @@
 package lv.freeradiusgui.domain;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import javax.persistence.*;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 

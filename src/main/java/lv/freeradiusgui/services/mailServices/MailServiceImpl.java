@@ -1,16 +1,16 @@
 package lv.freeradiusgui.services.mailServices;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.mail.Message;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import javax.annotation.PostConstruct;
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import lv.freeradiusgui.config.AppConfig;
 import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.services.serverServices.ServerService;

@@ -1,7 +1,7 @@
 package lv.freeradiusgui.interceptors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.serverServices.ServerService;
 import org.springframework.beans.factory.annotation.Autowired;
