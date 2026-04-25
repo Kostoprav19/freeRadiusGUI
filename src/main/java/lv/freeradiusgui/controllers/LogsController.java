@@ -1,12 +1,12 @@
 package lv.freeradiusgui.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
-import javax.servlet.http.HttpServletRequest;
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Log;
 import lv.freeradiusgui.services.LogService;

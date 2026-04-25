@@ -1,6 +1,6 @@
 package lv.freeradiusgui.config;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import lv.freeradiusgui.interceptors.SessionVariablesInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

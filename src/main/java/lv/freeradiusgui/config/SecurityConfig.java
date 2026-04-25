@@ -5,18 +5,19 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     @Autowired
     @Qualifier("userDetailsService")
@@ -24,48 +25,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired private ApplicationEventPublisher applicationEventPublisher;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationEventPublisher(
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.authenticationEventPublisher(
                         new DefaultAuthenticationEventPublisher(applicationEventPublisher))
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
-        // .and().authenticationProvider(authenticationProvider)
+        return builder.build();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/admin/**")
-                .access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/account/**")
-                .access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/server/**")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/switch/**")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/device/**")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/logs/**")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error")
-                .loginProcessingUrl("/j_spring_security_check")
-                .defaultSuccessUrl("/logs")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login?logout")
-                .and()
-                .csrf();
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Role names below are passed without the ROLE_ prefix because
+        // .hasRole(...) / .hasAnyRole(...) prepend it internally. The DB
+        // stores roles as ROLE_ADMIN / ROLE_USER (databaseCreationScript.sql);
+        // passing "ROLE_ADMIN" here would produce ROLE_ROLE_ADMIN checks and
+        // deny every request to the matched URL (fail-closed, not bypass).
+        http.authorizeHttpRequests(
+                        auth ->
+                                auth.requestMatchers("/admin/**")
+                                        .hasRole("ADMIN")
+                                        .requestMatchers("/account/**")
+                                        .hasRole("ADMIN")
+                                        .requestMatchers("/server/**")
+                                        .hasAnyRole("USER", "ADMIN")
+                                        .requestMatchers("/switch/**")
+                                        .hasAnyRole("USER", "ADMIN")
+                                        .requestMatchers("/device/**")
+                                        .hasAnyRole("USER", "ADMIN")
+                                        .requestMatchers("/logs/**")
+                                        .hasAnyRole("USER", "ADMIN")
+                                        .anyRequest()
+                                        .authenticated())
+                .formLogin(
+                        form ->
+                                form.loginPage("/login")
+                                        .failureUrl("/login?error")
+                                        .loginProcessingUrl("/j_spring_security_check")
+                                        .defaultSuccessUrl("/logs")
+                                        .usernameParameter("j_username")
+                                        .passwordParameter("j_password"))
+                .logout(logout -> logout.logoutSuccessUrl("/login?logout"));
+        return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder;
+        return new BCryptPasswordEncoder();
     }
 }
