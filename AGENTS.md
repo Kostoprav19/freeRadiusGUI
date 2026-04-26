@@ -185,11 +185,12 @@ Runtime config lives in `src/main/resources/config.properties`:
 
 - `usersfilepath`, `clientsfilepath`, `logfilesdirpath` — FreeRADIUS paths
 - `dbUrl`, `dbUser`, `dbPassword`, pool sizing
-- `mailEnabled` (boolean, defaults to `true` when missing), `mailFrom`,
-  `mailTo`, `mailSmtpServer` — set `mailEnabled = false` to skip SMTP
-  setup at startup and short-circuit `MailService#sendMail()` to a
-  SUCCESS no-op (used by the lab profile to avoid the unreachable
-  default SMTP host blocking startup).
+- `mailEnabled` (boolean, defaults to `false` — opt-in), `mailFrom`,
+  `mailTo`, `mailSmtpServer` — set `mailEnabled = true` to send
+  rejected-RADIUS-request notifications. When false (the default),
+  `MailService#init()` skips SMTP setup and `sendMail()` short-circuits
+  to a SUCCESS no-op, so an unreachable `mailSmtpServer` cannot block
+  startup.
 
 Credentials and server IPs in this file are **committed to the repo** as
 defaults — treat them as local/dev values, not secrets. Do not add real

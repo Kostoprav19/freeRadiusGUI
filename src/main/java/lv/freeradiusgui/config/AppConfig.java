@@ -133,10 +133,9 @@ public class AppConfig {
         dbCheckoutTimeout = Integer.parseInt(getProperty("dbCheckoutTimeout"));
 
         // MAIL
-        // Defaults to true when the property is missing so existing deployments
-        // keep the pre-toggle behaviour.
-        String mailEnabledProp = getProperty("mailEnabled");
-        mailEnabled = mailEnabledProp == null || Boolean.parseBoolean(mailEnabledProp);
+        // Defaults to false (opt-in) so a missing or unreachable SMTP host
+        // can't block startup; flip mailEnabled = true to send notifications.
+        mailEnabled = Boolean.parseBoolean(getProperty("mailEnabled"));
         mailFrom = getProperty("mailFrom");
         mailTo = getProperty("mailTo");
         mailSmtpServer = getProperty("mailSmtpServer");
