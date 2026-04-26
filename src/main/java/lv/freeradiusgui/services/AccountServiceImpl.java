@@ -38,9 +38,9 @@ public class AccountServiceImpl implements AccountService {
         // Form-bound roles arrive via Role(String) without an id; resolve ids
         // before rebuilding the persisted ref set, otherwise roleRefs end up
         // with roleId=null and the binding is silently dropped.
-        fixRolesWithOutId(account);
-        account.rebuildRoleRefs();
         try {
+            fixRolesWithOutId(account);
+            account.rebuildRoleRefs();
             accountRepository.save(account);
             return true;
         } catch (Exception e) {
