@@ -16,8 +16,6 @@ public interface DeviceService {
 
     List<Device> getAll();
 
-    List<Device> getAllByCriteria(String fieldName, Object object);
-
     boolean delete(Device device);
 
     Long getCount();

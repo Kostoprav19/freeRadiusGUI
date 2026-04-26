@@ -49,9 +49,17 @@ public class SecurityConfig {
         //    .formLogin().loginPage(...) targets; Spring Security 6 dropped
         //    that auto-permit, so without this rule the /login page itself
         //    requires authentication and the redirect chain loops infinitely.
+        //  - /resources/** is permitAll for the same reason: Spring Security 6
+        //    no longer auto-permits anything served by Spring MVC's
+        //    ResourceHandlerRegistry, and every view (including login.html)
+        //    loads bootstrap/jquery/css/favicon from /resources/. Without
+        //    this rule the login page renders unstyled and the asset
+        //    requests redirect-loop back to /login.
         http.authorizeHttpRequests(
                         auth ->
-                                auth.requestMatchers("/login")
+                                auth.requestMatchers("/resources/**")
+                                        .permitAll()
+                                        .requestMatchers("/login")
                                         .permitAll()
                                         .requestMatchers("/admin/**")
                                         .hasRole("ADMIN")

@@ -10,8 +10,8 @@ a Java / Spring MVC web app on a deliberately pinned legacy stack.
 **Read `AGENTS.md` at the repo root first** for the current stack
 versions, conventions, and gotchas, and treat it as the source of
 truth. If a review question turns on an exact version (e.g. "is this
-API available in our Java / Spring / Hibernate?"), check `pom.xml` —
-never rely on versions memorised from this prompt.
+API available in our Java / Spring / Spring Data JDBC?"), check
+`pom.xml` — never rely on versions memorised from this prompt.
 
 Your job is to give a second opinion in one of two modes:
 
@@ -96,8 +96,9 @@ Walk through every applicable item. Cite `file:line` for each finding.
 
 ### Project conventions (see `AGENTS.md`)
 
-- [ ] Layering respected: `Controller → Service → DAO → Entity`.
-      Controllers don't call DAOs directly.
+- [ ] Layering respected: `Controller → Service → Repository → Entity`
+      (Spring Data JDBC `CrudRepository`s under `repositories/`).
+      Controllers don't call repositories directly.
 - [ ] View names go through `lv.freeradiusgui.constants.Views`, not
       hard-coded strings.
 - [ ] Shell invocations go through `ShellExecutor` +
@@ -107,7 +108,16 @@ Walk through every applicable item. Cite `file:line` for each finding.
 - [ ] Validators wired via `@InitBinder`, one per form/entity.
 - [ ] Flash messages use `RedirectAttributes` with keys `msg` /
       `msgType` (`success` / `danger`).
-- [ ] `LocalDateTime` columns use `CustomLocalDateTime` `@Type`.
+- [ ] `LocalDateTime` columns map natively via JDBC 4.2 — no custom
+      converter, no `@Type` (the old `CustomLocalDateTime` was retired
+      with Hibernate in Phase 5).
+- [ ] Domain entities use Spring Data Relational annotations
+      (`@Table`, `@Column`, `@Id`, `@MappedCollection`, `@Transient`),
+      not `jakarta.persistence.*`. Many-to-one FKs use
+      `AggregateReference<T, Integer>`; the dual-field pattern
+      (persisted `*Ref` field + `@Transient` typed view + service-side
+      hydration) is the project idiom — do not introduce eager-fetch
+      shortcuts.
 - [ ] Logging via SLF4J (`LoggerFactory.getLogger(getClass())`) — no
       `System.out` / `printStackTrace` in new code.
 
@@ -123,7 +133,7 @@ Look up the current pinned versions in `AGENTS.md` ("Tech Stack" /
       regardless of correctness.
 - [ ] No APIs or JDBC URL options that only exist in framework
       versions newer than what `pom.xml` pins (Spring, Thymeleaf,
-      Hibernate, MySQL connector).
+      Spring Data JDBC, MySQL connector).
 - [ ] No accidental Java / framework / dependency version bumps in
       `pom.xml`.
 
@@ -145,8 +155,9 @@ Look up the current pinned versions in `AGENTS.md` ("Tech Stack" /
 - [ ] Logic handles obvious edge cases (null, empty, missing file, IO
       failure, concurrent access where relevant).
 - [ ] Transactional boundaries correct (`@Transactional` on services
-      touching multiple DAO calls; tests use `@Rollback` where
-      appropriate).
+      that do multi-step writes through repositories; tests use
+      `@Rollback` where appropriate). Reads are not unnecessarily
+      `@Transactional`.
 - [ ] No secrets, real passwords, or production hostnames committed to
       `config.properties` or other files.
 - [ ] Exception handling is intentional — nothing swallowed silently.
@@ -155,10 +166,11 @@ Look up the current pinned versions in `AGENTS.md` ("Tech Stack" /
 ### Tests
 
 - [ ] New/changed behaviour has tests under `src/test/java/...`
-      following the pattern of `DeviceDAOImplTest` /
-      `ClientsConfigFileServiceImplTest`.
-- [ ] Tests don't require resources that aren't documented (note: DAO
-      tests need a live MySQL — see `AGENTS.md` gotchas).
+      following the pattern of `repositories/DeviceRepositoryTest` /
+      `repositories/AccountRepositoryTest` /
+      `services/ClientsConfFileServiceTest`.
+- [ ] Tests don't require resources that aren't documented (note:
+      repository tests need a live MySQL — see `AGENTS.md` gotchas).
 - [ ] No test was weakened or deleted to make the diff pass.
 
 ## Review checklist — plan-review mode
@@ -183,12 +195,13 @@ Use this when reviewing a plan **before** implementation. Cite
       the Java pin currently in `pom.xml` (call out mismatches, e.g.
       a library that needs JDK 11 while the pin is still 1.8).
 - [ ] Each dependency swap is consistent: driver class, JDBC URL
-      params, Spring / Hibernate dialect, config properties all line
-      up end-to-end.
+      params, Spring / Spring Data dialect resolution, config
+      properties all line up end-to-end.
 - [ ] Removed dependencies are confirmed unused (grep was actually
       run, not just claimed) — plan should say how it verified.
 - [ ] New dependencies don't silently pull in transitive conflicts
-      with the pinned Spring / Hibernate / Thymeleaf versions.
+      with the pinned Spring / Spring Data / Thymeleaf versions, and
+      do not reintroduce a removed framework (e.g. Hibernate).
 
 ### Ordering, verification, rollback
 

@@ -1,15 +1,17 @@
 package lv.freeradiusgui.domain;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-@Table(name = "devices")
+@Table("devices")
 public class Device implements Serializable {
 
     public static final String TYPE_COMPUTER = "Computer";
@@ -22,46 +24,44 @@ public class Device implements Serializable {
     public static final int HALF_DUPLEX = 0;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "device_id")
+    @Column("device_id")
     private Integer id;
 
-    @Column(name = "mac", unique = true)
+    @Column("mac")
     private String mac;
 
-    @Column(name = "name")
+    @Column("name")
     private String name;
 
-    @Column(name = "descr")
+    @Column("descr")
     private String description;
 
-    @Column(name = "type")
+    @Column("type")
     private String type;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinColumn(name = "switch_id")
-    private Switch aSwitch;
+    @Column("switch_id")
+    private AggregateReference<Switch, Integer> switchRef;
 
-    @Column(name = "port")
+    @Transient private Switch aSwitch;
+
+    @Column("port")
     private Integer switchPort;
 
-    @Column(name = "speed")
+    @Column("speed")
     private Integer portSpeed;
 
-    @Column(name = "duplex")
+    @Column("duplex")
     private Integer duplex;
 
-    @Column(name = "tor")
-    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+    @Column("tor")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime timeOfRegistration;
 
-    @Column(name = "lastseen")
-    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+    @Column("lastseen")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime lastSeen;
 
-    @Column(name = "access")
+    @Column("access")
     private Integer access;
 
     public Device() {}
@@ -82,7 +82,7 @@ public class Device implements Serializable {
         this.name = name;
         this.description = description;
         this.type = type;
-        this.aSwitch = aSwitch;
+        setSwitch(aSwitch);
         this.switchPort = switchPort;
         this.portSpeed = portSpeed;
         this.duplex = duplex;
@@ -135,8 +135,7 @@ public class Device implements Serializable {
     }
 
     public void setMac(String mac) {
-        mac = mac.replaceAll("[^a-fA-F0-9]", ""); // normalize
-        this.mac = mac;
+        this.mac = (mac == null) ? null : mac.replaceAll("[^a-fA-F0-9]", "");
     }
 
     public String getName() {
@@ -169,6 +168,14 @@ public class Device implements Serializable {
 
     public void setSwitch(Switch aSwitch) {
         this.aSwitch = aSwitch;
+        this.switchRef =
+                (aSwitch == null || aSwitch.getId() == null)
+                        ? null
+                        : AggregateReference.to(aSwitch.getId());
+    }
+
+    public Integer getSwitchId() {
+        return switchRef == null ? null : switchRef.getId();
     }
 
     public Integer getSwitchPort() {

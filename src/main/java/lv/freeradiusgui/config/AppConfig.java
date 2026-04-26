@@ -29,6 +29,7 @@ public class AppConfig {
     private int dbCheckoutTimeout;
 
     // MAIL
+    private boolean mailEnabled;
     private String mailFrom;
     private String mailTo;
     private String mailSmtpServer;
@@ -73,6 +74,10 @@ public class AppConfig {
         return dbCheckoutTimeout;
     }
 
+    public boolean isMailEnabled() {
+        return mailEnabled;
+    }
+
     public String getMailFrom() {
         return mailFrom;
     }
@@ -103,6 +108,7 @@ public class AppConfig {
         logger.info("dbMinPoolSize = " + getDbMinPoolSize());
         logger.info("dbMaxPoolSize = " + getDbMaxPoolSize());
         logger.info("dbCheckoutTimeout = " + getDbCheckoutTimeout());
+        logger.info("mailEnabled = " + isMailEnabled());
         logger.info("mailFrom = " + getMailFrom());
         logger.info("mailTo = " + getMailTo());
         logger.info("mailSmtpServer = " + getMailSmtpServer());
@@ -127,6 +133,7 @@ public class AppConfig {
         dbCheckoutTimeout = Integer.parseInt(getProperty("dbCheckoutTimeout"));
 
         // MAIL
+        mailEnabled = Boolean.parseBoolean(getProperty("mailEnabled"));
         mailFrom = getProperty("mailFrom");
         mailTo = getProperty("mailTo");
         mailSmtpServer = getProperty("mailSmtpServer");

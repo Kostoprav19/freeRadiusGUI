@@ -2,8 +2,8 @@ package lv.freeradiusgui.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import lv.freeradiusgui.dao.switchDAO.SwitchDAO;
 import lv.freeradiusgui.domain.Switch;
+import lv.freeradiusgui.repositories.SwitchRepository;
 import lv.freeradiusgui.services.filesServices.ClientsConfFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SwitchServiceImpl implements SwitchService {
 
-    @Autowired private SwitchDAO switchDAO;
+    @Autowired private SwitchRepository switchRepository;
 
     @Autowired ClientsConfFileService clientsConfigFileService;
 
@@ -21,28 +21,39 @@ public class SwitchServiceImpl implements SwitchService {
 
     @Override
     public boolean store(Switch aSwitch) {
-        return switchDAO.store(aSwitch);
+        if (aSwitch == null) return false;
+        try {
+            switchRepository.save(aSwitch);
+            return true;
+        } catch (Exception e) {
+            logger.error("Failed to store switch", e);
+            return false;
+        }
     }
 
     @Override
     public boolean storeAll(List<Switch> switchList) {
-        boolean result = switchDAO.storeAll(switchList);
-        if (result) {
+        if (switchList == null) return false;
+        try {
+            switchRepository.saveAll(switchList);
             logger.info("Successfully written switch records to database.");
-        } else {
-            logger.error("Failed to write switch records to database");
+            return true;
+        } catch (Exception e) {
+            logger.error("Failed to write switch records to database", e);
+            return false;
         }
-        return result;
     }
 
     @Override
     public Switch getById(Integer id) {
-        return switchDAO.getById(id);
+        if (id == null || id < 0) return null;
+        return switchRepository.findById(id).orElse(null);
     }
 
     @Override
     public Switch getByIp(String ip) {
-        return switchDAO.getByIp(ip);
+        if (ip == null || ip.isEmpty()) return null;
+        return switchRepository.findByIp(ip);
     }
 
     @Override
@@ -56,37 +67,36 @@ public class SwitchServiceImpl implements SwitchService {
 
     @Override
     public List<Switch> getAll() {
-        return switchDAO.getAll();
-    }
-
-    @Override
-    public List<Switch> getAllByCriteria(String fieldName, Object object) {
-        return switchDAO.getAllByCriteria(fieldName, object);
-    }
-
-    @Override
-    public boolean delete(Switch aSwitch) {
-        boolean result = switchDAO.delete(aSwitch);
-        if (result) {
-            logger.info(
-                    "Successfully deleted switch record from database. Switch id: "
-                            + aSwitch.getId());
-        } else {
-            logger.error(
-                    "Failed to delete switch records from database. Switch id: " + aSwitch.getId());
-        }
+        List<Switch> result = new ArrayList<>();
+        switchRepository.findAll().forEach(result::add);
         return result;
     }
 
     @Override
+    public boolean delete(Switch aSwitch) {
+        if (aSwitch == null) return false;
+        try {
+            switchRepository.delete(aSwitch);
+            logger.info(
+                    "Successfully deleted switch record from database. Switch id: "
+                            + aSwitch.getId());
+            return true;
+        } catch (Exception e) {
+            logger.error(
+                    "Failed to delete switch records from database. Switch id: " + aSwitch.getId(),
+                    e);
+            return false;
+        }
+    }
+
+    @Override
     public Long getCount() {
-        return switchDAO.getCount();
+        return switchRepository.count();
     }
 
     @Override
     public Switch prepareNewSwitch() {
-        Switch aSwitch = new Switch();
-        return aSwitch;
+        return new Switch();
     }
 
     @Override
@@ -101,7 +111,7 @@ public class SwitchServiceImpl implements SwitchService {
 
     @Override
     public boolean writeToConfig() {
-        List<Switch> listFromDB = switchDAO.getAll();
+        List<Switch> listFromDB = getAll();
         if ((listFromDB == null) || (listFromDB.isEmpty())) return false;
 
         return clientsConfigFileService.saveListToFile(listFromDB);

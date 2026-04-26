@@ -2,8 +2,8 @@ package lv.freeradiusgui.validators;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lv.freeradiusgui.dao.switchDAO.SwitchDAO;
 import lv.freeradiusgui.domain.Switch;
+import lv.freeradiusgui.repositories.SwitchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -13,7 +13,7 @@ import org.springframework.validation.Validator;
 @Component("switchFormValidator")
 public class SwitchFormValidator implements Validator {
 
-    @Autowired SwitchDAO switchDAO;
+    @Autowired SwitchRepository switchRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -37,7 +37,7 @@ public class SwitchFormValidator implements Validator {
             errors.rejectValue("ip", "Pattern.switchForm.ip");
         }
 
-        if ((aSwitch.getId() == null) && (switchDAO.getByIp(aSwitch.getIp()) != null)) {
+        if ((aSwitch.getId() == null) && (switchRepository.findByIp(aSwitch.getIp()) != null)) {
             errors.rejectValue("ip", "Exist.switchForm.ip");
         }
     }

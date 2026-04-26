@@ -11,7 +11,7 @@
     <script th:src="@{/resources/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div th:replace="fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'">&nbsp;</div>
+<div th:replace="~{fragments/header :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'header-admin' : 'header'}">&nbsp;</div>
 <div class="container">
 
     <div class="page-header">
@@ -22,7 +22,7 @@
             <h1 th:text="'Create new device'"> </h1>
         </th:block>
         <th:block th:if="${msg != null}">
-            <div th:replace="fragments/alert :: alert (type=${msgType}, message=${msg})">Alert</div>
+            <div th:replace="~{fragments/alert :: alert (type=${msgType}, message=${msg})}">Alert</div>
         </th:block>
     </div>
 
@@ -90,7 +90,7 @@
         </div>
     </form>
 </div>
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 
 </body>
