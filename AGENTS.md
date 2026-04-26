@@ -193,8 +193,8 @@ production credentials here.
 
 ## Architecture Conventions
 
-- **Layering**: `Controller → Service (interface + `*Impl`) → Repository
-  (Spring Data JDBC `CrudRepository`) → Domain entity`. Keep new code
+- **Layering**: `Controller → Service (interface + *Impl) → Repository
+  (Spring Data JDBC CrudRepository) → Domain entity`. Keep new code
   in this shape; do not call repositories directly from controllers.
 - **View names**: always reference through
   `lv.freeradiusgui.constants.Views` constants — do not hard‑code view
