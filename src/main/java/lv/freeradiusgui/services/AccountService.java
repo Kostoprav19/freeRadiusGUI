@@ -13,8 +13,6 @@ public interface AccountService {
 
     List<Account> getAll();
 
-    List<Account> getAllByCriteria(String fieldName, Object object);
-
     boolean delete(Account account);
 
     Long getCount();

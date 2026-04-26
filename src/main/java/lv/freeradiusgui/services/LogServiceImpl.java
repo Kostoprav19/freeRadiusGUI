@@ -5,10 +5,18 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import lv.freeradiusgui.dao.logDAO.LogDAO;
+import java.util.Map;
+import java.util.Set;
+import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.domain.Switch;
+import lv.freeradiusgui.repositories.DeviceRepository;
+import lv.freeradiusgui.repositories.LogRepository;
+import lv.freeradiusgui.repositories.SwitchRepository;
 import lv.freeradiusgui.services.filesServices.LogFileService;
 import lv.freeradiusgui.services.serverServices.ServerService;
 import lv.freeradiusgui.utils.OperationResult;
@@ -20,7 +28,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class LogServiceImpl implements LogService {
 
-    @Autowired private LogDAO logDAO;
+    @Autowired private LogRepository logRepository;
+
+    @Autowired private SwitchRepository switchRepository;
+
+    @Autowired private DeviceRepository deviceRepository;
 
     @Autowired private LogFileService logFileService;
 
@@ -33,30 +45,47 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public boolean store(Log log) {
-        return logDAO.store(log);
+        if (log == null) return false;
+        try {
+            logRepository.save(log);
+            return true;
+        } catch (Exception e) {
+            logger.error("Failed to store log", e);
+            return false;
+        }
     }
 
     @Override
     public boolean storeAll(List<Log> listFromFile) {
-        boolean result = logDAO.storeAll(listFromFile);
-        if (result) {
+        if (listFromFile == null) return false;
+        try {
+            logRepository.saveAll(listFromFile);
             logger.info("Successfully written log records to database.");
-        } else {
-            logger.error("Failed to write log records to database.");
+            return true;
+        } catch (Exception e) {
+            logger.error("Failed to write log records to database.", e);
+            return false;
         }
-        return result;
     }
 
     @Override
     public Log getById(Integer id) {
-        return logDAO.getById(id);
+        if (id == null || id < 0) return null;
+        Log log = logRepository.findById(id).orElse(null);
+        if (log != null) hydrate(java.util.Collections.singletonList(log));
+        return log;
     }
 
     @Override
     public List<Log> getByDate(LocalDateTime date) {
         LocalDateTime sDate = date.with(LocalTime.MIDNIGHT);
         LocalDateTime eDate = sDate.plusDays(1);
-        return logDAO.getByDate(sDate, eDate);
+        List<Log> list =
+                logRepository
+                        .findByTimeOfRegistrationGreaterThanEqualAndTimeOfRegistrationLessThanOrderByIdDesc(
+                                sDate, eDate);
+        hydrate(list);
+        return list;
     }
 
     @Override
@@ -68,17 +97,20 @@ public class LogServiceImpl implements LogService {
     @Override
     public boolean deleteByDate(LocalDateTime date) {
         List<Log> list = getByDate(date);
-        boolean result = logDAO.deleteAll(list);
-        if (result) {
+        if (list == null) return false;
+        try {
+            logRepository.deleteAll(list);
             logger.info(
                     "Successfully deleted log records from database by date: "
                             + date.format(displayFormatter));
-        } else {
+            return true;
+        } catch (Exception e) {
             logger.error(
                     "Failed to delete log records from database by date: "
-                            + date.format(displayFormatter));
+                            + date.format(displayFormatter),
+                    e);
+            return false;
         }
-        return result;
     }
 
     @Override
@@ -92,17 +124,15 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public List<Log> getAll() {
-        return logDAO.getAll();
-    }
-
-    @Override
-    public List<Log> getAllByCriteria(String fieldName, Object object) {
-        return logDAO.getAllByCriteria(fieldName, object);
+        List<Log> list = new ArrayList<>();
+        logRepository.findAll().forEach(list::add);
+        hydrate(list);
+        return list;
     }
 
     @Override
     public Long getCount() {
-        return logDAO.getCount();
+        return logRepository.count();
     }
 
     @Override
@@ -144,5 +174,39 @@ public class LogServiceImpl implements LogService {
     @Override
     public Integer countRejected(List<Log> list) {
         return filterRejectedLogs(list).size();
+    }
+
+    /** Populates each log's transient {@link Log#getSwitch()} and {@link Log#getDevice()}. */
+    private void hydrate(List<Log> logs) {
+        if (logs == null || logs.isEmpty()) return;
+
+        Set<Integer> switchIds = new HashSet<>();
+        Set<String> macs = new HashSet<>();
+        for (Log log : logs) {
+            if (log.getSwitchId() != null) switchIds.add(log.getSwitchId());
+            if (log.getMac() != null) macs.add(log.getMac());
+        }
+
+        Map<Integer, Switch> switchById = new HashMap<>();
+        if (!switchIds.isEmpty()) {
+            switchRepository.findAllById(switchIds).forEach(s -> switchById.put(s.getId(), s));
+        }
+
+        Map<String, Device> deviceByMac = new HashMap<>();
+        if (!macs.isEmpty()) {
+            deviceRepository.findByMacIn(macs).forEach(d -> deviceByMac.put(d.getMac(), d));
+        }
+
+        for (Log log : logs) {
+            Integer sid = log.getSwitchId();
+            if (sid != null) {
+                Switch s = switchById.get(sid);
+                if (s != null) log.setSwitch(s);
+            }
+            if (log.getMac() != null) {
+                Device d = deviceByMac.get(log.getMac());
+                if (d != null) log.setDevice(d);
+            }
+        }
     }
 }

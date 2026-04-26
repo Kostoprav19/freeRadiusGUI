@@ -1,20 +1,20 @@
 package lv.freeradiusgui.domain;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
-@Table(name = "roles")
+@Table("roles")
 public class Role {
 
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
+    @Column("role_id")
     private Integer id;
 
-    @Column(name = "roleName", nullable = false)
+    @Column("roleName")
     private String name;
 
     public Role() {}

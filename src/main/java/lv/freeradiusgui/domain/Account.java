@@ -1,56 +1,48 @@
 package lv.freeradiusgui.domain;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
+import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-@Table(name = "accounts")
+@Table("accounts")
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
+    @Column("account_id")
     private Integer id;
 
-    @Column(name = "login")
+    @Column("login")
     private String login;
 
-    @Column(name = "password")
+    @Column("password")
     private String password;
 
-    @Column(name = "name")
+    @Column("name")
     private String name;
 
-    @Column(name = "surname")
+    @Column("surname")
     private String surname;
 
-    @Column(name = "email")
+    @Column("email")
     private String email;
 
-    @Column(name = "created")
-    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+    @Column("created")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime creationDate;
 
-    @Column(name = "enabled", nullable = false)
-    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @Column("enabled")
     private boolean enabled;
 
-    @ManyToMany(
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "accounts_roles",
-            joinColumns = {@JoinColumn(name = "account_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    @Fetch(FetchMode.SUBSELECT)
-    private Set<Role> roles = new HashSet<Role>();
+    @MappedCollection(idColumn = "account_id")
+    private Set<AccountRoleRef> roleRefs = new HashSet<>();
+
+    @Transient private Set<Role> roles = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -121,7 +113,35 @@ public class Account {
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+        this.roles = (roles == null) ? new HashSet<>() : roles;
+        rebuildRoleRefs();
+    }
+
+    public void addRole(Role role) {
+        if (role == null) return;
+        this.roles.add(role);
+        if (role.getId() != null) {
+            this.roleRefs.add(new AccountRoleRef(role.getId()));
+        }
+    }
+
+    public Set<AccountRoleRef> getRoleRefs() {
+        return roleRefs;
+    }
+
+    public void setRoleRefs(Set<AccountRoleRef> roleRefs) {
+        this.roleRefs = (roleRefs == null) ? new HashSet<>() : roleRefs;
+    }
+
+    /** Rebuilds {@link #roleRefs} from {@link #roles} ids. Call after role ids are populated. */
+    public void rebuildRoleRefs() {
+        Set<AccountRoleRef> refs = new HashSet<>();
+        for (Role r : this.roles) {
+            if (r != null && r.getId() != null) {
+                refs.add(new AccountRoleRef(r.getId()));
+            }
+        }
+        this.roleRefs = refs;
     }
 
     public Account() {}
@@ -141,10 +161,6 @@ public class Account {
         this.email = email;
         this.creationDate = creationDate;
         this.enabled = enabled;
-    }
-
-    public void addRole(Role role) {
-        this.roles.add(role);
     }
 
     @Override

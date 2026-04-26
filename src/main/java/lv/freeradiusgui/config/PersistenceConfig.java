@@ -2,22 +2,24 @@ package lv.freeradiusgui.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import java.util.Properties;
 import javax.sql.DataSource;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableTransactionManagement
-public class HybernateConfig {
+@EnableJdbcRepositories(basePackages = "lv.freeradiusgui.repositories")
+public class PersistenceConfig extends AbstractJdbcConfiguration {
 
     @Autowired AppConfig appConfig;
 
@@ -35,29 +37,13 @@ public class HybernateConfig {
         return new HikariDataSource(cfg);
     }
 
-    private Properties hibernateProperties() {
-
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
-        properties.put("hibernate.show_sql", "false");
-        properties.put("hibernate.format_sql", "true");
-
-        return properties;
+    @Bean
+    public NamedParameterJdbcOperations namedParameterJdbcOperations(DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Bean
-    public SessionFactory sessionFactory(DataSource dataSource) throws Exception {
-
-        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setDataSource(dataSource);
-        sessionFactoryBean.setPackagesToScan("lv.freeradiusgui.domain");
-        sessionFactoryBean.setHibernateProperties(hibernateProperties());
-        sessionFactoryBean.afterPropertiesSet();
-        return sessionFactoryBean.getObject();
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
-        return new HibernateTransactionManager(sessionFactory);
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 }

@@ -2,10 +2,16 @@ package lv.freeradiusgui.services;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import lv.freeradiusgui.dao.deviceDAO.DeviceDAO;
+import java.util.Map;
+import java.util.Set;
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Log;
+import lv.freeradiusgui.domain.Switch;
+import lv.freeradiusgui.repositories.DeviceRepository;
+import lv.freeradiusgui.repositories.SwitchRepository;
 import lv.freeradiusgui.services.filesServices.UsersFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +23,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired private DeviceDAO deviceDAO;
+    @Autowired private DeviceRepository deviceRepository;
+
+    @Autowired private SwitchRepository switchRepository;
 
     @Autowired private UsersFileService usersFileService;
 
@@ -25,29 +33,43 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean store(Device device) {
-        return deviceDAO.store(device);
+        if (device == null) return false;
+        try {
+            deviceRepository.save(device);
+            return true;
+        } catch (Exception e) {
+            logger.error("Failed to store device", e);
+            return false;
+        }
     }
 
     @Override
     public boolean storeAll(List<Device> deviceList) {
-        boolean result = deviceDAO.storeAll(deviceList);
-
-        if (result) {
+        if (deviceList == null) return false;
+        try {
+            deviceRepository.saveAll(deviceList);
             logger.info("Successfully written device records to database.");
-        } else {
-            logger.error("Failed to write device records to database");
+            return true;
+        } catch (Exception e) {
+            logger.error("Failed to write device records to database", e);
+            return false;
         }
-        return result;
     }
 
     @Override
     public Device getById(Integer id) {
-        return deviceDAO.getById(id);
+        if (id == null || id < 0) return null;
+        Device device = deviceRepository.findById(id).orElse(null);
+        hydrateSwitch(device);
+        return device;
     }
 
     @Override
     public Device getByMac(String mac) {
-        return deviceDAO.getByMac(mac);
+        if (mac == null || mac.isEmpty()) return null;
+        Device device = deviceRepository.findByMac(mac);
+        hydrateSwitch(device);
+        return device;
     }
 
     @Override
@@ -61,7 +83,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public List<Device> getAll() {
-        List<Device> list = deviceDAO.getAll();
+        List<Device> list = new ArrayList<>();
+        deviceRepository.findAll().forEach(list::add);
+        hydrateSwitches(list);
         return list;
     }
 
@@ -80,27 +104,25 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public List<Device> getAllByCriteria(String fieldName, Object object) {
-        return deviceDAO.getAllByCriteria(fieldName, object);
-    }
-
-    @Override
     public boolean delete(Device device) {
-        boolean result = deviceDAO.delete(device);
-        if (result) {
+        if (device == null) return false;
+        try {
+            deviceRepository.delete(device);
             logger.info(
                     "Successfully deleted device record from database. Switch id: "
                             + device.getId());
-        } else {
+            return true;
+        } catch (Exception e) {
             logger.error(
-                    "Failed to delete device records from database. Switch id: " + device.getId());
+                    "Failed to delete device records from database. Switch id: " + device.getId(),
+                    e);
+            return false;
         }
-        return result;
     }
 
     @Override
     public Long getCount() {
-        return deviceDAO.getCount();
+        return deviceRepository.count();
     }
 
     @Override
@@ -109,9 +131,9 @@ public class DeviceServiceImpl implements DeviceService {
         if (mac != null) device.setMac(mac);
         device.setAccess(Device.ACCESS_ACCEPT);
         device.setTimeOfRegistration(LocalDateTime.now());
-        device.setSwitchPort(-1); // No information yet
-        device.setPortSpeed(-1); // No information yet
-        device.setDuplex(-1); // No information yet
+        device.setSwitchPort(-1);
+        device.setPortSpeed(-1);
+        device.setDuplex(-1);
         return device;
     }
 
@@ -124,13 +146,13 @@ public class DeviceServiceImpl implements DeviceService {
 
         List<Log> logList = logService.getToday();
         listFromFile = updateDeviceListStatistics(listFromFile, logList);
-        deviceDAO.storeAll(listFromFile);
+        deviceRepository.saveAll(listFromFile);
         return true;
     }
 
     @Override
     public boolean writeToConfig() {
-        List<Device> listFromDB = deviceDAO.getAll();
+        List<Device> listFromDB = getAll();
         if ((listFromDB == null) || (listFromDB.isEmpty())) return false;
 
         return usersFileService.saveListToFile(listFromDB);
@@ -141,7 +163,7 @@ public class DeviceServiceImpl implements DeviceService {
         List<Device> deviceList = getAll();
         List<Log> logList = logService.getToday();
         deviceList = updateDeviceListStatistics(deviceList, logList);
-        deviceDAO.storeAll(deviceList);
+        deviceRepository.saveAll(deviceList);
     }
 
     private List<Device> mergeWithDbRecords(List<Device> listFromFile) {
@@ -164,5 +186,28 @@ public class DeviceServiceImpl implements DeviceService {
             }
         }
         return result;
+    }
+
+    private void hydrateSwitch(Device device) {
+        if (device == null || device.getSwitchId() == null) return;
+        switchRepository.findById(device.getSwitchId()).ifPresent(device::setSwitch);
+    }
+
+    private void hydrateSwitches(List<Device> devices) {
+        if (devices == null || devices.isEmpty()) return;
+        Set<Integer> ids = new HashSet<>();
+        for (Device d : devices) {
+            if (d.getSwitchId() != null) ids.add(d.getSwitchId());
+        }
+        if (ids.isEmpty()) return;
+        Map<Integer, Switch> byId = new HashMap<>();
+        switchRepository.findAllById(ids).forEach(s -> byId.put(s.getId(), s));
+        for (Device d : devices) {
+            Integer sid = d.getSwitchId();
+            if (sid != null) {
+                Switch s = byId.get(sid);
+                if (s != null) d.setSwitch(s);
+            }
+        }
     }
 }

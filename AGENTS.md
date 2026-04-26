@@ -22,7 +22,7 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 | Build        | Maven (`pom.xml`), packaging = `war`                          |
 | Language     | Java 17 (`<release>17</release>`), jakarta namespace          |
 | Web          | Spring Web MVC **6.1.14**, Spring Security **6.3.4**          |
-| Persistence  | Hibernate **5.6.15.Final** *jakarta artifact* + MySQL **8.0** (`mysql-connector-j` **8.4**) |
+| Persistence  | Spring Data JDBC **3.3.5** + MySQL **8.0** (`mysql-connector-j` **8.4**) |
 | View         | Thymeleaf **3.1.4** (+ `thymeleaf-spring6` + `thymeleaf-extras-springsecurity6` **3.1.3**) |
 | DB pool      | HikariCP **5.1.0**                                            |
 | Logging      | SLF4J 1.7 + Logback 1.2.13                                    |
@@ -50,21 +50,21 @@ This is **not** Spring Boot — bootstrapping is via
 └── src/
     ├── main/
     │   ├── java/lv/freeradiusgui/
-    │   │   ├── config/             # Spring, Security, Hibernate, Thymeleaf, MVC, init
+    │   │   ├── config/             # Spring, Security, Persistence, Thymeleaf, MVC, init
     │   │   ├── controllers/        # @Controller (Account, Admin, Devices, Switches, Logs, Server, Login)
     │   │   ├── services/           # @Service business logic
     │   │   │   ├── filesServices/  # Read/write FreeRADIUS users + clients.conf + log files
     │   │   │   ├── serverServices/ # Restart freeradius, status checks
     │   │   │   ├── shellServices/  # ShellExecutor + ShellCommands constants
     │   │   │   └── mailServices/   # SMTP notifications
-    │   │   ├── dao/                # Hibernate DAOs (AbstractGenericBaseDao + per-entity)
-    │   │   ├── domain/             # JPA entities: Account, Role, Device, Switch, Log, Server
+    │   │   ├── repositories/       # Spring Data JDBC CrudRepository<T,Integer>
+    │   │   ├── domain/             # Spring Data Relational entities: Account, AccountRoleRef, Role, Device, Switch, Log, Server
     │   │   ├── validators/         # Spring Validator implementations
     │   │   ├── interceptors/       # SessionVariablesInterceptor
     │   │   ├── listeners/          # Auth success/failure + startup listeners
     │   │   ├── scheduler/          # @Scheduled tasks
     │   │   ├── constants/          # Views.java — ALL view names live here
-    │   │   └── utils/              # CustomLocalDateTime (Hibernate UserType), OperationResult
+    │   │   └── utils/              # OperationResult
     │   ├── resources/
     │   │   ├── config.properties   # DB URL, file paths, mail settings
     │   │   ├── messages.properties
@@ -104,7 +104,7 @@ Raw Maven equivalents (no mise needed):
 ```bash
 mvn clean package                   # build target/freeradiusgui.war
 mvn test                            # run unit tests (Surefire: *Test / *IT / *TestIT)
-mvn -Dtest=DeviceDAOImplTest test   # run a single test
+mvn -Dtest=DeviceRepositoryTest test # run a single test
 mvn spotless:check                  # lint
 mvn spotless:apply                  # format
 ```
@@ -117,13 +117,11 @@ app image and serves it from a Tomcat 10.1 container.
 ### Containerization
 
 - `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 10.1/JDK 17 runtime.
-  The runtime stage sets `JAVA_OPTS` with four `--add-opens` flags that
-  Hibernate 5.6 + Spring 6.1 need under JDK 17 strong encapsulation
-  (`java.base/java.lang`, `…/java.lang.reflect`, `…/java.lang.invoke`,
-  `…/java.util`). Mirrored in `pom.xml`'s surefire `<argLine>`. Phase
-  3 added a fifth open for `java.base/java.math` preemptively; Phase
-  4 verified `mvn test` is green without it and dropped it. Do not
-  drop any of the remaining four without testing DAO reflection.
+  The runtime stage sets `JAVA_OPTS` with two `--add-opens` flags Spring 6.1
+  needs under JDK 17 (`java.base/java.lang`, `…/java.lang.reflect`).
+  Mirrored in `pom.xml`'s surefire `<argLine>`. Spring Data JDBC does not
+  need the `java.lang.invoke` and `java.util` opens that Hibernate 5.6
+  required (dropped in Phase 5).
 - The WAR is exploded into `$CATALINA_HOME/webapps/ROOT/` at image build
   time. To override config without rebuilding, bind-mount over
   `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
@@ -195,18 +193,22 @@ production credentials here.
 
 ## Architecture Conventions
 
-- **Layering**: `Controller → Service (interface + `*Impl`) → DAO
-  (interface + `*Impl` extends `AbstractGenericBaseDao`) → Domain entity`.
-  Keep new code in this shape; do not call DAOs directly from controllers.
+- **Layering**: `Controller → Service (interface + `*Impl`) → Repository
+  (Spring Data JDBC `CrudRepository`) → Domain entity`. Keep new code
+  in this shape; do not call repositories directly from controllers.
 - **View names**: always reference through
   `lv.freeradiusgui.constants.Views` constants — do not hard‑code view
   name strings in controllers.
-- **Entities**: JPA annotations + Hibernate. `LocalDateTime` columns
-  use `lv.freeradiusgui.utils.CustomLocalDateTime` as the `@Type`.
-  Hibernate 5.6 ships native JSR‑310 support, so the custom
-  `EnhancedUserType` is retained only for migration minimality — it
-  can be dropped whenever entities are willing to switch to plain
-  `@Column LocalDateTime` (no Hibernate-6 blocker here).
+- **Entities**: Spring Data Relational annotations
+  (`@Table`, `@Column`, `@Id`, `@MappedCollection`, `@Transient`).
+  `LocalDateTime` is read/written natively via JDBC 4.2 — no custom
+  `UserType`. Many-to-one FKs use `AggregateReference<T, Integer>` for
+  the persisted side, paired with a `@Transient` typed field that is
+  hydrated in the service layer (see `Device.aSwitch`, `Log.aSwitch`,
+  `Log.device`). The `accounts ↔ roles` many-to-many uses
+  `AccountRoleRef` as a `@MappedCollection` join-row, with a
+  `@Transient Set<Role> roles` view; setters call `rebuildRoleRefs()` so
+  controller/form code keeps working with `Set<Role>`.
 - **Validators**: one per form/entity in `validators/`, wired via
   `@InitBinder` in the controller (see `DevicesController`).
 - **Shell calls**: go through `ShellExecutor` with constants from
@@ -225,21 +227,13 @@ production credentials here.
 
 - **Tests need a live MySQL**: every test uses
   `@ContextConfiguration(classes = WebMVCConfig.class)` which transitively
-  boots `HybernateConfig` with a real HikariCP `DataSource`. Run
-  `mise run db:up` before `mise run test`. DAO tests fail with
-  `CannotCreateTransaction — Could not open Hibernate session` when the
-  DB is unreachable; service tests that only exercise pure helpers
+  boots `PersistenceConfig` with a real HikariCP `DataSource`. Run
+  `mise run db:up` before `mise run test`. Repository tests fail when
+  the DB is unreachable; service tests that only exercise pure helpers
   (`removeComments`, `parseValue`, …) pass even without MySQL because
-  context init only touches the DB when a DAO is actually used.
-- **`@Transactional` + `@Rollback`** on `DeviceDAOImplTest` means the
-  tests don't leave state behind in MySQL — safe to re‑run freely.
-- **DAO package casing inconsistency**: both `dao/deviceDAO/` and
-  `dao/DeviceDAO/` exist (the latter contains `DeviceDAOImpl.java`).
-  This is a pre‑existing quirk — don't refactor it incidentally; it may
-  break imports elsewhere.
-- **Typo `HybernateConfig`**: intentional file/class name
-  (`config/HybernateConfig.java`). Do not rename without a coordinated
-  change.
+  context init only touches the DB when a repository is actually used.
+- **`@Transactional` + `@Rollback`** on repository tests keeps MySQL
+  state clean — safe to re‑run freely.
 - **`web/` directory at repo root** is a legacy IntelliJ IDEA web module
   layout. Maven uses `src/main/webapp/` — ignore `web/` for build
   changes.
@@ -249,20 +243,15 @@ production credentials here.
   (runs the WAR in Tomcat 10.1 inside Docker), or deploy
   `target/freeradiusgui.war` into any external Servlet 5.0+ / Jakarta EE
   9+ container (Tomcat 10.1, or any other compliant Jakarta runtime).
-- **JDK 17 + jakarta namespace**: post-Phase-4 the codebase is on
-  Spring 6.1.x / Spring Security 6.3.x / Hibernate **5.6 jakarta
-  artifact** (still 5.6.x bytecode, just `jakarta.persistence`
-  imports) / Thymeleaf 3.1 *with `-spring6` integration extras* /
-  jakarta.mail 2.0.2 / Tomcat 10.1 (Servlet 6.0). Do **not** bump
-  Hibernate past 5.6.15.Final without a Phase 5 plan — Hibernate 6
-  removes the `Criteria` API, changes `EnhancedUserType` (we have
-  `CustomLocalDateTime` riding that), and moves the dialect classes.
-  Tomcat 11 / Servlet 6.1 / Jakarta EE 11 also runs on JDK 17, so
-  the version-pin gate isn't a JDK question — it's that Spring 6.1
-  + Spring Security 6.3 are aligned to Servlet 6.0 (Jakarta EE 10),
-  not 6.1, and bumping the runtime past Tomcat 10.1 alone is not
-  worth the risk surface here. Spring 6.2 has additional breaking
-  changes — stay on 6.1.x.
+- **JDK 17 + jakarta namespace**: post-Phase-5 the codebase is on
+  Spring 6.1.x / Spring Security 6.3.x / Spring Data JDBC **3.3.5**
+  (Hibernate is gone) / Thymeleaf 3.1 *with `-spring6` integration
+  extras* / jakarta.mail 2.0.2 / Tomcat 10.1 (Servlet 6.0). Spring
+  Data 3.3.x is aligned to Spring 6.1.x — do not bump Spring to 6.2
+  without bumping Spring Data in lockstep. Tomcat 11 / Servlet 6.1 /
+  Jakarta EE 11 also runs on JDK 17, but the version-pin gate isn't
+  a JDK question — Spring 6.1 + Spring Security 6.3 are aligned to
+  Servlet 6.0 (Jakarta EE 10), not 6.1.
 - **`hasRole(...)` prepends `ROLE_` automatically**: in
   `SecurityConfig` the role names are passed bare (`"ADMIN"`,
   `"USER"`) because `.hasRole(X)` and `.hasAnyRole(X, …)` prepend
@@ -281,14 +270,12 @@ production credentials here.
   lives entirely outside the JDK, so `pom.xml` carries
   `jakarta.annotation:jakarta.annotation-api:2.1.1`. Don't drop it —
   two classes (`WebMVCConfig`, `MailServiceImpl`) import it.
-- **`--add-opens` is load-bearing**: Hibernate 5.6 proxies + Spring
-  6.1 reflective scans fail with `InaccessibleObjectException` on
-  JDK 17 without the four `--add-opens` flags in `Dockerfile`
-  `JAVA_OPTS` and surefire `<argLine>`. (Phase 3 added a fifth for
-  `java.base/java.math` preemptively; Phase 4 verified it's unused
-  and dropped it.) If a new DAO test throws
-  `InaccessibleObjectException` on some other package, add a matching
-  `--add-opens` in both places.
+- **`--add-opens` is load-bearing**: Spring 6.1 reflective scans fail
+  with `InaccessibleObjectException` on JDK 17 without the two
+  `--add-opens` flags (`java.base/java.lang`, `…/java.lang.reflect`)
+  in `Dockerfile` `JAVA_OPTS` and surefire `<argLine>`. If a new
+  test throws `InaccessibleObjectException` on some other package,
+  add a matching `--add-opens` in both places.
 - **`jakarta.servlet-api 6.0.0` is pinned to match Tomcat 10.1**:
   Spring 6.1 declares Servlet 5.0+ as its baseline, but Tomcat 10.1
   ships Servlet 6 and exposes `jakarta.servlet.ServletConnection`
@@ -325,8 +312,8 @@ production credentials here.
 
 - Framework: JUnit 4 + `spring-test`.
 - Surefire includes: `**/*IT.java`, `**/*TestIT.java`, `**/*Test.java`.
-- When adding tests for DAOs/services, follow the pattern in
-  `DeviceDAOImplTest` / `ClientsConfigFileServiceImplTest`.
+- When adding tests for repositories/services, follow the pattern in
+  `DeviceRepositoryTest` / `ClientsConfFileServiceTest`.
 - Prefer putting new tests under `src/test/java/...` (see Gotchas).
 
 ## Coding Style

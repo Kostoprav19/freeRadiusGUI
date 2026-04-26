@@ -1,49 +1,48 @@
 package lv.freeradiusgui.domain;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-@Table(name = "logs")
+@Table("logs")
 public class Log {
 
     public static final int STATUS_ACCEPT = 1;
     public static final int STATUS_REJECT = 0;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "log_id")
+    @Column("log_id")
     private Integer id;
 
-    @Column(name = "mac")
+    @Column("mac")
     private String mac;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "mac", referencedColumnName = "mac", insertable = false, updatable = false)
-    private Device device;
+    @Transient private Device device;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinColumn(name = "switch_id")
-    private Switch aSwitch;
+    @Column("switch_id")
+    private AggregateReference<Switch, Integer> switchRef;
 
-    @Column(name = "port")
+    @Transient private Switch aSwitch;
+
+    @Column("port")
     private Integer switchPort;
 
-    @Column(name = "speed")
+    @Column("speed")
     private Integer portSpeed;
 
-    @Column(name = "duplex")
+    @Column("duplex")
     private Integer duplex;
 
-    @Column(name = "tor")
-    @Type(type = "lv.freeradiusgui.utils.CustomLocalDateTime")
+    @Column("tor")
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime timeOfRegistration;
 
-    @Column(name = "status")
-    private Integer status; // 1 - Accept, 0 - Reject
+    @Column("status")
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -58,8 +57,7 @@ public class Log {
     }
 
     public void setMac(String mac) {
-        mac = mac.replaceAll("[^a-fA-F0-9]", ""); // normalize
-        this.mac = mac;
+        this.mac = (mac == null) ? null : mac.replaceAll("[^a-fA-F0-9]", "");
     }
 
     public Device getDevice() {
@@ -76,6 +74,14 @@ public class Log {
 
     public void setSwitch(Switch aSwitch) {
         this.aSwitch = aSwitch;
+        this.switchRef =
+                (aSwitch == null || aSwitch.getId() == null)
+                        ? null
+                        : AggregateReference.to(aSwitch.getId());
+    }
+
+    public Integer getSwitchId() {
+        return switchRef == null ? null : switchRef.getId();
     }
 
     public Integer getSwitchPort() {

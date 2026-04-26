@@ -22,8 +22,6 @@ public interface LogService {
 
     List<Log> getAll();
 
-    List<Log> getAllByCriteria(String fieldName, Object object);
-
     Long getCount();
 
     OperationResult loadFromFile(LocalDateTime date);

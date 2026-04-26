@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @EnableAsync
 @ComponentScan(basePackages = {"lv.freeradiusgui"})
 @EnableScheduling
-@Import({ThymeleafConfig.class, HybernateConfig.class, SecurityConfig.class})
+@Import({ThymeleafConfig.class, PersistenceConfig.class, SecurityConfig.class})
 public class WebMVCConfig implements WebMvcConfigurer {
 
     @Override

@@ -16,8 +16,6 @@ public interface SwitchService {
 
     List<Switch> getAll();
 
-    List<Switch> getAllByCriteria(String fieldName, Object object);
-
     boolean delete(Switch aSwitch);
 
     Long getCount();

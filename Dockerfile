@@ -37,18 +37,10 @@ COPY --from=build /build/ROOT/ "$CATALINA_HOME/webapps/ROOT/"
 RUN mkdir -p /etc/freeradius /var/log/freeradius/radacct \
  && touch /etc/freeradius/users /etc/freeradius/clients.conf
 
-# --add-opens: required by Hibernate 5.6 + Spring 6.1 under JDK 17 strong
-# encapsulation. Without these, first sessionFactory.openSession() throws
-# InaccessibleObjectException. Mirror in pom.xml surefire <argLine>.
-# Phase 3 added a fifth open for java.base/java.math preemptively; Phase 4
-# verified it's unused (mvn test green without it) and dropped it.
-# Hibernate 6 (Phase 5) reflects through MethodHandles instead of direct
-# field access for most cases — most of the four below can drop then.
+# --add-opens: Spring 6.1 reflection on JDK 17. Mirror in pom.xml surefire <argLine>.
 ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC \
     --add-opens=java.base/java.lang=ALL-UNNAMED \
-    --add-opens=java.base/java.lang.reflect=ALL-UNNAMED \
-    --add-opens=java.base/java.lang.invoke=ALL-UNNAMED \
-    --add-opens=java.base/java.util=ALL-UNNAMED"
+    --add-opens=java.base/java.lang.reflect=ALL-UNNAMED"
 
 EXPOSE 8080
 

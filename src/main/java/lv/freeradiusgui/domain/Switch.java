@@ -1,29 +1,29 @@
 package lv.freeradiusgui.domain;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
-@Table(name = "switches")
+@Table("switches")
 public class Switch {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "switch_id")
+    @Column("switch_id")
     private Integer id;
 
-    @Column(name = "mac", unique = true)
+    @Column("mac")
     private String mac;
 
-    @Column(name = "name")
+    @Column("name")
     private String name;
 
-    @Column(name = "descr")
+    @Column("descr")
     private String description;
 
-    @Column(name = "ip")
+    @Column("ip")
     private String ip;
 
-    @Column(name = "secret")
+    @Column("secret")
     private String secret;
 
     // TODO: additional fields like numberOfPorts, vendor, model, year
@@ -51,8 +51,7 @@ public class Switch {
     }
 
     public void setMac(String mac) {
-        mac = mac.replaceAll("[^a-fA-F0-9]", ""); // normalize
-        this.mac = mac;
+        this.mac = (mac == null) ? null : mac.replaceAll("[^a-fA-F0-9]", "");
     }
 
     public String getName() {
