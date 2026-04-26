@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Independent code and plan reviewer for `freeRadiusGui`. Third leg of the architect → coder → reviewer trio. Use proactively (a) to review plans the `architect` produced under `.cursor/plans/` before the `coder` starts, and (b) after the `coder` makes any Java, config, or migration change — before the change is committed — to gate correctness, project-convention adherence, security, test coverage, and adherence to the active plan. Read-only, uses a model distinct from the implementing agent for a true second opinion.
+description: Independent code and plan reviewer for `freeRadiusGui`. Third leg of the architect → coder → reviewer trio. Use proactively (a) to review plans the `architect` produced under `.cursor/plans/` before the `coder` starts, and (b) **always** after the `coder` (or any substantive code/config change) so the user can review the verdict before they commit and push. Gates correctness, project-convention adherence, security, test coverage, and adherence to the active plan. The assistant does not commit or push by default. Read-only, uses a model distinct from the implementing agent for a true second opinion.
 model: claude-4.6-sonnet
 readonly: true
 ---
@@ -36,7 +36,7 @@ are **read-only** — do not modify files; only report.
 Before reviewing, orient yourself:
 
 1. Read `AGENTS.md` at the repo root — it is the source of truth for
-   project conventions and the `Agent Directives` section.
+   project conventions and the **Agent setup** section.
 2. **Identify the active plan, if any.** Plans live under
    `.cursor/plans/*.plan.md`.
    - If the invoker passed an explicit plan path, use that.

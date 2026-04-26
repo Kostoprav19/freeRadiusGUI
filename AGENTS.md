@@ -270,9 +270,11 @@ Claude Code, and Codex CLI all see the same definitions:
   the user explicitly asked. Surveys options; `coder` executes the
   plan.
 - **`coder`** (`gpt-5.3-codex`, read/write) — implements **one phase
-  at a time**, runs verification, stages the diff. **Does not** edit
-  **anything** under `.cursor/plans/`; reports which todo `id`s
-  completed so **`architect`** can update plan files and `ROADMAP.md`.
+  at a time**, runs verification, then the workflow **always invokes
+  `reviewer`** on the diff. **Does not** `git commit` or `git push` unless
+  the user **explicitly** asks. **Does not** edit **anything** under
+  `.cursor/plans/`; reports which todo `id`s completed so **`architect`**
+  can update plan files and `ROADMAP.md`.
 - **`reviewer`** (`claude-4.6-sonnet`, read-only) — independent second
   opinion in plan-review and code-review modes. Different model
   family from the coder so single-model blind spots can't slip through.
@@ -290,23 +292,29 @@ Claude Code, and Codex CLI all see the same definitions:
 
 1. `architect` writes the plan; `reviewer` (plan-review) gates it
    (BLOCKING → architect amends).
-2. `coder` implements one phase, runs verification, stages the diff;
-   `reviewer` (code-review) gates the staged diff (BLOCKING → coder
-   fixes and re-runs; never commit with open BLOCKING findings).
-3. Commit: conventional-commits prefix, imperative subject, body
-   explains *why* + plan phase id + verification results. **No
-   tool-attribution trailers** (`Made-with: Cursor`, `Co-authored-by:
-   …[bot]`, etc.). Reference the verdict in the session summary.
-
-The gate is **per commit**. May be skipped for trivial docs-only
-commits (mention the skip), reverts of an already-approved commit, or
-explicit user override (call it out).
+2. `coder` implements one phase and runs verification; then **`reviewer`**
+   (code-review) runs on the **changed diff** (BLOCKING → `coder` fixes
+   and re-runs). **The assistant must invoke `reviewer` after code changes
+   by default;** do not skip for substantive edits.
+3. **Commit and push** are **not** performed by the assistant unless the user
+   **explicitly** asks. The user reviews, then `git commit` and `git push`
+   with a conventional-commits message (imperative subject, body with *why*
+   + plan phase + verification, **no** `Made-with:` / bot `Co-authored-by:`
+   trailers). The assistant may suggest a commit message in the summary.
+   The gate is the **reviewer** result before the user commits; a trivial
+   docs-only change may skip `reviewer` if the user labels it as such.
 
 **Strict routing.** Edits to **source, tests, `pom.xml`, `Dockerfile`,
 `docker/**`, `mise.toml`, and lab compose** should be made by the **`coder`**
 subagent, not by the main orchestrating session, except trivial docs-only
-fixes the user calls out. Cursor loads **`.cursor/rules/coder-implementation-routing.mdc`**
+fixes the user calls out. After implementation, **invoke `reviewer`** on the
+diff. **Do not** `git commit` or `git push` from the assistant unless the
+user explicitly requests it. Cursor loads **`.cursor/rules/coder-implementation-routing.mdc`**
 as a reminder.
+
+- **"Review"** in a user request — by default, **invoke the `reviewer`**
+  subagent on the diff, do not replace that with a prose review only in
+  the main chat (see `.cursor/rules/coder-implementation-routing.mdc`).
 
 ## What NOT to do
 
