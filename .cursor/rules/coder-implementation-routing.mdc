@@ -1,0 +1,40 @@
+---
+description: Route app code, Docker, and build config edits to the coder subagent
+alwaysApply: true
+---
+
+# Implementation routing (strict)
+
+This repository uses a **three-agent** workflow (see `AGENTS.md`).
+
+## Do not implement in the main / orchestrating chat
+
+For **non-trivial** work, the session that spawns subagents must **not** use
+file-edit tools to change application implementation or container/build assets
+itself. **Invoke the `coder` subagent** to perform those edits, run
+verification, stage, and hand off to `reviewer` before commit.
+
+**In scope for the `coder` (when a plan or task authorises it):**
+
+- `src/**` (Java, resources, webapp, tests)
+- `pom.xml`
+- `Dockerfile` and `docker/**` (e.g. `docker/entrypoint-*.sh`, `docker/README.md`)
+- `mise.toml` and build/lab integration such as `lab/compose.yaml`, `lab/**`
+  when the change is part of the implementation (not a one-line typo)
+- `AGENTS.md` / `README.md` only when they are part of the same **documented
+  phase** (e.g. stack version sync with a dep bump the coder is applying)
+
+**Out of scope for the main chat and for `coder` (use `architect` only):**
+
+- **Any** create/edit/delete under **`.cursor/plans/`** (including
+  `ROADMAP.md`, `*.plan.md`, plan `todos`).
+
+**Still OK in the main chat (no `coder` required):**
+
+- Questions, design discussion, and **invoking** `architect` / `coder` /
+  `reviewer` with a clear task
+- Trivial, user-explicit **docs-only** one-offs (e.g. fix a typo, add a
+  sentence) if the user labels them as trivial; when unsure, use **`coder`**
+
+**Flow:** `architect` (plan) → `coder` (implementation + Docker/build as
+above) → `reviewer` (gate) → commit.

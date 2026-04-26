@@ -279,7 +279,12 @@ Claude Code, and Codex CLI all see the same definitions:
 - **Main / orchestrating session** (the chat that spawns subagents) —
   requests like "update the roadmap" or "change the plan" are **only**
   executed by the **`architect` subagent**; never use file tools on
-  **`.cursor/plans/`** yourself.
+  **`.cursor/plans/`** yourself. For **implementation** (application
+  code, `pom.xml`, `Dockerfile`, `docker/**`, `mise.toml`, `lab/compose.yaml`,
+  and similar), do **not** apply those edits in the main chat: **invoke the
+  `coder` subagent** so changes run through verification and reviewer gating
+  (see `.cursor/rules/coder-implementation-routing.mdc`). Trivial docs-only
+  one-offs are the exception if explicitly marked as such.
 
 ### Standard flow
 
@@ -296,6 +301,12 @@ Claude Code, and Codex CLI all see the same definitions:
 The gate is **per commit**. May be skipped for trivial docs-only
 commits (mention the skip), reverts of an already-approved commit, or
 explicit user override (call it out).
+
+**Strict routing.** Edits to **source, tests, `pom.xml`, `Dockerfile`,
+`docker/**`, `mise.toml`, and lab compose** should be made by the **`coder`**
+subagent, not by the main orchestrating session, except trivial docs-only
+fixes the user calls out. Cursor loads **`.cursor/rules/coder-implementation-routing.mdc`**
+as a reminder.
 
 ## What NOT to do
 

@@ -15,10 +15,11 @@ For any version-sensitive decision, also check `pom.xml` rather than
 relying on memory. If `AGENTS.md` and `pom.xml` disagree, `pom.xml`
 wins and you must call out the doc drift.
 
-You do **not** write application code, `pom.xml`, or
-`config.properties` (unless the user explicitly tasks you with a
-doc outside `plans/`). The `coder` implements; the `reviewer` gates
-implementation. **You alone** write the planning tree.
+You do **not** write application code, `pom.xml`, `Dockerfile`,
+`docker/**`, or `config.properties` (unless the user explicitly tasks
+you with a doc outside `plans/`). The **`coder`** implements all of
+that when a plan authorises it; the `reviewer` gates implementation.
+**You alone** write the planning tree.
 
 ## `.cursor/plans/` — architect-only (entire directory)
 
