@@ -64,41 +64,31 @@ Preferred entry point is [`mise`](https://mise.jdx.dev/) (see `mise.toml`).
 Run `mise tasks` for the authoritative list; the most-used tasks are:
 
 ```bash
-mise install                        # install pinned Java 17 + Maven 3.9
-mise run build                      # mvn clean package (skips tests)
-mise run test                       # mvn test (needs MySQL up — see db:up)
-mise run verify                     # mvn clean verify (compile + test + package)
-mise run lint                       # mvn spotless:check
-mise run format                     # mvn spotless:apply
-mise run docker:build               # build Docker image (freeradiusgui:latest)
-
-# Compose stack (mise cd's into lab/ for you):
-mise run db:up                      # just MySQL, for unit tests
-mise run db:down                    # stop stack, keep DB volume
-mise run db:reset                   # stop AND wipe DB volume (re-seeds)
-mise run compose:up                 # full stack: app + DB + FreeRADIUS + radclient
-mise run compose:down               # stop the full stack
+mise install                        # pinned Java 17 + Maven 3.9
+mise run build | test | verify      # mvn clean package | test | clean verify
+mise run lint  | format             # mvn spotless:check | apply
+mise run docker:build               # build freeradiusgui:latest
+mise run db:up | db:down | db:reset # MySQL only (db:reset wipes volume + re-seeds)
+mise run compose:up | compose:down  # full stack: app + DB + FreeRADIUS + radclient
 ```
 
 Raw Maven works too (`mvn clean package`, `mvn test`,
-`mvn -Dtest=DeviceRepositoryTest test`, `mvn spotless:check|apply`).
-No embedded-servlet entry point — run via `mise run compose:up` or
-deploy the WAR to an external Tomcat 10.1.
+`mvn -Dtest=DeviceRepositoryTest test`). No embedded-servlet entry
+point — run via `mise run compose:up` or deploy the WAR to an
+external Tomcat 10.1.
 
 ### Containerization
 
-- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 10.1/JDK 17 runtime.
-  `JAVA_OPTS` carries two `--add-opens` flags Spring 6.1 needs under JDK 17
-  (`java.base/java.lang`, `…/java.lang.reflect`); mirrored in surefire
-  `<argLine>`. Spring Data JDBC does not need the `java.lang.invoke` /
-  `java.util` opens that Hibernate 5.6 required (dropped in Phase 5).
-- WAR is exploded into `$CATALINA_HOME/webapps/ROOT/` at image build time.
-  Override config without rebuilding by bind-mounting over
-  `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
-- The image does **not** include the `freeradius` daemon. Shell ops
-  (`freeradius`, `killall`, `pgrep`) only work with `--pid=host` and
-  access to a FreeRADIUS install, or alongside a sidecar.
-- `procps` + `psmisc` are installed for `pgrep` / `killall`.
+- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 10.1/JDK 17
+  runtime. `JAVA_OPTS` carries two `--add-opens` flags Spring 6.1 needs on
+  JDK 17 (`java.base/java.lang`, `…/java.lang.reflect`); mirrored in
+  surefire `<argLine>`.
+- WAR is exploded into `$CATALINA_HOME/webapps/ROOT/`. Override config
+  by bind-mounting `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
+- The image does **not** ship the `freeradius` daemon. Shell ops
+  (`freeradius`, `killall`, `pgrep`) need `--pid=host` + access to a
+  FreeRADIUS install (or a sidecar). `procps` + `psmisc` provide
+  `pgrep` / `killall`.
 
 ### Compose (MySQL + optional app)
 
@@ -248,27 +238,39 @@ production credentials.
   (`spotless-maven-plugin` 2.44.5, `google-java-format` 1.26.0); bumping
   past these requires a JDK 21 phase.
 
-## Pre-commit workflow (mandatory for agents)
+## Agent setup (architect → coder → reviewer)
 
-Before `git commit` on anything non-trivial, agents MUST run the
-`reviewer` subagent on the staged changes and act on its findings.
-Same gate a human reviewer would apply in a PR, moved earlier so
-broken diffs never reach history.
+Non-trivial changes use a **three-agent workflow**. Canonical prompts
+live in `agents/` at repo root (vendor-neutral); `.cursor/agents`,
+`.claude/agents`, and `.codex/agents` are symlinks to it so Cursor,
+Claude Code, and Codex CLI all see the same definitions:
 
-1. Stage (`git add …`), review the staged diff yourself first
-   (`git diff --staged`) — the reviewer is a second opinion.
-2. Launch the `reviewer` subagent in readonly mode with: branch/commit
-   range, plan file (if any), short scope + verification summary
-   (`mvn test` / `spotless:check` / `mise run smoke` / …).
-3. **BLOCKING** → fix and loop. Never commit with open BLOCKING findings.
-4. **SUGGESTED** / **NITS** → fold in, defer to a follow-up commit, or
-   skip with a short reason.
-5. `git commit`, then reference the verdict in the session summary.
+- **`architect`** (`claude-opus-4-7`, read-only) — surveys options,
+  writes a phased plan under `.cursor/plans/<slug>.plan.md` (YAML
+  `todos` + per-phase changes / verification / out-of-scope /
+  rollback). Does **not** write code.
+- **`coder`** (`gpt-5.3-codex`, read/write) — implements **one phase
+  at a time**, strictly in scope, runs verification, updates the
+  plan's `todos` to `completed`, stages the diff.
+- **`reviewer`** (`claude-4.6-sonnet`, read-only) — independent second
+  opinion in plan-review and code-review modes. Different model
+  family from the coder so single-model blind spots can't slip through.
 
-May be skipped for: trivial docs-only commits (still mention the skip);
-reverts of an already-approved commit; explicit user override — call
-it out. The gate is **per commit**, not once at end-of-branch; an
-end-of-phase audit is an *additional* safety net, not a replacement.
+### Standard flow
+
+1. `architect` writes the plan; `reviewer` (plan-review) gates it
+   (BLOCKING → architect amends).
+2. `coder` implements one phase, runs verification, stages the diff;
+   `reviewer` (code-review) gates the staged diff (BLOCKING → coder
+   fixes and re-runs; never commit with open BLOCKING findings).
+3. Commit: conventional-commits prefix, imperative subject, body
+   explains *why* + plan phase id + verification results. **No
+   tool-attribution trailers** (`Made-with: Cursor`, `Co-authored-by:
+   …[bot]`, etc.). Reference the verdict in the session summary.
+
+The gate is **per commit**. May be skipped for trivial docs-only
+commits (mention the skip), reverts of an already-approved commit, or
+explicit user override (call it out).
 
 ## What NOT to do
 

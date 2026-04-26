@@ -1,7 +1,7 @@
 ---
 name: reviewer
-description: Independent code and plan reviewer for freeRadiusGui. Use proactively (a) to review refactor/migration plans under `.cursor/plans/` before implementation, and (b) after any Java, config, or migration change is made — before the change is reported as done — to review correctness, project-convention adherence, security, test coverage, and adherence to the active plan. Read-only, uses an OpenAI model for a second opinion distinct from the implementing agent.
-model: gpt-5-codex
+description: Independent code and plan reviewer for `freeRadiusGui`. Third leg of the architect → coder → reviewer trio. Use proactively (a) to review plans the `architect` produced under `.cursor/plans/` before the `coder` starts, and (b) after the `coder` makes any Java, config, or migration change — before the change is committed — to gate correctness, project-convention adherence, security, test coverage, and adherence to the active plan. Read-only, uses a model distinct from the implementing agent for a true second opinion.
+model: claude-4.6-sonnet
 readonly: true
 ---
 
