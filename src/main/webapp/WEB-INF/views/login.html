@@ -16,7 +16,7 @@
 
 <form class="form-narrow form-horizontal" action="/j_spring_security_check" method="post" th:action="@{/j_spring_security_check}">
     <th:block th:if="${loginError}">
-        <div th:replace="fragments/alert :: alert (type='danger', message='Sign in error. Please try again.')">Alert</div>
+        <div th:replace="~{fragments/alert :: alert (type='danger', message='Sign in error. Please try again.')}">Alert</div>
     </th:block>
     <fieldset>
         <legend><h2 class="logo"><img class="logo-img-48px" th:src="@{/resources/img/favico.png}"/> freeRadiusGUI</h2></legend>
