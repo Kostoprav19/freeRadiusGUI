@@ -28,10 +28,15 @@ RUN apt-get update \
 RUN rm -rf "$CATALINA_HOME/webapps/"* "$CATALINA_HOME/webapps.dist"
 
 COPY --from=build /build/ROOT/ "$CATALINA_HOME/webapps/ROOT/"
+COPY docker/entrypoint-tomcat.sh /usr/local/bin/entrypoint-tomcat.sh
+RUN chmod 755 /usr/local/bin/entrypoint-tomcat.sh
 
-# RADIUS config, accounting, and app log paths are not created here. Supply bind
-# mounts or named volumes in compose/ops. Tests use Surefire
-# (LOGBACK_LOG_PATH=target/junit-logs). Lab: see lab/compose.yaml.
+# OCI labels: "docker inspect …Labels" and registry UIs. Do not add empty VOLUME
+# declarations here — that creates anonymous empty volumes and hides bad mounts.
+LABEL org.opencontainers.image.title="freeRadiusGui" \
+      org.opencontainers.image.description="FreeRADIUS admin UI; requires external mounts for RADIUS data and log dirs. See docker/README.md in the source tree." \
+      lv.freeradiusgui.recommended.volumes="/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties, /etc/freeradius/clients.conf, /etc/freeradius/users, /var/log/freeradius/radacct, /var/log/freeradiusgui" \
+      lv.freeradiusgui.strict_mounted_startup="set FREERADIUSGUI_REQUIRE_MOUNTS=1; see entrypoint and docker/README.md"
 
 # --add-opens: Spring 6.1 reflection on JDK 17. Mirror in pom.xml surefire <argLine>.
 ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC \
@@ -43,4 +48,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD curl -fsS http://localhost:8080/ >/dev/null || exit 1
 
+ENTRYPOINT ["/usr/local/bin/entrypoint-tomcat.sh"]
 CMD ["catalina.sh", "run"]

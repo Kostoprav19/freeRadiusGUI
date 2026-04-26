@@ -85,6 +85,11 @@ external Tomcat 10.1.
   surefire `<argLine>`.
 - WAR is exploded into `$CATALINA_HOME/webapps/ROOT/`. Override config
   by bind-mounting `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
+- **Production-style ops:** the image has **no** `VOLUME` stanzas and no
+  pre-created RADIUS or log paths (avoids empty anonymous volumes). OCI
+  **labels** list expected mount points (`docker inspect` / registry UI).
+  An **entrypoint** can fail fast when `FREERADIUSGUI_REQUIRE_MOUNTS=1`.
+  Full table and `docker run` notes: `docker/README.md` in the repo.
 - The image does **not** ship the `freeradius` daemon. Shell ops
   (`freeradius`, `killall`, `pgrep`) need `--pid=host` + access to a
   FreeRADIUS install (or a sidecar). `procps` + `psmisc` provide
