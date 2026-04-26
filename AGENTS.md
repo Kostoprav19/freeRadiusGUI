@@ -214,6 +214,11 @@ production credentials.
 - **Java 17 source**: `var`, records, switch expressions, text blocks
   compile — but keep new code consistent with existing style unless a
   feature materially helps.
+- **`LOGBACK_LOG_PATH` in `logback.xml`**: defaults to
+  `/var/log/freeradiusgui` (production / compose). **Surefire** sets
+  `LOGBACK_LOG_PATH` to `target/junit-logs` so `mvn test` does not need
+  a root-owned host path. Override with `-DLOGBACK_LOG_PATH=...` when
+  running the app if the default is wrong for your host.
 
 ## Testing
 

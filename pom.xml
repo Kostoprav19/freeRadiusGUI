@@ -221,6 +221,9 @@
                         --add-opens=java.base/java.lang=ALL-UNNAMED
                         --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
                     </argLine>
+                    <systemPropertyVariables>
+                        <LOGBACK_LOG_PATH>${project.build.directory}/junit-logs</LOGBACK_LOG_PATH>
+                    </systemPropertyVariables>
                     <includes>
                         <include>**/*IT.java</include>
                         <include>**/*TestIT.java</include>
