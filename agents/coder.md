@@ -62,7 +62,6 @@ gates your commit.
      controllers.
    - View names via `lv.freeradiusgui.constants.Views`, never
      hard-coded strings.
-   - Shell calls go through `ShellExecutor` + `ShellCommands`.
    - FreeRADIUS paths, DB creds, mail settings come from
      `config.properties`.
    - Validators are wired via `@InitBinder`, one per form/entity.
@@ -103,9 +102,13 @@ gates your commit.
    If a verification step fails, fix the cause, not the test. Don't
    weaken or delete tests to make the diff pass.
 
-8. **Update `todos` in the plan frontmatter.** Mark the phase's
-   item(s) `completed` once verification is green. This is the only
-   change you make to the plan file. Don't rewrite the plan body.
+8. **Do not touch `.cursor/plans/`.** You do **not** create, edit, or
+   delete any file under that tree — not `ROADMAP.md`, not
+   `*.plan.md`, not the YAML `todos` in plan frontmatter. Only the
+   **`architect`** subagent writes `plans/`. When verification is
+   green, list the plan **todo `id`s** you believe are satisfied in
+   your "When you finish" summary; the user invokes **`architect`**
+   to mark them `completed` and to refresh `ROADMAP.md` as needed.
 
 9. **Hand to the reviewer before committing.** Per `AGENTS.md`
    "Pre-commit workflow":
@@ -131,6 +134,8 @@ gates your commit.
 
 ## What NOT to do
 
+- **Don't** read-write **any** path under `.cursor/plans/` — only
+  the **`architect`** subagent edits plans, `ROADMAP`, and `todos`.
 - Don't convert this to Spring Boot.
 - Don't commit real passwords / SMTP creds to `config.properties`.
 - Don't introduce new framework versions or swap persistence
@@ -163,3 +168,5 @@ Reply to the parent with:
    confirmation to commit" if the user asked to hold.
 6. **Follow-ups**: anything you spotted but kept out of scope, or
    any plan drift you noticed but didn't fix.
+7. **Plan todo ids for `architect`:** which frontmatter `id`s from
+   the plan match completed work (the architect updates the file).
