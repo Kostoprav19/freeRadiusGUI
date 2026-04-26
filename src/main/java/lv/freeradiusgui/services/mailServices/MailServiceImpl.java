@@ -36,6 +36,10 @@ public class MailServiceImpl implements MailService {
 
     @PostConstruct
     public void init() {
+        if (!appConfig.isMailEnabled()) {
+            logger.info("Mail notifications disabled (mailEnabled=false); skipping SMTP setup.");
+            return;
+        }
         Properties props = System.getProperties();
         props.put("mail.smtp.host", appConfig.getMailSmtpServer());
         this.session = Session.getInstance(props, null);
@@ -73,6 +77,10 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public OperationResult sendMail() {
+        if (!appConfig.isMailEnabled()) {
+            logger.debug("sendMail() skipped — mail notifications disabled.");
+            return new OperationResult(OperationResult.SUCCESS, "Mail notifications disabled.");
+        }
         String from = appConfig.getMailFrom();
         String to = appConfig.getMailTo();
         String subject =
