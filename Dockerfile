@@ -17,9 +17,6 @@ RUN mkdir -p /build/ROOT \
 
 
 # ---------- Runtime stage ----------------------------------------------------
-# Tomcat 10.1 = Servlet 6.0 / Jakarta EE 10. Pairs with our jakarta.* webapp
-# from Phase 4. Tomcat 11 = Servlet 6.1 / Jakarta EE 11 + JDK 21 minimum
-# (deferred to Phase 8). Tomcat 10.0 is EOL; do not pin to it.
 FROM tomcat:10.1-jdk17-temurin
 
 # Tools the app shells out to (pgrep -> procps, killall -> psmisc).
@@ -32,10 +29,9 @@ RUN rm -rf "$CATALINA_HOME/webapps/"* "$CATALINA_HOME/webapps.dist"
 
 COPY --from=build /build/ROOT/ "$CATALINA_HOME/webapps/ROOT/"
 
-# Create expected FreeRADIUS paths so the app doesn't crash when nothing is
-# bind-mounted. Operators should mount real paths over these in production.
-RUN mkdir -p /etc/freeradius /var/log/freeradius/radacct /var/log/freeradiusgui \
-    && touch /etc/freeradius/users /etc/freeradius/clients.conf
+# RADIUS config, accounting, and app log paths are not created here. Supply bind
+# mounts or named volumes in compose/ops. Tests use Surefire
+# (LOGBACK_LOG_PATH=target/junit-logs). Lab: see lab/compose.yaml.
 
 # --add-opens: Spring 6.1 reflection on JDK 17. Mirror in pom.xml surefire <argLine>.
 ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC \

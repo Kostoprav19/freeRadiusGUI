@@ -107,7 +107,10 @@ overrides, dev-only DB seed. Run `docker compose` from inside `lab/`
     Bind-mounts `lab/config.properties` (lab fork pointing `dbUrl` at
     `jdbc:mysql://db:3306/...`) and `lab/freeradius/{clients.conf,users}`;
     shares `/var/log/freeradius/radacct` (named volume `radius-logs`)
-    with `freeradius` so the Logs page sees live data.
+    with `freeradius` so the Logs page sees live data. Named volume
+    `app-logs` is mounted at `/var/log/freeradiusgui` with
+    `JAVA_OPTS` … `-DLOGBACK_LOG_PATH=/var/log/freeradiusgui` (Logback
+    file output; the runtime image does not pre-create that path).
   - `freeradius`, `radclient` — dev-only helpers; see README.
 - Credentials live in `lab/.env` (copy `lab/.env.example`); defaults
   match `src/main/resources/config.properties` + `${VAR:-default}`
@@ -215,10 +218,13 @@ production credentials.
   compile — but keep new code consistent with existing style unless a
   feature materially helps.
 - **`LOGBACK_LOG_PATH` in `logback.xml`**: defaults to
-  `/var/log/freeradiusgui` (production / compose). **Surefire** sets
-  `LOGBACK_LOG_PATH` to `target/junit-logs` so `mvn test` does not need
-  a root-owned host path. Override with `-DLOGBACK_LOG_PATH=...` when
-  running the app if the default is wrong for your host.
+  `/var/log/freeradiusgui` when unset. The **Dockerfile** does not create
+  that directory (production: supply a volume or bind mount and
+  `JAVA_OPTS`/`-DLOGBACK_LOG_PATH=...`, or pre-create a writable path on
+  the host). **Surefire** sets `LOGBACK_LOG_PATH` to `target/junit-logs` so
+  `mvn test` is self-contained. **lab/compose** mounts the `app-logs` volume
+  at `/var/log/freeradiusgui` and passes `-DLOGBACK_LOG_PATH=…` in
+  `JAVA_OPTS`.
 
 ## Testing
 
