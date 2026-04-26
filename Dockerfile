@@ -34,8 +34,8 @@ COPY --from=build /build/ROOT/ "$CATALINA_HOME/webapps/ROOT/"
 
 # Create expected FreeRADIUS paths so the app doesn't crash when nothing is
 # bind-mounted. Operators should mount real paths over these in production.
-RUN mkdir -p /etc/freeradius /var/log/freeradius/radacct \
- && touch /etc/freeradius/users /etc/freeradius/clients.conf
+RUN mkdir -p /etc/freeradius /var/log/freeradius/radacct /var/log/freeradiusgui \
+    && touch /etc/freeradius/users /etc/freeradius/clients.conf
 
 # --add-opens: Spring 6.1 reflection on JDK 17. Mirror in pom.xml surefire <argLine>.
 ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC \
