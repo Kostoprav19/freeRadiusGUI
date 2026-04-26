@@ -15,7 +15,7 @@ description = "Compile and package the WAR (skips tests)"
 run = "mvn -B -ntp -DskipTests clean package"
 
 [tasks.test]
-description = "Run unit tests (JUnit 4, Surefire)"
+description = "Run unit tests (JUnit Jupiter, Surefire 3.2.x)"
 run = "mvn -B -ntp test"
 
 [tasks.verify]

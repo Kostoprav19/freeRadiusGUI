@@ -1,7 +1,7 @@
 package lv.freeradiusgui.repositories;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -10,16 +10,16 @@ import lv.freeradiusgui.config.WebMVCConfig;
 import lv.freeradiusgui.domain.Account;
 import lv.freeradiusgui.domain.AccountRoleRef;
 import lv.freeradiusgui.domain.Role;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = WebMVCConfig.class)
 @Transactional
@@ -38,7 +38,7 @@ public class AccountRepositoryTest {
     @Test
     public void roleRefRoundTripUsesAccountsRolesTable() {
         Role admin = roleRepository.findByName(Role.ROLE_ADMIN);
-        assertNotNull("seed role ROLE_ADMIN missing", admin);
+        assertNotNull(admin, "seed role ROLE_ADMIN missing");
 
         Account account = new Account();
         account.setLogin("test-roleref-" + System.nanoTime());

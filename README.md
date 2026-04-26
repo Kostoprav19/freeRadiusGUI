@@ -16,7 +16,7 @@ auth logs from the browser.
 
 Java 17 (jakarta namespace) · Spring MVC 6.1 · Spring Security 6.3 ·
 Spring Data JDBC 3.3 · Thymeleaf 3.1 (+ `thymeleaf-spring6`) · MySQL 8.0
-(mysql-connector-j 8.4) · HikariCP 5.1 · Logback 1.2 · Maven (WAR packaging) ·
+(mysql-connector-j 8.4) · HikariCP 5.1 · SLF4J 2 + Logback 1.5 · Maven (WAR packaging) ·
 Tomcat 10.1 (Docker image).
 
 > This is **not** Spring Boot — bootstrap is `WebApplicationInitializer`

@@ -25,9 +25,9 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 | Persistence  | Spring Data JDBC **3.3.5** + MySQL **8.0** (`mysql-connector-j` **8.4**) |
 | View         | Thymeleaf **3.1.4** (+ `thymeleaf-spring6` + `thymeleaf-extras-springsecurity6` **3.1.3**) |
 | DB pool      | HikariCP **5.1.0**                                            |
-| Logging      | SLF4J 1.7 + Logback 1.2.13                                    |
+| Logging      | SLF4J 2.0.17 + Logback 1.5.32                                 |
 | Mail         | `jakarta.mail` 2.0.2                                          |
-| Tests        | JUnit 4.12, Spring Test, Surefire                             |
+| Tests        | JUnit Jupiter 5.12 (via `junit-bom`), Spring Test, Surefire 3.2 |
 | Servlet ctr. | Tomcat 10.1 at runtime (via Docker image); no embedded plugin |
 
 This is **not** Spring Boot — bootstrapping is via
@@ -217,8 +217,8 @@ production credentials.
 
 ## Testing
 
-- JUnit 4 + `spring-test`. Surefire includes `**/*IT.java`,
-  `**/*TestIT.java`, `**/*Test.java`.
+- JUnit Jupiter 5 + `spring-test` (`@ExtendWith(SpringExtension.class)`).
+  Surefire includes `**/*IT.java`, `**/*TestIT.java`, `**/*Test.java`.
 - New repository/service tests follow `DeviceRepositoryTest` /
   `ClientsConfFileServiceTest`.
 - Put new tests under `src/test/java/...` (see Gotchas).
@@ -245,16 +245,25 @@ live in `agents/` at repo root (vendor-neutral); `.cursor/agents`,
 `.claude/agents`, and `.codex/agents` are symlinks to it so Cursor,
 Claude Code, and Codex CLI all see the same definitions:
 
-- **`architect`** (`claude-opus-4-7`, read-only) — surveys options,
-  writes a phased plan under `.cursor/plans/<slug>.plan.md` (YAML
-  `todos` + per-phase changes / verification / out-of-scope /
-  rollback). Does **not** write code.
+- **`architect`** (`claude-opus-4-7`) — **sole writer** of
+  **`.cursor/plans/`** (entire tree: `ROADMAP.md`, `*.plan.md`, plan
+  `todos`, etc.). The Cursor subagent is configured with
+  **`readonly: false`** in `agents/architect.md` so it *can* save
+  files there; `readonly: true` would block all writes. Still **no
+  app code** — do not edit `src/`, `pom.xml`, or app `config` unless
+  the user explicitly asked. Surveys options; `coder` executes the
+  plan.
 - **`coder`** (`gpt-5.3-codex`, read/write) — implements **one phase
-  at a time**, strictly in scope, runs verification, updates the
-  plan's `todos` to `completed`, stages the diff.
+  at a time**, runs verification, stages the diff. **Does not** edit
+  **anything** under `.cursor/plans/`; reports which todo `id`s
+  completed so **`architect`** can update plan files and `ROADMAP.md`.
 - **`reviewer`** (`claude-4.6-sonnet`, read-only) — independent second
   opinion in plan-review and code-review modes. Different model
   family from the coder so single-model blind spots can't slip through.
+- **Main / orchestrating session** (the chat that spawns subagents) —
+  requests like "update the roadmap" or "change the plan" are **only**
+  executed by the **`architect` subagent**; never use file tools on
+  **`.cursor/plans/`** yourself.
 
 ### Standard flow
 
