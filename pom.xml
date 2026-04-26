@@ -15,18 +15,29 @@
         <!-- Runtime: JDK 17 + Tomcat 10.1, jakarta.* namespace. -->
         <spring-version>6.1.14</spring-version>
         <spring-security-version>6.3.4</spring-security-version>
-        <junit-version>4.12</junit-version>
         <jakarta-servlet-api-version>6.0.0</jakarta-servlet-api-version>
         <spring-data-version>3.3.5</spring-data-version>
         <mysql-connector-version>8.4.0</mysql-connector-version>
         <hikaricp-version>5.1.0</hikaricp-version>
         <thymeleaf-version>3.1.4.RELEASE</thymeleaf-version>
         <thymeleaf-security>3.1.3.RELEASE</thymeleaf-security>
-        <slf4j-version>1.7.21</slf4j-version>
-        <logback-version>1.2.13</logback-version>
+        <slf4j-version>2.0.17</slf4j-version>
+        <logback-version>1.5.32</logback-version>
         <jakarta.mail-version>2.0.2</jakarta.mail-version>
         <jakarta.annotation-version>2.1.1</jakarta.annotation-version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.12.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -58,9 +69,8 @@
 
         <!--TEST-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -211,6 +221,9 @@
                         --add-opens=java.base/java.lang=ALL-UNNAMED
                         --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
                     </argLine>
+                    <systemPropertyVariables>
+                        <LOGBACK_LOG_PATH>${project.build.directory}/junit-logs</LOGBACK_LOG_PATH>
+                    </systemPropertyVariables>
                     <includes>
                         <include>**/*IT.java</include>
                         <include>**/*TestIT.java</include>

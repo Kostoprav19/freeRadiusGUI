@@ -1,26 +1,26 @@
 package lv.freeradiusgui.repositories;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import lv.freeradiusgui.config.WebMVCConfig;
 import lv.freeradiusgui.domain.Device;
 import lv.freeradiusgui.domain.Switch;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = WebMVCConfig.class)
 @Transactional
@@ -33,7 +33,7 @@ public class DeviceRepositoryTest {
 
     private Switch persistedSwitch;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Switch s = new Switch();
         s.setName("test-switch");
@@ -42,7 +42,7 @@ public class DeviceRepositoryTest {
         persistedSwitch = switchRepository.save(s);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // @Rollback handles cleanup
     }

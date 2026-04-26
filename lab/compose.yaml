@@ -35,6 +35,7 @@ services:
       start_period: 30s
 
   # freeRadiusGUI web app (Tomcat 10.1 / Spring 6 MVC). Enabled with `--profile app`.
+  # For a prod-like check, add: environment FREERADIUSGUI_REQUIRE_MOUNTS=1 (entrypoint; see docker/README.md).
   app:
     profiles: ["app"]
     build:
@@ -48,12 +49,13 @@ services:
     ports:
       - "${APP_PORT:-8080}:8080"
     environment:
-      JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC"
+      JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED"
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      - ./freeradius/clients.conf:/etc/freeradius/clients.conf
-      - ./freeradius/users:/etc/freeradius/users
+      - ./freeradius/clients.conf:/etc/freeradius/clients.conf:ro
+      - ./freeradius/users:/etc/freeradius/users:ro
       - radius-logs:/var/log/freeradius/radacct
+      - app-logs:/var/log/freeradiusgui
 
   # FreeRADIUS 3.2 server with overrides so the GUI's Logs page can parse its output.
   freeradius:
@@ -95,3 +97,4 @@ services:
 volumes:
   db-data:
   radius-logs:
+  app-logs:

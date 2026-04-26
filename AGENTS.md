@@ -25,9 +25,9 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 | Persistence  | Spring Data JDBC **3.3.5** + MySQL **8.0** (`mysql-connector-j` **8.4**) |
 | View         | Thymeleaf **3.1.4** (+ `thymeleaf-spring6` + `thymeleaf-extras-springsecurity6` **3.1.3**) |
 | DB pool      | HikariCP **5.1.0**                                            |
-| Logging      | SLF4J 1.7 + Logback 1.2.13                                    |
+| Logging      | SLF4J 2.0.17 + Logback 1.5.32                                 |
 | Mail         | `jakarta.mail` 2.0.2                                          |
-| Tests        | JUnit 4.12, Spring Test, Surefire                             |
+| Tests        | JUnit Jupiter 5.12 (via `junit-bom`), Spring Test, Surefire 3.2 |
 | Servlet ctr. | Tomcat 10.1 at runtime (via Docker image); no embedded plugin |
 
 This is **not** Spring Boot — bootstrapping is via
@@ -64,41 +64,36 @@ Preferred entry point is [`mise`](https://mise.jdx.dev/) (see `mise.toml`).
 Run `mise tasks` for the authoritative list; the most-used tasks are:
 
 ```bash
-mise install                        # install pinned Java 17 + Maven 3.9
-mise run build                      # mvn clean package (skips tests)
-mise run test                       # mvn test (needs MySQL up — see db:up)
-mise run verify                     # mvn clean verify (compile + test + package)
-mise run lint                       # mvn spotless:check
-mise run format                     # mvn spotless:apply
-mise run docker:build               # build Docker image (freeradiusgui:latest)
-
-# Compose stack (mise cd's into lab/ for you):
-mise run db:up                      # just MySQL, for unit tests
-mise run db:down                    # stop stack, keep DB volume
-mise run db:reset                   # stop AND wipe DB volume (re-seeds)
-mise run compose:up                 # full stack: app + DB + FreeRADIUS + radclient
-mise run compose:down               # stop the full stack
+mise install                        # pinned Java 17 + Maven 3.9
+mise run build | test | verify      # mvn clean package | test | clean verify
+mise run lint  | format             # mvn spotless:check | apply
+mise run docker:build               # build freeradiusgui:latest
+mise run db:up | db:down | db:reset # MySQL only (db:reset wipes volume + re-seeds)
+mise run compose:up | compose:down  # full stack: app + DB + FreeRADIUS + radclient
 ```
 
 Raw Maven works too (`mvn clean package`, `mvn test`,
-`mvn -Dtest=DeviceRepositoryTest test`, `mvn spotless:check|apply`).
-No embedded-servlet entry point — run via `mise run compose:up` or
-deploy the WAR to an external Tomcat 10.1.
+`mvn -Dtest=DeviceRepositoryTest test`). No embedded-servlet entry
+point — run via `mise run compose:up` or deploy the WAR to an
+external Tomcat 10.1.
 
 ### Containerization
 
-- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 10.1/JDK 17 runtime.
-  `JAVA_OPTS` carries two `--add-opens` flags Spring 6.1 needs under JDK 17
-  (`java.base/java.lang`, `…/java.lang.reflect`); mirrored in surefire
-  `<argLine>`. Spring Data JDBC does not need the `java.lang.invoke` /
-  `java.util` opens that Hibernate 5.6 required (dropped in Phase 5).
-- WAR is exploded into `$CATALINA_HOME/webapps/ROOT/` at image build time.
-  Override config without rebuilding by bind-mounting over
-  `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
-- The image does **not** include the `freeradius` daemon. Shell ops
-  (`freeradius`, `killall`, `pgrep`) only work with `--pid=host` and
-  access to a FreeRADIUS install, or alongside a sidecar.
-- `procps` + `psmisc` are installed for `pgrep` / `killall`.
+- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 10.1/JDK 17
+  runtime. `JAVA_OPTS` carries two `--add-opens` flags Spring 6.1 needs on
+  JDK 17 (`java.base/java.lang`, `…/java.lang.reflect`); mirrored in
+  surefire `<argLine>`.
+- WAR is exploded into `$CATALINA_HOME/webapps/ROOT/`. Override config
+  by bind-mounting `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
+- **Production-style ops:** the image has **no** `VOLUME` stanzas and no
+  pre-created RADIUS or log paths (avoids empty anonymous volumes). OCI
+  **labels** list expected mount points (`docker inspect` / registry UI).
+  An **entrypoint** can fail fast when `FREERADIUSGUI_REQUIRE_MOUNTS=1`.
+  Full table and `docker run` notes: `docker/README.md` in the repo.
+- The image does **not** ship the `freeradius` daemon. Shell ops
+  (`freeradius`, `killall`, `pgrep`) need `--pid=host` + access to a
+  FreeRADIUS install (or a sidecar). `procps` + `psmisc` provide
+  `pgrep` / `killall`.
 
 ### Compose (MySQL + optional app)
 
@@ -117,7 +112,10 @@ overrides, dev-only DB seed. Run `docker compose` from inside `lab/`
     Bind-mounts `lab/config.properties` (lab fork pointing `dbUrl` at
     `jdbc:mysql://db:3306/...`) and `lab/freeradius/{clients.conf,users}`;
     shares `/var/log/freeradius/radacct` (named volume `radius-logs`)
-    with `freeradius` so the Logs page sees live data.
+    with `freeradius` so the Logs page sees live data. Named volume
+    `app-logs` is mounted at `/var/log/freeradiusgui` with
+    `JAVA_OPTS` … `-DLOGBACK_LOG_PATH=/var/log/freeradiusgui` (Logback
+    file output; the runtime image does not pre-create that path).
   - `freeradius`, `radclient` — dev-only helpers; see README.
 - Credentials live in `lab/.env` (copy `lab/.env.example`); defaults
   match `src/main/resources/config.properties` + `${VAR:-default}`
@@ -224,11 +222,19 @@ production credentials.
 - **Java 17 source**: `var`, records, switch expressions, text blocks
   compile — but keep new code consistent with existing style unless a
   feature materially helps.
+- **`LOGBACK_LOG_PATH` in `logback.xml`**: defaults to
+  `/var/log/freeradiusgui` when unset. The **Dockerfile** does not create
+  that directory (production: supply a volume or bind mount and
+  `JAVA_OPTS`/`-DLOGBACK_LOG_PATH=...`, or pre-create a writable path on
+  the host). **Surefire** sets `LOGBACK_LOG_PATH` to `target/junit-logs` so
+  `mvn test` is self-contained. **lab/compose** mounts the `app-logs` volume
+  at `/var/log/freeradiusgui` and passes `-DLOGBACK_LOG_PATH=…` in
+  `JAVA_OPTS`.
 
 ## Testing
 
-- JUnit 4 + `spring-test`. Surefire includes `**/*IT.java`,
-  `**/*TestIT.java`, `**/*Test.java`.
+- JUnit Jupiter 5 + `spring-test` (`@ExtendWith(SpringExtension.class)`).
+  Surefire includes `**/*IT.java`, `**/*TestIT.java`, `**/*Test.java`.
 - New repository/service tests follow `DeviceRepositoryTest` /
   `ClientsConfFileServiceTest`.
 - Put new tests under `src/test/java/...` (see Gotchas).
@@ -248,27 +254,67 @@ production credentials.
   (`spotless-maven-plugin` 2.44.5, `google-java-format` 1.26.0); bumping
   past these requires a JDK 21 phase.
 
-## Pre-commit workflow (mandatory for agents)
+## Agent setup (architect → coder → reviewer)
 
-Before `git commit` on anything non-trivial, agents MUST run the
-`reviewer` subagent on the staged changes and act on its findings.
-Same gate a human reviewer would apply in a PR, moved earlier so
-broken diffs never reach history.
+Non-trivial changes use a **three-agent workflow**. Canonical prompts
+live in `agents/` at repo root (vendor-neutral); `.cursor/agents`,
+`.claude/agents`, and `.codex/agents` are symlinks to it so Cursor,
+Claude Code, and Codex CLI all see the same definitions:
 
-1. Stage (`git add …`), review the staged diff yourself first
-   (`git diff --staged`) — the reviewer is a second opinion.
-2. Launch the `reviewer` subagent in readonly mode with: branch/commit
-   range, plan file (if any), short scope + verification summary
-   (`mvn test` / `spotless:check` / `mise run smoke` / …).
-3. **BLOCKING** → fix and loop. Never commit with open BLOCKING findings.
-4. **SUGGESTED** / **NITS** → fold in, defer to a follow-up commit, or
-   skip with a short reason.
-5. `git commit`, then reference the verdict in the session summary.
+- **`architect`** (`claude-opus-4-7`) — **sole writer** of
+  **`.cursor/plans/`** (entire tree: `ROADMAP.md`, `*.plan.md`, plan
+  `todos`, etc.). The Cursor subagent is configured with
+  **`readonly: false`** in `agents/architect.md` so it *can* save
+  files there; `readonly: true` would block all writes. Still **no
+  app code** — do not edit `src/`, `pom.xml`, or app `config` unless
+  the user explicitly asked. Surveys options; `coder` executes the
+  plan.
+- **`coder`** (`gpt-5.3-codex`, read/write) — implements **one phase
+  at a time**, runs verification, then the workflow **always invokes
+  `reviewer`** on the diff. **Does not** `git commit` or `git push` unless
+  the user **explicitly** asks. **Does not** edit **anything** under
+  `.cursor/plans/`; reports which todo `id`s completed so **`architect`**
+  can update plan files and `ROADMAP.md`.
+- **`reviewer`** (`claude-4.6-sonnet`, read-only) — independent second
+  opinion in plan-review and code-review modes. Different model
+  family from the coder so single-model blind spots can't slip through.
+- **Main / orchestrating session** (the chat that spawns subagents) —
+  requests like "update the roadmap" or "change the plan" are **only**
+  executed by the **`architect` subagent**; never use file tools on
+  **`.cursor/plans/`** yourself. For **implementation** (application
+  code, `pom.xml`, `Dockerfile`, `docker/**`, `mise.toml`, `lab/compose.yaml`,
+  and similar), do **not** apply those edits in the main chat: **invoke the
+  `coder` subagent** so changes run through verification and reviewer gating
+  (see `.cursor/rules/coder-implementation-routing.mdc`). Trivial docs-only
+  one-offs are the exception if explicitly marked as such.
 
-May be skipped for: trivial docs-only commits (still mention the skip);
-reverts of an already-approved commit; explicit user override — call
-it out. The gate is **per commit**, not once at end-of-branch; an
-end-of-phase audit is an *additional* safety net, not a replacement.
+### Standard flow
+
+1. `architect` writes the plan; `reviewer` (plan-review) gates it
+   (BLOCKING → architect amends).
+2. `coder` implements one phase and runs verification; then **`reviewer`**
+   (code-review) runs on the **changed diff** (BLOCKING → `coder` fixes
+   and re-runs). **The assistant must invoke `reviewer` after code changes
+   by default;** do not skip for substantive edits.
+3. **Commit and push** are **not** performed by the assistant unless the user
+   **explicitly** asks. The user reviews, then `git commit` and `git push`
+   with a conventional-commits message (imperative subject, body with *why*
+   + plan phase + verification, **no** `Made-with:` / bot `Co-authored-by:`
+   trailers). The assistant may suggest a commit message in the summary.
+   The gate is the **reviewer** result before the user commits; a trivial
+   docs-only change may skip `reviewer` if the user labels it as such.
+
+**Strict routing.** Edits to **source, tests, `pom.xml`, `Dockerfile`,
+`docker/**`, `mise.toml`, and lab compose** should be made by the **`coder`**
+subagent, not by the main orchestrating session, except trivial docs-only
+fixes the user calls out. After implementation, **invoke `reviewer`** on the
+diff. **Do not** `git commit` or `git push` from the assistant unless the
+user explicitly requests it. Cursor loads **`.cursor/rules/coder-implementation-routing.mdc`**
+as a reminder.
+
+- **"Review"** in a user request — by default, **invoke the `reviewer`**
+  subagent on the diff, do not replace that with a prose review only in
+  the main chat (see `.cursor/rules/coder-implementation-routing.mdc`).
 
 ## What NOT to do
 
