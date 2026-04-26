@@ -44,7 +44,13 @@
         <appender-ref ref="STDOUT" />
     </logger>
 
-    <logger name="org.hibernate" level="WARN"
+    <logger name="org.springframework.jdbc" level="WARN"
+            additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="org.springframework.data" level="WARN"
             additivity="false">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
