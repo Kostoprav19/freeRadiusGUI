@@ -180,6 +180,7 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>25</release>
+                    <source>25</source>
                 </configuration>
             </plugin>
 
