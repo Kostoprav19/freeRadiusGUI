@@ -284,7 +284,8 @@ Claude Code, and Codex CLI all see the same definitions:
   code, `pom.xml`, `Dockerfile`, `docker/**`, `mise.toml`, `lab/compose.yaml`,
   and similar), do **not** apply those edits in the main chat: **invoke the
   `coder` subagent** so changes run through verification and reviewer gating
-  (see `.cursor/rules/coder-implementation-routing.mdc`). Trivial docs-only
+  (see `agents/rules/coder-implementation-routing.mdc`; Cursor loads it via
+  `.cursor/rules/` symlink). Trivial docs-only
   one-offs are the exception if explicitly marked as such.
 
 ### Standard flow
@@ -308,12 +309,12 @@ Claude Code, and Codex CLI all see the same definitions:
 subagent, not by the main orchestrating session, except trivial docs-only
 fixes the user calls out. After implementation, **invoke `reviewer`** on the
 diff. **Do not** `git commit` or `git push` from the assistant unless the
-user explicitly requests it. Cursor loads **`.cursor/rules/coder-implementation-routing.mdc`**
-as a reminder.
+user explicitly requests it. Cursor loads **`agents/rules/coder-implementation-routing.mdc`**
+via the `.cursor/rules/` symlink as a reminder.
 
 - **"Review"** in a user request — by default, **invoke the `reviewer`**
   subagent on the diff, do not replace that with a prose review only in
-  the main chat (see `.cursor/rules/coder-implementation-routing.mdc`).
+  the main chat (see `agents/rules/coder-implementation-routing.mdc`).
 
 ## What NOT to do
 

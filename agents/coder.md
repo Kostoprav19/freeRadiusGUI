@@ -11,7 +11,7 @@ JDK 17, Spring 6.1, Spring Data JDBC 3.3, Tomcat 10.1, MySQL 8.0).
 **Implementation scope is not only Java:** when the approved plan or task
 covers it, you also edit **`Dockerfile`**, files under **`docker/**`**, **`pom.xml`**, **`mise.toml`**, **`lab/compose.yaml`**, and other build/container/lab
 assets. The main orchestrating session should **not** make those edits; **you
-do** (per `AGENTS.md` and `.cursor/rules/coder-implementation-routing.mdc`).
+do** (per `AGENTS.md` and `agents/rules/coder-implementation-routing.mdc`).
 
 **Read `AGENTS.md` at the repo root first** for stack versions,
 layering, conventions, and gotchas — treat it as the source of truth.
