@@ -20,9 +20,9 @@ same machine as FreeRADIUS (Linux), with permissions to execute
 | Layer        | Tech                                                          |
 |--------------|---------------------------------------------------------------|
 | Build        | Maven (`pom.xml`), packaging = `war`                          |
-| Language     | Java 17 (`<release>17</release>`), jakarta namespace          |
-| Web          | Spring Web MVC **6.1.14**, Spring Security **6.3.4**          |
-| Persistence  | Spring Data JDBC **3.3.5** + MySQL **8.0** (`mysql-connector-j` **8.4**) |
+| Language     | Java 25 (`<release>25</release>`), jakarta namespace          |
+| Web          | Spring Web MVC **6.2.18**, Spring Security **6.4.13**         |
+| Persistence  | Spring Data JDBC **3.4.13** + MySQL **8.0** (`mysql-connector-j` **9.7**) |
 | View         | Thymeleaf **3.1.4** (+ `thymeleaf-spring6` + `thymeleaf-extras-springsecurity6` **3.1.3**) |
 | DB pool      | HikariCP **5.1.0**                                            |
 | Logging      | SLF4J 2.0.17 + Logback 1.5.32                                 |
@@ -64,7 +64,7 @@ Preferred entry point is [`mise`](https://mise.jdx.dev/) (see `mise.toml`).
 Run `mise tasks` for the authoritative list; the most-used tasks are:
 
 ```bash
-mise install                        # pinned Java 17 + Maven 3.9
+mise install                        # pinned Java 25 + Maven 3.9
 mise run build | test | verify      # mvn clean package | test | clean verify
 mise run lint  | format             # mvn spotless:check | apply
 mise run docker:build               # build freeradiusgui:latest
@@ -79,10 +79,10 @@ external Tomcat 10.1.
 
 ### Containerization
 
-- `Dockerfile` — multi-stage: Maven 3.9/JDK 17 build → Tomcat 10.1/JDK 17
-  runtime. `JAVA_OPTS` carries two `--add-opens` flags Spring 6.1 needs on
-  JDK 17 (`java.base/java.lang`, `…/java.lang.reflect`); mirrored in
-  surefire `<argLine>`.
+- `Dockerfile` — multi-stage: Maven 3.9/JDK 25 build → Tomcat 10.1/JRE 25
+  runtime. `JAVA_OPTS` carries timezone/memory defaults and no extra
+  `--add-opens` flags after the Spring 6.2 + JDK 25 audit; surefire
+  `<argLine>` mirrors that empty opens set.
 - WAR is exploded into `$CATALINA_HOME/webapps/ROOT/`. Override config
   by bind-mounting `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
 - **Production-style ops:** the image has **no** `VOLUME` stanzas and no
@@ -106,7 +106,7 @@ overrides, dev-only DB seed. Run `docker compose` from inside `lab/`
   - `db` — `mysql:8.0` (utf8mb4_0900_ai_ci) mounting
     `../databaseCreationScript.sql` into `/docker-entrypoint-initdb.d/`.
     `caching_sha2_password` (8.0 default) is handled by
-    `mysql-connector-j` 8.4 + `allowPublicKeyRetrieval=true` in the lab
+    `mysql-connector-j` 9.7 + `allowPublicKeyRetrieval=true` in the lab
     JDBC URL. Downgrading to `mysql:5.7` is unsupported (volume is 8.0).
   - `app` — gated behind the `app` profile, built from repo root.
     Bind-mounts `lab/config.properties` (lab fork pointing `dbUrl` at
@@ -186,11 +186,10 @@ production credentials.
 - **No `main()` and no embedded-servlet plugin**. Run via
   `mise run compose:up`, or drop the WAR into any Servlet 5.0+ /
   Jakarta EE 9+ container.
-- **Version pin (post-Phase-5)**: Spring 6.1.x / Security 6.3.x /
-  Spring Data JDBC **3.3.5** / Thymeleaf 3.1 + `-spring6` / jakarta.mail
-  2.0.2 / Tomcat 10.1 (Servlet 6.0). Spring Data 3.3.x is aligned to
-  Spring 6.1.x — bump them in lockstep. Tomcat 11 / Servlet 6.1 needs
-  Spring 6.2+ first.
+- **Version pin (post-Phase-8)**: Spring 6.2.x / Security 6.4.x /
+  Spring Data JDBC **3.4.13** / Thymeleaf 3.1 + `-spring6` / jakarta.mail
+  2.0.2 / Tomcat 10.1 (Servlet 6.0). Spring Data 3.4.x is aligned to
+  Spring 6.2.x. Tomcat 11 / Servlet 6.1 needs Spring 7+.
 - **`hasRole(...)` auto-prepends `ROLE_`**: pass bare names (`"ADMIN"`)
   in `SecurityConfig`. Passing `"ROLE_ADMIN"` produces `ROLE_ROLE_ADMIN`
   checks (fail-closed). The legacy SpEL `.access("hasRole('ROLE_X')")`
@@ -201,13 +200,12 @@ production credentials.
 - **`jakarta.annotation.PostConstruct` needs an explicit artifact**:
   `pom.xml` carries `jakarta.annotation-api:2.1.1` (used by `WebMVCConfig`,
   `MailServiceImpl`). Don't drop it.
-- **`--add-opens` is load-bearing**: Spring 6.1 reflective scans fail
-  with `InaccessibleObjectException` on JDK 17 without the two flags in
-  `Dockerfile` `JAVA_OPTS` and surefire `<argLine>`. If a new test
-  throws `InaccessibleObjectException` on another package, add a matching
-  `--add-opens` in **both** places.
+- **`--add-opens` audit status**: Spring 6.2 + JDK 25 test/smoke runs are
+  green with no explicit opens in `Dockerfile` `JAVA_OPTS` and surefire
+  `<argLine>`. If a future test throws `InaccessibleObjectException` on
+  another package, add a matching `--add-opens` in **both** places.
 - **`jakarta.servlet-api 6.0.0` pinned `provided`** to match Tomcat 10.1
-  (Spring 6.1 reflective-scans Servlet 6's `ServletConnection`).
+  (Spring 6.2 still targets Servlet 6.0 / Jakarta EE 10).
 - **Thymeleaf 3.1 removed `#request`/`#session`/`#servletContext`/`#response`**
   and `ServletContextTemplateResolver`. Templates use controller-provided
   model attributes (`SessionVariablesInterceptor`, `LoginController`'s
@@ -217,9 +215,9 @@ production credentials.
   `useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true` — needed
   by `mysql-connector-j` 8.x against MySQL 8 (`caching_sha2_password`
   needs `allowPublicKeyRetrieval` when not TLS-protected).
-- **Driver is `com.mysql.cj.jdbc.Driver`** (Connector/J 8), not legacy
+- **Driver is `com.mysql.cj.jdbc.Driver`** (Connector/J 9), not legacy
   `com.mysql.jdbc.Driver`. Do not "fix" it back.
-- **Java 17 source**: `var`, records, switch expressions, text blocks
+- **Java 25 source**: `var`, records, switch expressions, text blocks
   compile — but keep new code consistent with existing style unless a
   feature materially helps.
 - **`LOGBACK_LOG_PATH` in `logback.xml`**: defaults to
@@ -242,7 +240,7 @@ production credentials.
 ## Coding Style
 
 - Formatting enforced by **Spotless** (`mvn spotless:check` /
-  `mise run lint`) using `google-java-format 1.26.0` in **AOSP** style
+  `mise run lint`) using `google-java-format 1.29.0` in **AOSP** style
   (4-space indent, braces same line, specific import order); no ratchet.
   Run `mvn spotless:apply` (or `mise run format`) before committing.
 - Do **not** add narrating comments. Legacy `/** Created by X on DATE */`
@@ -250,9 +248,10 @@ production credentials.
 - Use SLF4J (`LoggerFactory.getLogger(getClass())`); never `System.out` /
   `printStackTrace` in new code.
 - Keep controllers thin; delegate to services.
-- Spotless/GJF pinned to the newest JDK 17-compatible line
-  (`spotless-maven-plugin` 2.44.5, `google-java-format` 1.26.0); bumping
-  past these requires a JDK 21 phase.
+- Spotless/GJF are pinned at `spotless-maven-plugin` **3.4.0** and
+  `google-java-format` **1.29.0** (formatter runtime requires JDK 21+;
+  the project uses JDK 25). Bump only together when upgrading the lint
+  toolchain.
 
 ## Agent setup (architect → coder → reviewer)
 

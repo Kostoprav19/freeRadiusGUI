@@ -14,19 +14,16 @@ auth logs from the browser.
 
 ## Tech Stack
 
-Java 17 (jakarta namespace) · Spring MVC 6.1 · Spring Security 6.3 ·
-Spring Data JDBC 3.3 · Thymeleaf 3.1 (+ `thymeleaf-spring6`) · MySQL 8.0
-(mysql-connector-j 8.4) · HikariCP 5.1 · SLF4J 2 + Logback 1.5 · Maven (WAR packaging) ·
+Java 25 (jakarta namespace) · Spring MVC 6.2 · Spring Security 6.4 ·
+Spring Data JDBC 3.4 · Thymeleaf 3.1 (+ `thymeleaf-spring6`) · MySQL 8.0
+(mysql-connector-j 9.7) · HikariCP 5.1 · SLF4J 2 + Logback 1.5 · Maven (WAR packaging) ·
 Tomcat 10.1 (Docker image).
-
-> This is **not** Spring Boot — bootstrap is `WebApplicationInitializer`
-> (`config/AppInitializer.java`).
 
 ## Requirements
 
 | For              | Need                                                       |
 |------------------|------------------------------------------------------------|
-| Local build/run  | JDK 17, Maven 3.9 (or [`mise`](https://mise.jdx.dev/))     |
+| Local build/run  | JDK 25, Maven 3.9 (or [`mise`](https://mise.jdx.dev/))     |
 | Runtime          | MySQL 8.0 reachable per `config.properties`                |
 | Full operation   | A FreeRADIUS install on the same host / in a sidecar       |
 
@@ -38,7 +35,7 @@ project (`mise.toml`).
 ```bash
 curl https://mise.jdx.dev/install.sh | sh      # one-time
 mise trust                                     # one-time, per clone
-mise install                                   # fetches Java 17 + Maven 3.9
+mise install                                   # fetches Java 25 + Maven 3.9
 ```
 
 List available tasks with `mise tasks` and run one with `mise run <task>`.
@@ -48,8 +45,8 @@ List available tasks with `mise tasks` and run one with `mise run <task>`.
 ```bash
 mvn clean package                   # build target/freeradiusgui.war
 mvn test                            # run tests
-mvn -Dtest=DeviceDAOImplTest test   # single test
-mvn spotless:check                  # lint (AOSP style, google-java-format 1.26.0)
+mvn -Dtest=DeviceRepositoryTest test   # single test
+mvn spotless:check                  # lint (AOSP style, google-java-format 1.29.0)
 mvn spotless:apply                  # auto-fix formatting
 ```
 
@@ -58,7 +55,7 @@ embedded Tomcat task was retired with the migration to Tomcat 10.1 / jakarta.
 
 ### Linting
 
-Spotless (with `google-java-format 1.26.0` AOSP style) lints every Java file
+Spotless (with `google-java-format 1.29.0` AOSP style) lints every Java file
 under `src/main/java` and `src/test/java`. Rules: 4‑space indent, sorted
 imports, unused imports removed, trailing whitespace trimmed, files end
 with a newline.
