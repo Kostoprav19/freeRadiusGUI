@@ -3,6 +3,8 @@ package lv.freeradiusgui.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 public class AppConfig {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Pattern PLACEHOLDER_PATTERN =
+            Pattern.compile("\\$\\{([A-Za-z_][A-Za-z0-9_]*)(?::(.*?))?\\}");
     public static final String PROPERTIES_FILE = "config.properties";
     private final Properties configProp = new Properties();
 
@@ -140,7 +144,40 @@ public class AppConfig {
     }
 
     public String getProperty(String key) {
-        return configProp.getProperty(key);
+        return resolvePlaceholders(configProp.getProperty(key));
+    }
+
+    private String resolvePlaceholders(String raw) {
+        if (raw == null || !raw.contains("${")) {
+            return raw;
+        }
+
+        Matcher matcher = PLACEHOLDER_PATTERN.matcher(raw);
+        StringBuffer resolved = new StringBuffer();
+        while (matcher.find()) {
+            String placeholderKey = matcher.group(1);
+            String defaultValue = matcher.group(2);
+
+            String replacement = System.getenv(placeholderKey);
+            String source = "env";
+            if (replacement == null) {
+                replacement = System.getProperty(placeholderKey);
+                source = "sysprop";
+            }
+            if (replacement == null) {
+                replacement = defaultValue;
+                source = "default";
+            }
+            if (replacement == null) {
+                replacement = "";
+                source = "empty";
+            }
+
+            logger.debug("Resolved placeholder {} from {}", placeholderKey, source);
+            matcher.appendReplacement(resolved, Matcher.quoteReplacement(replacement));
+        }
+        matcher.appendTail(resolved);
+        return resolved.toString();
     }
 
     private void readPropertyFile() {
