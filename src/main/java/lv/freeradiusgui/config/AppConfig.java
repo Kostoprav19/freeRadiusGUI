@@ -14,7 +14,7 @@ public class AppConfig {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final Pattern PLACEHOLDER_PATTERN =
-            Pattern.compile("\\$\\{([A-Za-z_][A-Za-z0-9_]*)(?::(.*?))?\\}");
+            Pattern.compile("\\$\\{([A-Za-z_][A-Za-z0-9_.-]*)(?::(.*?))?\\}");
     public static final String PROPERTIES_FILE = "config.properties";
     private final Properties configProp = new Properties();
 

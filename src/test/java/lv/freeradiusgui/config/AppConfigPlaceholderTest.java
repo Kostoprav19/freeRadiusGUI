@@ -87,6 +87,13 @@ public class AppConfigPlaceholderTest {
         assertEquals("${B:c}", resolve("${APP_CONFIG_TEST_UNSET_NESTED:${B:c}}"));
     }
 
+    @Test
+    public void resolvePlaceholders_supportsDottedAndHyphenatedSystemPropertyKeys() {
+        System.setProperty("user.home-test", "/test/home");
+        assertEquals("/test/home", resolve("${user.home-test:fallback}"));
+        System.clearProperty("user.home-test");
+    }
+
     private String resolve(String value) {
         try {
             AppConfig config = new AppConfig();
