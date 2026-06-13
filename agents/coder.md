@@ -134,7 +134,7 @@ checks your work before the user commits; **you do not** `git commit` or
     - Body: *why*, plan phase id, verification
       (e.g. "mvn test 8/8, smoke 25/25", reviewer `APPROVE`).
     - **No** `Made-with: Cursor`, `Co-authored-by:` bot trailers, or
-      tool footers.
+      tool footers. Do not add `--trailer "Co-authored-by: Cursor <cursoragent@cursor.com>"` to git commands.
 
 ## What NOT to do
 
