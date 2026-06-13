@@ -9,12 +9,9 @@ lab/.env
 # Maven build output
 target/
 
-# Tool-specific dirs — canonical agent prompts live in agents/ at repo root.
-# Cursor IDE rules: canonical files are `agents/rules/*.mdc`; `.cursor/rules/`
-# holds symlinks to those files (tracked). Ignore other `.cursor/` noise
-# (e.g. local `.cursor/plans/` copies).
+# Tool-specific dirs
 .cursor/**
-!.cursor/rules/
-!.cursor/rules/**
+.cursor/rules/
+.cursor/rules/**
 .claude/
 .codex/
