@@ -36,7 +36,7 @@ services:
         max-size: "10m"
         max-file: "5"
 
-  # App service.
+  # Role: FreeRADIUSGUI web app.
   app:
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
     container_name: freeradiusgui-app
@@ -57,11 +57,11 @@ services:
       FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
     volumes:
+      - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
       - /etc/freeradius/clients.conf:/etc/freeradius/clients.conf
       - /etc/freeradius/users:/etc/freeradius/users
       - /var/log/freeradius/radacct:/var/log/freeradius/radacct:ro
       - /var/log/freeradiusgui:/var/log/freeradiusgui
-      - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
     logging:
       driver: json-file
       options:

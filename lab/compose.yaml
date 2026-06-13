@@ -34,7 +34,7 @@ services:
       retries: 10
       start_period: 30s
 
-  # App service.
+  # Role: FreeRADIUSGUI web app.
   app:
     profiles: ["app"]
     build:
