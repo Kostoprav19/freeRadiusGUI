@@ -53,30 +53,15 @@ services:
     environment:
       FREERADIUSGUI_REQUIRE_MOUNTS: "1"
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
-      DB_URL: ${DB_URL:-jdbc:mysql://db:3306/freeradiusgui?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
-      DB_USER: ${DB_USER:-freeradius}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DRIVER: ${DB_DRIVER:-com.mysql.cj.jdbc.Driver}
-      DB_MIN_POOL: ${DB_MIN_POOL:-5}
-      DB_MAX_POOL: ${DB_MAX_POOL:-20}
-      DB_CHECKOUT_TIMEOUT_MS: ${DB_CHECKOUT_TIMEOUT_MS:-1800}
-      MAIL_ENABLED: ${MAIL_ENABLED:-false}
-      MAIL_FROM: ${MAIL_FROM:-freeradius1@local}
-      MAIL_TO: ${MAIL_TO:-help@local}
-      MAIL_SMTP_SERVER: ${MAIL_SMTP_SERVER:-10.0.0.100}
-      SHELL_PGREP_FREERADIUS: ${SHELL_PGREP_FREERADIUS:-pgrep -fl freeradius}
-      SHELL_PGREP_TOMCAT: ${SHELL_PGREP_TOMCAT:-pgrep -fl tomcat}
-      SHELL_PGREP_MYSQL: ${SHELL_PGREP_MYSQL:-pgrep -fl mysqld}
-      SHELL_START_FREERADIUS: ${SHELL_START_FREERADIUS:?Required — see deploy/.env.example for the nsenter recipe}
-      SHELL_STOP_FREERADIUS: ${SHELL_STOP_FREERADIUS:?Required — see deploy/.env.example for the nsenter recipe}
       FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
       FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
     volumes:
-      - /etc/freeradius/clients.conf:/etc/freeradius/clients.conf:ro
-      - /etc/freeradius/users:/etc/freeradius/users:ro
+      - /etc/freeradius/clients.conf:/etc/freeradius/clients.conf
+      - /etc/freeradius/users:/etc/freeradius/users
       - /var/log/freeradius/radacct:/var/log/freeradius/radacct:ro
       - /var/log/freeradiusgui:/var/log/freeradiusgui
+      - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
     logging:
       driver: json-file
       options:
