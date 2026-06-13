@@ -1,4 +1,4 @@
-name: freeradiusgui
+name: freeradiusgui-prod
 
 services:
   # MySQL service.
@@ -7,19 +7,16 @@ services:
     container_name: freeradiusgui-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpw}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD required}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-freeradiusgui}
       MYSQL_USER: ${MYSQL_USER:-freeradius}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-koJasmoJas2}
-    ports:
-      - "${MYSQL_PORT:-3306}:3306"
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD required}
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_0900_ai_ci
     volumes:
       - db-data:/var/lib/mysql
       - ../databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
-      - ./dev-seed.sql:/docker-entrypoint-initdb.d/20-dev-seed.sql:ro
     healthcheck:
       test:
         - CMD
@@ -28,30 +25,37 @@ services:
         - -h
         - localhost
         - -uroot
-        - -p${MYSQL_ROOT_PASSWORD:-rootpw}
+        - -p${MYSQL_ROOT_PASSWORD}
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   # App service.
   app:
-    profiles: ["app"]
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
     container_name: freeradiusgui-app
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "${APP_PORT:-8080}:8080"
+    pid: host
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
     environment:
+      FREERADIUSGUI_REQUIRE_MOUNTS: "1"
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
       DB_URL: ${DB_URL:-jdbc:mysql://db:3306/freeradiusgui?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
       DB_USER: ${DB_USER:-freeradius}
-      DB_PASSWORD: ${DB_PASSWORD:-koJasmoJas2}
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_DRIVER: ${DB_DRIVER:-com.mysql.cj.jdbc.Driver}
       DB_MIN_POOL: ${DB_MIN_POOL:-5}
       DB_MAX_POOL: ${DB_MAX_POOL:-20}
@@ -59,59 +63,25 @@ services:
       MAIL_ENABLED: ${MAIL_ENABLED:-false}
       MAIL_FROM: ${MAIL_FROM:-freeradius1@local}
       MAIL_TO: ${MAIL_TO:-help@local}
+      MAIL_SMTP_SERVER: ${MAIL_SMTP_SERVER:-10.0.0.100}
       SHELL_PGREP_FREERADIUS: ${SHELL_PGREP_FREERADIUS:-pgrep -fl freeradius}
       SHELL_PGREP_TOMCAT: ${SHELL_PGREP_TOMCAT:-pgrep -fl tomcat}
       SHELL_PGREP_MYSQL: ${SHELL_PGREP_MYSQL:-pgrep -fl mysqld}
-      SHELL_START_FREERADIUS: ${SHELL_START_FREERADIUS:-freeradius}
-      SHELL_STOP_FREERADIUS: ${SHELL_STOP_FREERADIUS:-killall freeradius}
+      SHELL_START_FREERADIUS: ${SHELL_START_FREERADIUS:?Required — see deploy/.env.example for the nsenter recipe}
+      SHELL_STOP_FREERADIUS: ${SHELL_STOP_FREERADIUS:?Required — see deploy/.env.example for the nsenter recipe}
       FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
       FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
     volumes:
-      - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      - ./freeradius/clients.conf:/etc/freeradius/clients.conf:ro
-      - ./freeradius/users:/etc/freeradius/users:ro
-      - radius-logs:/var/log/freeradius/radacct
-      - app-logs:/var/log/freeradiusgui
-
-  # FreeRADIUS service (dev only).
-  freeradius:
-    profiles: ["app"]
-    build:
-      context: ./freeradius
-      dockerfile: Dockerfile.freeradius
-    image: freeradiusgui-radius:latest
-    container_name: freeradiusgui-radius
-    restart: unless-stopped
-    command: ["-X"]
-    ports:
-      - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
-      - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
-    volumes:
-      - ./freeradius/clients.conf:/etc/raddb/clients.conf:ro
-      - ./freeradius/users:/etc/raddb/mods-config/files/authorize:ro
-      - radius-logs:/var/log/freeradius/radacct
-
-  # Radclient service (dev only).
-  radclient:
-    profiles: ["app"]
-    image: freeradius/freeradius-server:latest-3.2
-    container_name: freeradiusgui-radclient
-    restart: unless-stopped
-    depends_on:
-      - freeradius
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        sleep 5
-        while :; do
-          radclient -c 1 -r 1 freeradius:1812 auth testing123 < /requests.txt || true
-          sleep ${RADCLIENT_INTERVAL:-5}
-        done
-    volumes:
-      - ./freeradius/requests.txt:/requests.txt:ro
+      - /etc/freeradius/clients.conf:/etc/freeradius/clients.conf:ro
+      - /etc/freeradius/users:/etc/freeradius/users:ro
+      - /var/log/freeradius/radacct:/var/log/freeradius/radacct:ro
+      - /var/log/freeradiusgui:/var/log/freeradiusgui
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 volumes:
   db-data:
-  radius-logs:
-  app-logs:

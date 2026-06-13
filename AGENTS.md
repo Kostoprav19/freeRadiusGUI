@@ -53,3 +53,4 @@ Use `architect` → `coder` → `reviewer`. Canonical prompts in `agents/`.
 - NO committing real passwords.
 - NO new deps/frameworks/DB changes without user approval.
 - NO hard-coding FreeRADIUS file paths (use `config.properties`).
+- NO `--trailer "Co-authored-by: Cursor <cursoragent@cursor.com>"` or any bot mentions in git commits.

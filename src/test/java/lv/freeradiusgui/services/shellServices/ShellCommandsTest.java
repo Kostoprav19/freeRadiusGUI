@@ -3,73 +3,39 @@ package lv.freeradiusgui.services.shellServices;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lv.freeradiusgui.config.AppConfig;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class ShellCommandsTest {
 
-    private static final String SHELL_START_FREERADIUS = "SHELL_START_FREERADIUS";
-    private static final String SHELL_STOP_FREERADIUS = "SHELL_STOP_FREERADIUS";
-    private static final String SHELL_PGREP_FREERADIUS = "SHELL_PGREP_FREERADIUS";
-    private static final String SHELL_PGREP_TOMCAT = "SHELL_PGREP_TOMCAT";
-    private static final String SHELL_PGREP_MYSQL = "SHELL_PGREP_MYSQL";
-
-    @AfterEach
-    public void clearSystemProperties() {
-        System.clearProperty(SHELL_START_FREERADIUS);
-        System.clearProperty(SHELL_STOP_FREERADIUS);
-        System.clearProperty(SHELL_PGREP_FREERADIUS);
-        System.clearProperty(SHELL_PGREP_TOMCAT);
-        System.clearProperty(SHELL_PGREP_MYSQL);
+    @Test
+    public void getStartFreeradius_readsValueFromAppConfig() {
+        var shellCommands = shellCommandsWith(new AppConfig());
+        assertEquals("freeradius", shellCommands.getStartFreeradius());
     }
 
     @Test
-    public void getStartFreeradius_readsResolvedValueFromAppConfig() {
-        System.setProperty(SHELL_START_FREERADIUS, "start-command");
+    public void getStopFreeradius_readsValueFromAppConfig() {
         var shellCommands = shellCommandsWith(new AppConfig());
-
-        assertEquals("start-command", shellCommands.getStartFreeradius());
+        assertEquals("killall freeradius", shellCommands.getStopFreeradius());
     }
 
     @Test
-    public void getStopFreeradius_readsResolvedValueFromAppConfig() {
-        System.setProperty(SHELL_STOP_FREERADIUS, "stop-command");
+    public void getPgrepFreeradius_readsValueFromAppConfig() {
         var shellCommands = shellCommandsWith(new AppConfig());
-
-        assertEquals("stop-command", shellCommands.getStopFreeradius());
+        assertEquals("pgrep -fl freeradius", shellCommands.getPgrepFreeradius());
     }
 
     @Test
-    public void getPgrepFreeradius_readsResolvedValueFromAppConfig() {
-        System.setProperty(SHELL_PGREP_FREERADIUS, "pgrep-freeradius");
+    public void getPgrepTomcat_readsValueFromAppConfig() {
         var shellCommands = shellCommandsWith(new AppConfig());
-
-        assertEquals("pgrep-freeradius", shellCommands.getPgrepFreeradius());
+        assertEquals("pgrep -fl tomcat", shellCommands.getPgrepTomcat());
     }
 
     @Test
-    public void getPgrepTomcat_readsResolvedValueFromAppConfig() {
-        System.setProperty(SHELL_PGREP_TOMCAT, "pgrep-tomcat");
+    public void getPgrepMysql_readsValueFromAppConfig() {
         var shellCommands = shellCommandsWith(new AppConfig());
-
-        assertEquals("pgrep-tomcat", shellCommands.getPgrepTomcat());
-    }
-
-    @Test
-    public void getPgrepMysql_readsResolvedValueFromAppConfig() {
-        System.setProperty(SHELL_PGREP_MYSQL, "pgrep-mysql");
-        var shellCommands = shellCommandsWith(new AppConfig());
-
-        assertEquals("pgrep-mysql", shellCommands.getPgrepMysql());
-    }
-
-    @Test
-    public void getStartFreeradius_usesSystemPropertyOverrideThroughAppConfigResolver() {
-        System.setProperty(SHELL_START_FREERADIUS, "override-start-command");
-        var shellCommands = shellCommandsWith(new AppConfig());
-
-        assertEquals("override-start-command", shellCommands.getStartFreeradius());
+        assertEquals("pgrep -fl mysqld", shellCommands.getPgrepMysql());
     }
 
     private ShellCommands shellCommandsWith(AppConfig appConfig) {
