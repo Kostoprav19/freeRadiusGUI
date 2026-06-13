@@ -42,7 +42,7 @@ run = "mvn -B -ntp spotless:apply"
 
 [tasks."docker:build"]
 description = "Build the Docker image ($IMAGE)"
-run = "docker build -t $IMAGE ."
+run = "docker build -t $IMAGE -f docker/Dockerfile ."
 
 # ---------- Docker Compose (MySQL + optional app) ---------------------------
 

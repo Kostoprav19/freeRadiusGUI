@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class ServerServiceImpl implements ServerService {
 
     @Autowired ShellExecutor shellExecutor;
+    @Autowired ShellCommands shellCommands;
 
     @Autowired Server server;
 
@@ -24,13 +25,13 @@ public class ServerServiceImpl implements ServerService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public void updateStatuses() {
-        String result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_FREERADIUS);
+        String result = shellExecutor.executeCommand(shellCommands.getPgrepFreeradius());
         server.setStatus(Server.FREERADIUS, !result.isEmpty());
 
-        result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_TOMCAT);
+        result = shellExecutor.executeCommand(shellCommands.getPgrepTomcat());
         server.setStatus(Server.TOMCAT, !result.isEmpty());
 
-        result = shellExecutor.executeCommand(ShellCommands.COMMAND_PGRE_MYSQL);
+        result = shellExecutor.executeCommand(shellCommands.getPgrepMysql());
         server.setStatus(Server.MYSQL, !result.isEmpty());
 
         logger.info("Freeradius status: " + (server.getStatus(Server.FREERADIUS) ? "UP" : "DOWN"));
@@ -43,8 +44,8 @@ public class ServerServiceImpl implements ServerService {
     }
 
     public boolean restartFreeradius() {
-        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_FREERADIUS);
-        shellExecutor.executeCommand(ShellCommands.COMMAND_START_FREERADIUS);
+        shellExecutor.executeCommand(shellCommands.getStopFreeradius());
+        shellExecutor.executeCommand(shellCommands.getStartFreeradius());
         updateStatuses();
         if (server.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
             server.setLastServiceReboot(LocalDateTime.now());
@@ -53,7 +54,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     public boolean startFreeradius() {
-        shellExecutor.executeCommand(ShellCommands.COMMAND_START_FREERADIUS);
+        shellExecutor.executeCommand(shellCommands.getStartFreeradius());
         updateStatuses();
         if (server.getStatus(server.FREERADIUS) == server.SERVER_STATUS_UP) {
             server.setLastServiceReboot(LocalDateTime.now());
@@ -62,15 +63,11 @@ public class ServerServiceImpl implements ServerService {
     }
 
     public boolean stopFreeradius() {
-        shellExecutor.executeCommand(ShellCommands.COMMAND_STOP_FREERADIUS);
+        shellExecutor.executeCommand(shellCommands.getStopFreeradius());
         updateStatuses();
         if (server.getStatus(server.FREERADIUS) == server.SERVER_STATUS_DOWN) {
             return true;
         } else return false;
-    }
-
-    public String runCommand(String command) {
-        return shellExecutor.executeCommand(command);
     }
 
     @Override
