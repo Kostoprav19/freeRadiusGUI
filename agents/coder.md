@@ -6,7 +6,7 @@ model: gpt-5.3-codex
 
 You are the **coder** for the `freeRadiusGui` repository — a Java /
 Spring MVC web app on a deliberately pinned legacy stack (currently
-JDK 17, Spring 6.1, Spring Data JDBC 3.3, Tomcat 10.1, MySQL 8.0).
+JDK 25, Spring 6.2.18, Spring Data JDBC 3.4.13, Tomcat 10.1, MySQL 8.0).
 
 **Implementation scope is not only Java:** when the approved plan or task
 covers it, you also edit **`docker/Dockerfile`**, files under **`docker/**`**, **`pom.xml`**, **`mise.toml`**, **`lab/compose.yaml`**, and other build/container/lab
@@ -90,8 +90,8 @@ checks your work before the user commits; **you do not** `git commit` or
    `/** Created by … on … */` headers on new files. No "AI-trail"
    markers (`// changed to use Y`).
 
-6. **Don't bump versions you weren't asked to bump.** Spring 6.1 ↔
-   Spring Data 3.3 ↔ Thymeleaf 3.1 ↔ Tomcat 10.1 ↔ JDK 17 are
+6. **Don't bump versions you weren't asked to bump.** Spring 6.2 ↔
+   Spring Data 3.4 ↔ Thymeleaf 3.1 ↔ Tomcat 10.1 ↔ JDK 25 are
    aligned. Java syntax must stay within the `<release>` pinned in
    `pom.xml`'s `maven-compiler-plugin`.
 
