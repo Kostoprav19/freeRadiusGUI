@@ -1,326 +1,55 @@
 # AGENTS.md
 
-Guidance for AI agents working in this repository.
+AI guidance for `freeRadiusGui`.
 
-## Project Overview
+## Overview & Tech Stack
+- Spring MVC (not Boot) UI for FreeRADIUS admin on Linux. Bootstraps via `AppInitializer.java`.
+- **Tech:** Java 25, Spring 6.2.18, Security 6.4.13, Spring Data JDBC 3.4.13, MySQL 8.0, Thymeleaf 3.1.4, Tomcat 10.1, Maven 3.9. 
+- Reads/writes `/etc/freeradius/{users,clients.conf}` and `/var/log/freeradius/radacct`. Requires shell execution permissions for `freeradius` / `killall freeradius`.
 
-`freeRadiusGui` is a Spring MVC web application that provides a browser UI
-for administering a **FreeRADIUS** server running on the same host. It
-manages MAC‑based device access, RADIUS clients (switches), users/accounts,
-auth logs, and can restart the FreeRADIUS service after config changes.
+## Layout & Commands
+- `src/main/java/` (config, controllers, services, repositories, domain)
+- `src/main/resources/` (config.properties, logback, messages)
+- `lab/` (docker-compose stack, DB seeds)
+- Use [`mise`](https://mise.jdx.dev/) (`mise tasks`):
+  - `mise run build` / `test` / `verify` / `lint` / `format`
+  - `mise run compose:up` / `db:up` / `db:reset`
 
-The app reads/writes the FreeRADIUS configuration files on disk
-(`/etc/freeradius/users`, `/etc/freeradius/clients.conf`) and parses log
-files from `/var/log/freeradius/radacct` — so it expects to run on the
-same machine as FreeRADIUS (Linux), with permissions to execute
-`freeradius` / `killall freeradius` via shell.
+## Infrastructure
+- **Container:** Multi-stage `docker/Dockerfile` (Maven 3.9/JDK 25 → Tomcat 10.1/JRE 25). No `VOLUME`s. Shell ops require `--pid=host`.
+- **Compose (`lab/compose.yaml`):** `db` (mysql:8.0, seeds via `databaseCreationScript.sql` into empty dir), `app` (mounts local `config.properties`, radacct, logs).
+- **Bootstrap DB:** admin/123456, user/123456.
 
-## Tech Stack
+## Configuration & Architecture
+- Config at `src/main/resources/config.properties`. Committed as local defaults—do not add prod secrets. `mailEnabled` defaults false.
+- **Layering:** Controller → Service → Repository (`CrudRepository`) → Domain. No direct Controller-to-Repo calls.
+- **Entities:** Spring Data Relational. `AggregateReference` for many-to-one with `@Transient` populated in services. `AccountRoleRef` for many-to-many.
+- **Views:** Use `lv.freeradiusgui.constants.Views`. No hard-coded view strings.
+- **Validation:** Placed in `validators/`, via `@InitBinder`.
+- **Shell:** Use `ShellExecutor` with `ShellCommands` (never hard-code or pass user input).
+- **Flash Messages:** Use `RedirectAttributes` (`msg`, `msgType`).
+- **Security:** Pass bare roles (`hasRole("ADMIN")`). Explicit `requestMatchers("/login").permitAll()`. BCrypt passwords.
 
-| Layer        | Tech                                                          |
-|--------------|---------------------------------------------------------------|
-| Build        | Maven (`pom.xml`), packaging = `war`                          |
-| Language     | Java 25 (`<release>25</release>`), jakarta namespace          |
-| Web          | Spring Web MVC **6.2.18**, Spring Security **6.4.13**         |
-| Persistence  | Spring Data JDBC **3.4.13** + MySQL **8.0** (`mysql-connector-j` **9.7**) |
-| View         | Thymeleaf **3.1.4** (+ `thymeleaf-spring6` + `thymeleaf-extras-springsecurity6` **3.1.3**) |
-| DB pool      | HikariCP **5.1.0**                                            |
-| Logging      | SLF4J 2.0.17 + Logback 1.5.32                                 |
-| Mail         | `jakarta.mail` 2.0.2                                          |
-| Tests        | JUnit Jupiter 5.12 (via `junit-bom`), Spring Test, Surefire 3.2 |
-| Servlet ctr. | Tomcat 10.1 at runtime (via Docker image); no embedded plugin |
-
-This is **not** Spring Boot — bootstrapping is via
-`WebApplicationInitializer` (`config/AppInitializer.java`), not a `main()`.
-
-## Repository Layout
-
-```
-.
-├── pom.xml                         # Maven build
-├── databaseCreationScript.sql      # MySQL schema + seed (admin/user, pw: 123456)
-├── lab/                            # Local dev/test stack — `docker compose` runs from here
-│   ├── compose.yaml, .env.example, config.properties
-│   ├── freeradius/                 # FreeRADIUS Dockerfile + overrides, radclient requests
-│   ├── dev-seed.sql                # App DB dev-only seed (switches + devices)
-│   └── samples/                    # Legacy reference data
-├── web/WEB-INF/                    # legacy IntelliJ web module dir — NOT used by Maven
-└── src/
-    ├── main/java/lv/freeradiusgui/
-    │   ├── config/                 # Spring, Security, Persistence, Thymeleaf, MVC, init
-    │   ├── controllers/            # @Controller (Account, Admin, Devices, Switches, Logs, Server, Login)
-    │   ├── services/{filesServices,serverServices,shellServices,mailServices}/
-    │   ├── repositories/           # Spring Data JDBC CrudRepository<T,Integer>
-    │   ├── domain/                 # Spring Data Relational entities (Account, AccountRoleRef, Role, Device, Switch, Log, Server)
-    │   ├── validators/, interceptors/, listeners/, scheduler/, constants/, utils/
-    ├── main/resources/             # config.properties, messages.properties, logback.xml
-    ├── main/webapp/WEB-INF/        # web.xml (minimal — init in AppInitializer), views/*.html
-    └── test/lv/freeradiusgui/      # NOTE: non-standard path (see "Gotchas")
-```
-
-## Common Commands
-
-Preferred entry point is [`mise`](https://mise.jdx.dev/) (see `mise.toml`).
-Run `mise tasks` for the authoritative list; the most-used tasks are:
-
-```bash
-mise install                        # pinned Java 25 + Maven 3.9
-mise run build | test | verify      # mvn clean package | test | clean verify
-mise run lint  | format             # mvn spotless:check | apply
-mise run docker:build               # build freeradiusgui:latest
-mise run db:up | db:down | db:reset # MySQL only (db:reset wipes volume + re-seeds)
-mise run compose:up | compose:down  # full stack: app + DB + FreeRADIUS + radclient
-```
-
-Raw Maven works too (`mvn clean package`, `mvn test`,
-`mvn -Dtest=DeviceRepositoryTest test`). No embedded-servlet entry
-point — run via `mise run compose:up` or deploy the WAR to an
-external Tomcat 10.1.
-
-### Containerization
-
-- `Dockerfile` — multi-stage: Maven 3.9/JDK 25 build → Tomcat 10.1/JRE 25
-  runtime. `JAVA_OPTS` carries timezone/memory defaults and no extra
-  `--add-opens` flags after the Spring 6.2 + JDK 25 audit; surefire
-  `<argLine>` mirrors that empty opens set.
-- WAR is exploded into `$CATALINA_HOME/webapps/ROOT/`. Override config
-  by bind-mounting `/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties`.
-- **Production-style ops:** the image has **no** `VOLUME` stanzas and no
-  pre-created RADIUS or log paths (avoids empty anonymous volumes). OCI
-  **labels** list expected mount points (`docker inspect` / registry UI).
-  An **entrypoint** can fail fast when `FREERADIUSGUI_REQUIRE_MOUNTS=1`.
-  Full table and `docker run` notes: `docker/README.md` in the repo.
-- The image does **not** ship the `freeradius` daemon. Shell ops
-  (`freeradius`, `killall`, `pgrep`) need `--pid=host` + access to a
-  FreeRADIUS install (or a sidecar). `procps` + `psmisc` provide
-  `pgrep` / `killall`.
-
-### Compose (MySQL + optional app)
-
-The whole dev/test stack lives under `lab/` — `compose.yaml`,
-`.env(.example)`, lab-only `config.properties`, FreeRADIUS image +
-overrides, dev-only DB seed. Run `docker compose` from inside `lab/`
-(or via `mise run compose:* / db:*`). No compose file at repo root.
-
-- `lab/compose.yaml` services:
-  - `db` — `mysql:8.0` (utf8mb4_0900_ai_ci) mounting
-    `../databaseCreationScript.sql` into `/docker-entrypoint-initdb.d/`.
-    `caching_sha2_password` (8.0 default) is handled by
-    `mysql-connector-j` 9.7 + `allowPublicKeyRetrieval=true` in the lab
-    JDBC URL. Downgrading to `mysql:5.7` is unsupported (volume is 8.0).
-  - `app` — gated behind the `app` profile, built from repo root.
-    Bind-mounts `lab/config.properties` (lab fork pointing `dbUrl` at
-    `jdbc:mysql://db:3306/...`) and `lab/freeradius/{clients.conf,users}`;
-    shares `/var/log/freeradius/radacct` (named volume `radius-logs`)
-    with `freeradius` so the Logs page sees live data. Named volume
-    `app-logs` is mounted at `/var/log/freeradiusgui` with
-    `JAVA_OPTS` … `-DLOGBACK_LOG_PATH=/var/log/freeradiusgui` (Logback
-    file output; the runtime image does not pre-create that path).
-  - `freeradius`, `radclient` — dev-only helpers; see README.
-- Credentials live in `lab/.env` (copy `lab/.env.example`); defaults
-  match `src/main/resources/config.properties` + `${VAR:-default}`
-  fallbacks in `compose.yaml`, so the stack works with no `.env`.
-- `databaseCreationScript.sql` is idempotent, but MySQL only runs init
-  scripts on an empty data dir — use `mise run db:reset` to wipe + re-seed.
-
-### Database bootstrap
-
-```bash
-mysql -u root -p < databaseCreationScript.sql
-```
-
-Seeds accounts: `admin` (ROLE_ADMIN) and `user` (ROLE_USER), both with
-password `123456` (bcrypt hashed in the script).
-
-## Configuration
-
-Runtime config lives in `src/main/resources/config.properties`:
-
-- `usersfilepath`, `clientsfilepath`, `logfilesdirpath` — FreeRADIUS paths
-- `dbUrl`, `dbUser`, `dbPassword`, pool sizing
-- `mailEnabled` (boolean, defaults to `false` — opt-in), `mailFrom`,
-  `mailTo`, `mailSmtpServer`. When `false`, `MailService#init()` skips
-  SMTP setup and `sendMail()` short-circuits to a SUCCESS no-op, so an
-  unreachable `mailSmtpServer` cannot block startup.
-
-Credentials and server IPs in this file are **committed to the repo** as
-defaults — treat them as local/dev values, not secrets. Never add real
-production credentials.
-
-## Architecture Conventions
-
-- **Layering**: `Controller → Service (interface + *Impl) → Repository
-  (Spring Data JDBC `CrudRepository`) → Domain entity`. Don't call
-  repositories directly from controllers.
-- **View names**: always reference `lv.freeradiusgui.constants.Views`
-  constants — never hard‑code view name strings in controllers.
-- **Entities**: Spring Data Relational annotations (`@Table`, `@Column`,
-  `@Id`, `@MappedCollection`, `@Transient`). `LocalDateTime` is read/written
-  natively via JDBC 4.2 — no custom `UserType`. Many-to-one FKs use
-  `AggregateReference<T, Integer>` for the persisted side, paired with a
-  `@Transient` typed field hydrated in the service layer (see
-  `Device.aSwitch`, `Log.aSwitch`, `Log.device`). The `accounts ↔ roles`
-  many-to-many uses `AccountRoleRef` as a `@MappedCollection` join-row
-  with a `@Transient Set<Role> roles` view; setters call
-  `rebuildRoleRefs()` so controller/form code keeps working with `Set<Role>`.
-- **Validators**: one per form/entity in `validators/`, wired via
-  `@InitBinder` (see `DevicesController`).
-- **Shell calls**: go through `ShellExecutor` with constants from
-  `ShellCommands` — never hard‑code commands. Linux-specific.
-- **Flash messages**: `RedirectAttributes` with keys `msg` and `msgType`
-  (`success` / `danger`), rendered by `views/fragments/alert.html`.
-- **Security**: config in `config/SecurityConfig.java`; user lookup in
-  `SecurityUserDetailsServiceImpl`. Passwords are BCrypt.
-- **Scheduling/Async**: enabled globally in `WebMVCConfig` (`@EnableAsync`,
-  `@EnableScheduling`). Periodic jobs go in `scheduler/ScheduledTasks`.
-
-## Gotchas
-
-- **Tests need a live MySQL**: every test boots `WebMVCConfig` →
-  `PersistenceConfig` with a real HikariCP `DataSource`. Run
-  `mise run db:up` before `mise run test`. Repository tests fail without
-  DB; pure-helper service tests pass (DB is touched lazily). Repository
-  tests use `@Transactional` + `@Rollback`, so re-running is safe.
-- **`web/` at repo root** is a legacy IntelliJ web module dir. Maven
-  uses `src/main/webapp/` — ignore `web/` for build changes.
-- **No `main()` and no embedded-servlet plugin**. Run via
-  `mise run compose:up`, or drop the WAR into any Servlet 5.0+ /
-  Jakarta EE 9+ container.
-- **Version pin (post-Phase-8)**: Spring 6.2.x / Security 6.4.x /
-  Spring Data JDBC **3.4.13** / Thymeleaf 3.1 + `-spring6` / jakarta.mail
-  2.0.2 / Tomcat 10.1 (Servlet 6.0). Spring Data 3.4.x is aligned to
-  Spring 6.2.x. Tomcat 11 / Servlet 6.1 needs Spring 7+.
-- **`hasRole(...)` auto-prepends `ROLE_`**: pass bare names (`"ADMIN"`)
-  in `SecurityConfig`. Passing `"ROLE_ADMIN"` produces `ROLE_ROLE_ADMIN`
-  checks (fail-closed). The legacy SpEL `.access("hasRole('ROLE_X')")`
-  tolerated the prefix; the lambda DSL does not.
-- **Spring Security 6 dropped implicit `formLogin` permitAll**:
-  `SecurityConfig` has an explicit `requestMatchers("/login").permitAll()`
-  to avoid an infinite redirect loop — don't remove it.
-- **`jakarta.annotation.PostConstruct` needs an explicit artifact**:
-  `pom.xml` carries `jakarta.annotation-api:2.1.1` (used by `WebMVCConfig`,
-  `MailServiceImpl`). Don't drop it.
-- **`--add-opens` audit status**: Spring 6.2 + JDK 25 test/smoke runs are
-  green with no explicit opens in `Dockerfile` `JAVA_OPTS` and surefire
-  `<argLine>`. If a future test throws `InaccessibleObjectException` on
-  another package, add a matching `--add-opens` in **both** places.
-- **`jakarta.servlet-api 6.0.0` pinned `provided`** to match Tomcat 10.1
-  (Spring 6.2 still targets Servlet 6.0 / Jakarta EE 10).
-- **Thymeleaf 3.1 removed `#request`/`#session`/`#servletContext`/`#response`**
-  and `ServletContextTemplateResolver`. Templates use controller-provided
-  model attributes (`SessionVariablesInterceptor`, `LoginController`'s
-  `loginError`); `ThymeleafConfig` uses `SpringResourceTemplateResolver`
-  from `thymeleaf-spring6`.
-- **JDBC URL params required**:
-  `useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true` — needed
-  by `mysql-connector-j` 8.x against MySQL 8 (`caching_sha2_password`
-  needs `allowPublicKeyRetrieval` when not TLS-protected).
-- **Driver is `com.mysql.cj.jdbc.Driver`** (Connector/J 9), not legacy
-  `com.mysql.jdbc.Driver`. Do not "fix" it back.
-- **Java 25 source**: `var`, records, switch expressions, text blocks
-  compile — but keep new code consistent with existing style unless a
-  feature materially helps.
-- **`LOGBACK_LOG_PATH` in `logback.xml`**: defaults to
-  `/var/log/freeradiusgui` when unset. The **Dockerfile** does not create
-  that directory (production: supply a volume or bind mount and
-  `JAVA_OPTS`/`-DLOGBACK_LOG_PATH=...`, or pre-create a writable path on
-  the host). **Surefire** sets `LOGBACK_LOG_PATH` to `target/junit-logs` so
-  `mvn test` is self-contained. **lab/compose** mounts the `app-logs` volume
-  at `/var/log/freeradiusgui` and passes `-DLOGBACK_LOG_PATH=…` in
-  `JAVA_OPTS`.
-
-## Testing
-
-- JUnit Jupiter 5 + `spring-test` (`@ExtendWith(SpringExtension.class)`).
-  Surefire includes `**/*IT.java`, `**/*TestIT.java`, `**/*Test.java`.
-- New repository/service tests follow `DeviceRepositoryTest` /
-  `ClientsConfFileServiceTest`.
-- Put new tests under `src/test/java/...` (see Gotchas).
+## Gotchas & Tests
+- **Tests:** Need live MySQL (`mise run db:up`). Repo tests use `@Transactional` + `@Rollback`. Use JUnit 5 + SpringExtension. `web/` dir is legacy, ignore.
+- **JDBC:** Driver `com.mysql.cj.jdbc.Driver`. URL must have `useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true`.
+- **Logging:** Logback defaults to `/var/log/freeradiusgui`. Surefire uses `target/junit-logs`.
+- **Pins:** `jakarta.annotation-api` is required. No `--add-opens` flags used.
 
 ## Coding Style
+- **Spotless:** AOSP style, 4-space indent (`mise run format`). Keep existing style.
+- No narrating comments or legacy IDE boilerplate (`/** Created by... */`). Use SLF4J. Keep controllers thin.
 
-- Formatting enforced by **Spotless** (`mvn spotless:check` /
-  `mise run lint`) using `google-java-format 1.29.0` in **AOSP** style
-  (4-space indent, braces same line, specific import order); no ratchet.
-  Run `mvn spotless:apply` (or `mise run format`) before committing.
-- Do **not** add narrating comments. Legacy `/** Created by X on DATE */`
-  headers are IDE boilerplate — don't propagate them.
-- Use SLF4J (`LoggerFactory.getLogger(getClass())`); never `System.out` /
-  `printStackTrace` in new code.
-- Keep controllers thin; delegate to services.
-- Spotless/GJF are pinned at `spotless-maven-plugin` **3.4.0** and
-  `google-java-format` **1.29.0** (formatter runtime requires JDK 21+;
-  the project uses JDK 25). Bump only together when upgrading the lint
-  toolchain.
-
-## Agent setup (architect → coder → reviewer)
-
-Non-trivial changes use a **three-agent workflow**. Canonical prompts
-live in `agents/` at repo root (vendor-neutral); `.cursor/agents`,
-`.claude/agents`, and `.codex/agents` are symlinks to it so Cursor,
-Claude Code, and Codex CLI all see the same definitions:
-
-- **`architect`** (`claude-opus-4-7`) — **sole writer** of
-  **`.cursor/plans/`** (entire tree: `ROADMAP.md`, `*.plan.md`, plan
-  `todos`, etc.). The Cursor subagent is configured with
-  **`readonly: false`** in `agents/architect.md` so it *can* save
-  files there; `readonly: true` would block all writes. Still **no
-  app code** — do not edit `src/`, `pom.xml`, or app `config` unless
-  the user explicitly asked. Surveys options; `coder` executes the
-  plan.
-- **`coder`** (`gpt-5.3-codex`, read/write) — implements **one phase
-  at a time**, runs verification, then the workflow **always invokes
-  `reviewer`** on the diff. **Does not** `git commit` or `git push` unless
-  the user **explicitly** asks. **Does not** edit **anything** under
-  `.cursor/plans/`; reports which todo `id`s completed so **`architect`**
-  can update plan files and `ROADMAP.md`.
-- **`reviewer`** (`claude-4.6-sonnet`, read-only) — independent second
-  opinion in plan-review and code-review modes. Different model
-  family from the coder so single-model blind spots can't slip through.
-- **Main / orchestrating session** (the chat that spawns subagents) —
-  requests like "update the roadmap" or "change the plan" are **only**
-  executed by the **`architect` subagent**; never use file tools on
-  **`.cursor/plans/`** yourself. For **implementation** (application
-  code, `pom.xml`, `Dockerfile`, `docker/**`, `mise.toml`, `lab/compose.yaml`,
-  and similar), do **not** apply those edits in the main chat: **invoke the
-  `coder` subagent** so changes run through verification and reviewer gating
-  (see `agents/rules/coder-implementation-routing.mdc`; Cursor loads it via
-  `.cursor/rules/` symlink). Trivial docs-only
-  one-offs are the exception if explicitly marked as such.
-
-### Standard flow
-
-1. `architect` writes the plan; `reviewer` (plan-review) gates it
-   (BLOCKING → architect amends).
-2. `coder` implements one phase and runs verification; then **`reviewer`**
-   (code-review) runs on the **changed diff** (BLOCKING → `coder` fixes
-   and re-runs). **The assistant must invoke `reviewer` after code changes
-   by default;** do not skip for substantive edits.
-3. **Commit and push** are **not** performed by the assistant unless the user
-   **explicitly** asks. The user reviews, then `git commit` and `git push`
-   with a conventional-commits message (imperative subject, body with *why*
-   + plan phase + verification, **no** `Made-with:` / bot `Co-authored-by:`
-   trailers). The assistant may suggest a commit message in the summary.
-   The gate is the **reviewer** result before the user commits; a trivial
-   docs-only change may skip `reviewer` if the user labels it as such.
-
-**Strict routing.** Edits to **source, tests, `pom.xml`, `Dockerfile`,
-`docker/**`, `mise.toml`, and lab compose** should be made by the **`coder`**
-subagent, not by the main orchestrating session, except trivial docs-only
-fixes the user calls out. After implementation, **invoke `reviewer`** on the
-diff. **Do not** `git commit` or `git push` from the assistant unless the
-user explicitly requests it. Cursor loads **`agents/rules/coder-implementation-routing.mdc`**
-via the `.cursor/rules/` symlink as a reminder.
-
-- **"Review"** in a user request — by default, **invoke the `reviewer`**
-  subagent on the diff, do not replace that with a prose review only in
-  the main chat (see `agents/rules/coder-implementation-routing.mdc`).
+## Agent Workflow (3-Agent)
+Use `architect` → `coder` → `reviewer`. Canonical prompts in `agents/`.
+1. **`architect`:** Sole writer of `.cursor/plans/` (ROADMAP, plans, todos). Cannot edit app code/config.
+2. **`coder`:** Implements one phase. Edits `src/`, `pom.xml`, `docker/Dockerfile`, `lab/`, etc. Cannot edit plans. Do not commit/push unless asked.
+3. **`reviewer`:** Independent opinion. MUST be invoked after code changes by default.
+- **Routing:** Main session MUST NOT apply app code edits directly; use `coder` (except for user-labeled docs-only one-offs).
+- **"Review" request:** Always invoke `reviewer` subagent on the diff.
 
 ## What NOT to do
-
-- Don't convert this to Spring Boot as a side effect of another task.
-- Don't commit real passwords / SMTP creds to `config.properties`.
-- Don't introduce new framework versions or swap persistence providers
-  without an explicit ask.
-- Don't shell out directly from services — go through `ShellExecutor`.
-- Don't hard‑code FreeRADIUS file paths — read from `config.properties`.
+- NO Spring Boot conversions.
+- NO committing real passwords.
+- NO new deps/frameworks/DB changes without user approval.
+- NO hard-coding FreeRADIUS file paths (use `config.properties`).

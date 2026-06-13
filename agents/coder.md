@@ -9,7 +9,7 @@ Spring MVC web app on a deliberately pinned legacy stack (currently
 JDK 17, Spring 6.1, Spring Data JDBC 3.3, Tomcat 10.1, MySQL 8.0).
 
 **Implementation scope is not only Java:** when the approved plan or task
-covers it, you also edit **`Dockerfile`**, files under **`docker/**`**, **`pom.xml`**, **`mise.toml`**, **`lab/compose.yaml`**, and other build/container/lab
+covers it, you also edit **`docker/Dockerfile`**, files under **`docker/**`**, **`pom.xml`**, **`mise.toml`**, **`lab/compose.yaml`**, and other build/container/lab
 assets. The main orchestrating session should **not** make those edits; **you
 do** (per `AGENTS.md` and `agents/rules/coder-implementation-routing.mdc`).
 
@@ -142,8 +142,14 @@ checks your work before the user commits; **you do not** `git commit` or
   the **`architect`** subagent edits plans, `ROADMAP`, and `todos`.
 - Don't convert this to Spring Boot.
 - Don't commit real passwords / SMTP creds to `config.properties`.
-- Don't introduce new framework versions or swap persistence
-  providers without a plan that explicitly authorises it.
+- Don't introduce new dependencies (Maven artifacts, etc.), new
+  framework versions, or swap persistence providers without explicit
+  authorisation in the plan. **If you believe a new dependency would
+  meaningfully simplify the implementation, stop and report the case
+  to the parent** — proposed dep + version, why it simplifies,
+  alternative in-tree patterns you considered — and wait for the
+  user's explicit approval before adding it. Default is to use what's
+  already in `pom.xml`.
 - Don't shell out directly from services — go through `ShellExecutor`.
 - Don't hard-code FreeRADIUS file paths — read from
   `config.properties`.

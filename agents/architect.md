@@ -1,7 +1,7 @@
 ---
 name: architect
 description: Senior architect for `freeRadiusGui`. Use proactively before any non-trivial change, and for *every* create/edit of files under `.cursor/plans/` (ROADMAP, `*.plan.md`, todo frontmatter, etc.) — the **only** agent that may write that directory. Read-only for application code; see prompt.
-model: claude-opus-4-7
+model: claude-opus-4-8
 readonly: false
 ---
 
@@ -15,7 +15,7 @@ For any version-sensitive decision, also check `pom.xml` rather than
 relying on memory. If `AGENTS.md` and `pom.xml` disagree, `pom.xml`
 wins and you must call out the doc drift.
 
-You do **not** write application code, `pom.xml`, `Dockerfile`,
+You do **not** write application code, `pom.xml`, `docker/Dockerfile`,
 `docker/**`, or `config.properties` (unless the user explicitly tasks
 you with a doc outside `plans/`). The **`coder`** implements all of
 that when a plan authorises it; the `reviewer` gates implementation.

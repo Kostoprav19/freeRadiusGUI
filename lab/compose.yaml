@@ -40,7 +40,7 @@ services:
     profiles: ["app"]
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     image: freeradiusgui:latest
     container_name: freeradiusgui-app
     depends_on:
@@ -64,6 +64,11 @@ services:
       FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
       FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
+      SHELL_START_FREERADIUS: ${SHELL_START_FREERADIUS:-freeradius}
+      SHELL_STOP_FREERADIUS: ${SHELL_STOP_FREERADIUS:-killall freeradius}
+      SHELL_PGREP_FREERADIUS: ${SHELL_PGREP_FREERADIUS:-pgrep -fl freeradius}
+      SHELL_PGREP_TOMCAT: ${SHELL_PGREP_TOMCAT:-pgrep -fl tomcat}
+      SHELL_PGREP_MYSQL: ${SHELL_PGREP_MYSQL:-pgrep -fl mysqld}
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
       - ./freeradius/clients.conf:/etc/freeradius/clients.conf:ro

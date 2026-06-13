@@ -214,7 +214,7 @@
 
             <!-- TESTS: JDK 25 + Spring 6.2 audit found no extra JVM add-opens needed.
                  Keep argLine empty unless tests hit InaccessibleObjectException; if so,
-                 add opens here and mirror the same flags in Dockerfile JAVA_OPTS + lab compose. -->
+                 add opens here and mirror the same flags in docker/Dockerfile JAVA_OPTS + lab compose. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

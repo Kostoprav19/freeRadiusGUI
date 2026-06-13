@@ -13,8 +13,6 @@ public interface ServerService {
 
     boolean stopFreeradius();
 
-    String runCommand(String command);
-
     boolean getStatus(String key);
 
     LocalDateTime getLastServiceReboot();

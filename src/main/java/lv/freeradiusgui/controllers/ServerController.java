@@ -1,26 +1,21 @@
 package lv.freeradiusgui.controllers;
 
+import lv.freeradiusgui.config.AppConfig;
 import lv.freeradiusgui.constants.Views;
 import lv.freeradiusgui.domain.Server;
 import lv.freeradiusgui.services.serverServices.ServerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ServerController {
 
     @Autowired ServerService serverService;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired AppConfig appConfig;
 
     @ModelAttribute("page")
     public String module() {
@@ -33,6 +28,9 @@ public class ServerController {
         model.addAttribute("lastServiceReboot", serverService.getLastServiceReboot());
         model.addAttribute("tomcatStatus", serverService.getStatus(Server.TOMCAT));
         model.addAttribute("mysqlStatus", serverService.getStatus(Server.MYSQL));
+        model.addAttribute("usersFilePath", appConfig.getPathToUsersFile());
+        model.addAttribute("clientsFilePath", appConfig.getPathToClientsConfFile());
+        model.addAttribute("logFilesDirPath", appConfig.getPathToLogDirectory());
         return Views.SERVER;
     }
 
@@ -75,22 +73,6 @@ public class ServerController {
             redirectAttributes.addFlashAttribute("msg", "Failed to restart service 'freeradius'.");
             redirectAttributes.addFlashAttribute("msgType", "danger");
         }
-        return "redirect:/" + Views.SERVER;
-    }
-
-    @RequestMapping(
-            value = {Views.ADMIN + "/runCommand"},
-            method = RequestMethod.POST)
-    public String runCommand(
-            final RedirectAttributes redirectAttributes,
-            @RequestParam("consoleInput") String consoleInput) {
-        String consoleOutput = serverService.runCommand(consoleInput);
-
-        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        logger.debug("User '" + currentUser + "' called console command: " + consoleInput);
-
-        redirectAttributes.addFlashAttribute("consoleOutput", consoleOutput);
-
         return "redirect:/" + Views.SERVER;
     }
 }

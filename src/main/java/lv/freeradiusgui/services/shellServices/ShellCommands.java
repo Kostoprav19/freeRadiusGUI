@@ -1,14 +1,31 @@
 package lv.freeradiusgui.services.shellServices;
 
-public final class ShellCommands {
+import lv.freeradiusgui.config.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-    public static final String COMMAND_PGRE_FREERADIUS = "pgrep -fl freeradius";
+@Component
+public class ShellCommands {
 
-    public static final String COMMAND_PGRE_TOMCAT = "pgrep -fl tomcat";
+    @Autowired AppConfig appConfig;
 
-    public static final String COMMAND_PGRE_MYSQL = "pgrep -fl mysqld";
+    public String getStartFreeradius() {
+        return appConfig.getProperty("shellStartFreeradius");
+    }
 
-    public static final String COMMAND_STOP_FREERADIUS = "killall freeradius";
+    public String getStopFreeradius() {
+        return appConfig.getProperty("shellStopFreeradius");
+    }
 
-    public static final String COMMAND_START_FREERADIUS = "freeradius";
+    public String getPgrepFreeradius() {
+        return appConfig.getProperty("shellPgrepFreeradius");
+    }
+
+    public String getPgrepTomcat() {
+        return appConfig.getProperty("shellPgrepTomcat");
+    }
+
+    public String getPgrepMysql() {
+        return appConfig.getProperty("shellPgrepMysql");
+    }
 }
