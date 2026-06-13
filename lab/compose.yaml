@@ -1,7 +1,7 @@
 name: freeradiusgui
 
 services:
-  # MySQL 8.0 — schema + default accounts seeded on first boot only.
+  # MySQL service.
   db:
     image: mysql:8.0
     container_name: freeradiusgui-db
@@ -34,14 +34,13 @@ services:
       retries: 10
       start_period: 30s
 
-  # freeRadiusGUI web app (Tomcat 10.1 / Spring 6 MVC). Enabled with `--profile app`.
-  # For a prod-like check, add: environment FREERADIUSGUI_REQUIRE_MOUNTS=1 (entrypoint; see docker/README.md).
+  # Role: FreeRADIUSGUI web app.
   app:
     profiles: ["app"]
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    image: freeradiusgui:latest
+    image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
     container_name: freeradiusgui-app
     depends_on:
       db:
@@ -50,25 +49,9 @@ services:
       - "${APP_PORT:-8080}:8080"
     environment:
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
-      DB_URL: ${DB_URL:-jdbc:mysql://db:3306/freeradiusgui?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
-      DB_USER: ${DB_USER:-freeradius}
-      DB_PASSWORD: ${DB_PASSWORD:-koJasmoJas2}
-      DB_DRIVER: ${DB_DRIVER:-com.mysql.cj.jdbc.Driver}
-      DB_MIN_POOL: ${DB_MIN_POOL:-5}
-      DB_MAX_POOL: ${DB_MAX_POOL:-20}
-      DB_CHECKOUT_TIMEOUT_MS: ${DB_CHECKOUT_TIMEOUT_MS:-1800}
-      MAIL_ENABLED: ${MAIL_ENABLED:-false}
-      MAIL_FROM: ${MAIL_FROM:-freeradius1@local}
-      MAIL_TO: ${MAIL_TO:-help@local}
-      MAIL_SMTP_SERVER: ${MAIL_SMTP_SERVER:-10.0.0.100}
-      FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
       FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
+      FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
-      SHELL_START_FREERADIUS: ${SHELL_START_FREERADIUS:-freeradius}
-      SHELL_STOP_FREERADIUS: ${SHELL_STOP_FREERADIUS:-killall freeradius}
-      SHELL_PGREP_FREERADIUS: ${SHELL_PGREP_FREERADIUS:-pgrep -fl freeradius}
-      SHELL_PGREP_TOMCAT: ${SHELL_PGREP_TOMCAT:-pgrep -fl tomcat}
-      SHELL_PGREP_MYSQL: ${SHELL_PGREP_MYSQL:-pgrep -fl mysqld}
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
       - ./freeradius/clients.conf:/etc/freeradius/clients.conf:ro
@@ -76,7 +59,7 @@ services:
       - radius-logs:/var/log/freeradius/radacct
       - app-logs:/var/log/freeradiusgui
 
-  # FreeRADIUS 3.2 server with overrides so the GUI's Logs page can parse its output.
+  # FreeRADIUS service (dev only).
   freeradius:
     profiles: ["app"]
     build:
@@ -94,7 +77,7 @@ services:
       - ./freeradius/users:/etc/raddb/mods-config/files/authorize:ro
       - radius-logs:/var/log/freeradius/radacct
 
-  # radclient loop — generates steady auth traffic for the Logs page.
+  # Radclient service (dev only).
   radclient:
     profiles: ["app"]
     image: freeradius/freeradius-server:latest-3.2

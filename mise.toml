@@ -5,8 +5,12 @@ maven = "3.9.9"
 [env]
 # Keep Maven output quiet(ish) and avoid interactive prompts in CI.
 MAVEN_OPTS = "-Xmx1g"
-# Image name/tag used by the docker:* tasks below.
-IMAGE = "freeradiusgui:latest"
+# Image identity used by docker:* tasks. Override IMAGE_REPO to a
+# registry-qualified name (e.g. ghcr.io/<owner>/freeradiusgui) for
+# docker:push to be more than a no-op; see prod-05 plan.
+IMAGE_REPO = "danielsatkacuns/freeradiusgui"
+IMAGE_TAG  = "latest"
+IMAGE      = "{{env.IMAGE_REPO}}:{{env.IMAGE_TAG}}"
 
 # ---------- Maven / Java -----------------------------------------------------
 
@@ -42,7 +46,33 @@ run = "mvn -B -ntp spotless:apply"
 
 [tasks."docker:build"]
 description = "Build the Docker image ($IMAGE)"
-run = "docker build -t $IMAGE -f docker/Dockerfile ."
+run = '''
+set -e
+docker build -t $IMAGE -f docker/Dockerfile .
+version=$(mvn -B -ntp -q -DforceStdout=true help:evaluate -Dexpression=project.version 2>/dev/null)
+if [ -z "$version" ]; then
+  echo "error: could not resolve project.version from pom.xml" >&2
+  exit 1
+fi
+src="${IMAGE_REPO}:${IMAGE_TAG}"
+docker tag "$src" "${IMAGE_REPO}:${version}"
+docker tag "$src" "${IMAGE_REPO}:latest"
+echo "tagged: ${IMAGE_REPO}:${version}"
+echo "tagged: ${IMAGE_REPO}:latest"
+'''
+
+[tasks."docker:push"]
+description = "Push ${IMAGE_REPO}:<version> + ${IMAGE_REPO}:latest to the registry (no-op if IMAGE_REPO is unqualified)"
+run = '''
+set -e
+version=$(mvn -B -ntp -q -DforceStdout=true help:evaluate -Dexpression=project.version 2>/dev/null)
+if [ -z "$version" ]; then
+  echo "error: could not resolve project.version from pom.xml" >&2
+  exit 1
+fi
+docker push "${IMAGE_REPO}:${version}"
+docker push "${IMAGE_REPO}:latest"
+'''
 
 # ---------- Docker Compose (MySQL + optional app) ---------------------------
 

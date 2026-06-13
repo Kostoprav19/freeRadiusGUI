@@ -1,0 +1,72 @@
+name: freeradiusgui-prod
+
+services:
+  # MySQL service.
+  db:
+    image: mysql:8.0
+    container_name: freeradiusgui-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD required}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-freeradiusgui}
+      MYSQL_USER: ${MYSQL_USER:-freeradius}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD required}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+    volumes:
+      - db-data:/var/lib/mysql
+      - ../databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - localhost
+        - -uroot
+        - -p${MYSQL_ROOT_PASSWORD}
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Role: FreeRADIUSGUI web app.
+  app:
+    image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
+    container_name: freeradiusgui-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    pid: host
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    environment:
+      FREERADIUSGUI_REQUIRE_MOUNTS: "1"
+      JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
+      FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
+      FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
+      FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
+    volumes:
+      - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
+      - /etc/freeradius/clients.conf:/etc/freeradius/clients.conf
+      - /etc/freeradius/users:/etc/freeradius/users
+      - /var/log/freeradius/radacct:/var/log/freeradius/radacct:ro
+      - /var/log/freeradiusgui:/var/log/freeradiusgui
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  db-data:

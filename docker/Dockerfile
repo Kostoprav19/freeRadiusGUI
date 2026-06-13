@@ -3,13 +3,9 @@ FROM maven:3.9-eclipse-temurin-25 AS build
 
 WORKDIR /src
 
-# BuildKit cache mount for ~/.m2 keeps Maven artifacts across rebuilds
-# without relying on `dependency:go-offline` (which can fail when a
-# transitive is hosted only in a vendor-specific repository).
 COPY pom.xml ./
 COPY src ./src
-RUN --mount=type=cache,target=/root/.m2/repository \
-    mvn -B -ntp -DskipTests clean package \
+RUN mvn -B -ntp -DskipTests clean package \
  && ls -la target/freeradiusgui.war
 
 RUN mkdir -p /build/ROOT \
