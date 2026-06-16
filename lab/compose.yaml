@@ -54,18 +54,15 @@ services:
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      - ./freeradius/clients.conf:/etc/freeradius/clients.conf:ro
-      - ./freeradius/users:/etc/freeradius/users:ro
+      - ./freeradius/raddb/clients.conf:/etc/freeradius/clients.conf:ro
+      - ./freeradius/raddb/mods-config/files/authorize:/etc/freeradius/users:ro
       - radius-logs:/var/log/freeradius/radacct
       - app-logs:/var/log/freeradiusgui
 
   # FreeRADIUS service (dev only).
   freeradius:
     profiles: ["app"]
-    build:
-      context: ./freeradius
-      dockerfile: Dockerfile.freeradius
-    image: freeradiusgui-radius:latest
+    image: freeradius/freeradius-server:latest-3.2
     container_name: freeradiusgui-radius
     restart: unless-stopped
     command: ["-X"]
@@ -73,8 +70,9 @@ services:
       - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
       - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
     volumes:
-      - ./freeradius/clients.conf:/etc/raddb/clients.conf:ro
-      - ./freeradius/users:/etc/raddb/mods-config/files/authorize:ro
+      - ./freeradius/raddb/clients.conf:/etc/raddb/clients.conf:ro
+      - ./freeradius/raddb/mods-config/files/authorize:/etc/raddb/mods-config/files/authorize:ro
+      - ./freeradius/raddb/mods-enabled/detail.log:/etc/raddb/mods-enabled/detail.log:ro
       - radius-logs:/var/log/freeradius/radacct
 
   # Radclient service (dev only).

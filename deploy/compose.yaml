@@ -36,6 +36,27 @@ services:
         max-size: "10m"
         max-file: "5"
 
+  # FreeRADIUS service.
+  freeradius:
+    build:
+      context: ../docker/freeradius
+      dockerfile: Dockerfile.freeradius
+    image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
+    container_name: freeradiusgui-radius
+    restart: unless-stopped
+    command: ["-f"]
+    ports:
+      - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
+      - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
+    volumes:
+      - radius-config:/data/radius-config
+      - radius-logs:/var/log/freeradius/radacct
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
   # Role: FreeRADIUSGUI web app.
   app:
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
@@ -44,12 +65,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      freeradius:
+        condition: service_started
     ports:
       - "${APP_PORT:-8080}:8080"
-    pid: host
-    cap_add:
-      - SYS_ADMIN
-      - SYS_PTRACE
+    pid: "service:freeradius"
     environment:
       FREERADIUSGUI_REQUIRE_MOUNTS: "1"
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
@@ -58,10 +78,9 @@ services:
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      - /etc/freeradius/clients.conf:/etc/freeradius/clients.conf
-      - /etc/freeradius/users:/etc/freeradius/users
-      - /var/log/freeradius/radacct:/var/log/freeradius/radacct:ro
-      - /var/log/freeradiusgui:/var/log/freeradiusgui
+      - radius-config:/etc/freeradius
+      - radius-logs:/var/log/freeradius/radacct:ro
+      - app-logs:/var/log/freeradiusgui
     logging:
       driver: json-file
       options:
@@ -70,3 +89,6 @@ services:
 
 volumes:
   db-data:
+  radius-config:
+  radius-logs:
+  app-logs:

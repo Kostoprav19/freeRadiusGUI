@@ -26,12 +26,10 @@ mailTo = ops@example.com
 mailSmtpServer = smtp.example.com
 
 #----- SHELL COMMANDS -----
-# Status pgreps see the host PID namespace because of pid: host.
+# App shares PID namespace with FreeRADIUS container, so these commands
+# work directly without nsenter or host-level access.
 shellPgrepFreeradius = pgrep -fl freeradius
 shellPgrepTomcat = pgrep -fl tomcat
 shellPgrepMysql = pgrep -fl mysqld
-
-# Recommended recipe: nsenter into PID 1's namespaces to talk to the
-# host systemd. Adjust to your host systemd unit name.
-shellStartFreeradius = nsenter --target 1 --mount --uts --ipc --net --pid systemctl start freeradius
-shellStopFreeradius = nsenter --target 1 --mount --uts --ipc --net --pid systemctl stop freeradius
+shellStartFreeradius = freeradius
+shellStopFreeradius = killall freeradius

@@ -1,13 +1,28 @@
 # freeRadiusGui — production deploy
 
-Production deploy runs freeRadiusGui + MySQL in containers, while FreeRADIUS stays host-managed.
+Production deploy runs freeRadiusGui, FreeRADIUS, and MySQL all in containers. The app and FreeRADIUS containers share a PID namespace so the app can manage the FreeRADIUS daemon lifecycle (start/stop/restart/status) directly.
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  Docker Compose (freeradiusgui-prod)                    │
+│                                                         │
+│  ┌──────────┐  ┌──────────────────┐  ┌──────────────┐  │
+│  │    db    │  │    freeradius    │  │     app      │  │
+│  │ MySQL 8  │  │ FreeRADIUS 3.2   │  │  Tomcat 10   │  │
+│  │  :3306   │  │ :1812/udp :1813  │  │    :8080     │  │
+│  └──────────┘  └──────────────────┘  └──────────────┘  │
+│                       ▲  PID shared  ▲                  │
+│                       └──────────────┘                  │
+│                                                         │
+│  Volumes: db-data, radius-config, radius-logs, app-logs │
+└─────────────────────────────────────────────────────────┘
+```
 
 ## Prerequisites
 
-- Docker Engine + Docker Compose plugin on the host
-- Host FreeRADIUS installed and managed by systemd
-- Existing `/etc/freeradius/clients.conf` and `/etc/freeradius/users`
-- Access to host radacct logs at `/var/log/freeradius/radacct`
+- Docker Engine + Docker Compose plugin
 
 ## Steps
 
@@ -16,25 +31,37 @@ Production deploy runs freeRadiusGui + MySQL in containers, while FreeRADIUS sta
    - Set strong DB passwords and image tag values.
 2. Copy and edit app config:
    - `cp deploy/config.properties.example deploy/config.properties`
-   - Ensure DB credentials match `.env` and FreeRADIUS paths are correct.
-3. Start the stack:
-   - `docker compose --env-file deploy/.env -f deploy/compose.yaml up -d`
-   - For logs: `docker compose --env-file deploy/.env -f deploy/compose.yaml logs -f app db`
+   - Ensure DB credentials match `.env`.
+3. Build and start the stack:
+   - `docker compose --env-file deploy/.env -f deploy/compose.yaml up -d --build`
+   - For logs: `docker compose --env-file deploy/.env -f deploy/compose.yaml logs -f`
 4. First login:
    - Open `http://<host>:8080/`
    - Sign in with `admin` / `123456`
    - Change the admin password immediately.
 
+## First Boot
+
+On first start, the FreeRADIUS container seeds the `radius-config` volume with default `clients.conf` and `users` files. Use the web UI to configure your actual devices and switches, then click "Apply changes" to write them to the config volume.
+
 ## Verifying
 
 - Check containers: `docker compose --env-file deploy/.env -f deploy/compose.yaml ps`
-- Validate FreeRADIUS systemd unit from host namespace:
-  - `nsenter --target 1 --mount --uts --ipc --net --pid systemctl status freeradius`
-- Confirm app shell checks can see host processes (`freeradius`, `mysqld`, `tomcat`) from the UI Server page.
+- Test RADIUS auth: `docker compose --env-file deploy/.env -f deploy/compose.yaml exec freeradius radclient -x localhost auth testing123`
+- Confirm app can see FreeRADIUS process from the UI Server page.
+
+## Volumes
+
+| Volume | Purpose |
+|---|---|
+| `db-data` | MySQL data directory |
+| `radius-config` | FreeRADIUS `clients.conf` and `users` files (shared with app) |
+| `radius-logs` | FreeRADIUS radacct auth-detail logs (shared with app) |
+| `app-logs` | Application Logback logs |
 
 ## Files In This Directory
 
-- `compose.yaml` — production compose stack (`app`, `db`)
+- `compose.yaml` — production compose stack (`app`, `freeradius`, `db`)
 - `.env.example` — env template used with `--env-file`
 - `config.properties.example` — app config template mounted into Tomcat
 - `config.properties` — local deploy config (create from example)
