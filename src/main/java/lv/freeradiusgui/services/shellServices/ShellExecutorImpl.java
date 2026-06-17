@@ -2,6 +2,7 @@ package lv.freeradiusgui.services.shellServices;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,10 @@ public class ShellExecutorImpl implements ShellExecutor {
             // (e.g. curl ... | grep). Commands come from config.properties,
             // never from user input.
             p = Runtime.getRuntime().exec(new String[] {"/bin/sh", "-c", command});
-            p.waitFor();
+            if (!p.waitFor(30, TimeUnit.SECONDS)) {
+                logger.error("Command timed out after 30s: '" + command + "'.");
+                p.destroyForcibly();
+            }
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             String line = "";

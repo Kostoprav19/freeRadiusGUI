@@ -35,8 +35,7 @@ public class ServerController {
 
     @RequestMapping(Views.SERVER + "/restart")
     public String restartService(final RedirectAttributes redirectAttributes) {
-        serverService.restartFreeradius();
-        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
+        if (serverService.restartFreeradius()) {
             redirectAttributes.addFlashAttribute(
                     "msg", "Service 'freeradius' restarted; changes applied.");
             redirectAttributes.addFlashAttribute("msgType", "success");

@@ -51,15 +51,19 @@ services:
       - "${APP_PORT:-8080}:8080"
     environment:
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
-      FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
-      FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
-      FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
+      # Startup mount checks always run; these paths must be set explicitly
+      # (the entrypoint assumes no defaults) and must match the mounts below.
+      FREERADIUSGUI_CLIENTS_FILE: /etc/freeradius/clients.conf
+      FREERADIUSGUI_USERS_FILE: /etc/freeradius/users
+      FREERADIUSGUI_RADACCT_DIR: /var/log/freeradius/radacct
+      FREERADIUSGUI_LOGBACK_DIR: /var/log/freeradiusgui
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      # Shared writable config volume (same model as prod): the app rewrites
+      # Shared host config dir (same model as prod): the app rewrites
       # clients.conf/users here on "Apply changes" and freeradius reads them
-      # back via /data/radius-config after a restart.
-      - radius-config:/etc/freeradius
+      # back via /data/radius-config after a restart. Populated from
+      # lab/radius-config.example/ (see tests/smoke-test.sh / README).
+      - ./radius-config:/etc/freeradius
       - radius-logs:/var/log/freeradius/radacct
       - app-logs:/var/log/freeradiusgui
       # Lets the app restart/inspect the freeradius container via the Docker API.
@@ -80,21 +84,20 @@ services:
       - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
       - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
     volumes:
-      # Shared writable config volume (same one the app mounts at
-      # /etc/freeradius). Seeded on first boot from the lab repo files below,
-      # which carry the dockernet client + dev MAC entries the radclient loop
-      # relies on. After the app's "Apply changes" rewrites the volume, a
-      # restart makes freeradius pick up the new config.
-      - radius-config:/data/radius-config
-      - ./freeradius/raddb/clients.conf:/usr/local/share/freeradius-seed/clients.conf:ro
-      - ./freeradius/raddb/mods-config/files/authorize:/usr/local/share/freeradius-seed/users:ro
+      # Shared host config dir (same one the app mounts at /etc/freeradius).
+      # Holds clients.conf + users with the dockernet client + dev MAC entries
+      # the radclient loop relies on; populated from lab/radius-config.example/.
+      # The container refuses to start if the files are missing (mirrors prod).
+      - ./radius-config:/data/radius-config
       - radius-logs:/var/log/freeradius/radacct
-    # Healthy once the config volume is seeded, so the app waits for the files
-    # to exist before it starts (mirrors prod).
+    # "Port up and listening": healthy once the auth socket (1812/udp) is bound,
+    # so the app waits for the daemon to be ready (mirrors prod). 0714 is 1812 in
+    # hex as it appears in /proc/net/udp{,6}; checked this way because the image
+    # ships no ss/netstat/nc.
     healthcheck:
       test:
         - CMD-SHELL
-        - test -f /data/radius-config/clients.conf && test -f /data/radius-config/users
+        - grep -qE ':0714 ' /proc/net/udp /proc/net/udp6 2>/dev/null
       interval: 5s
       timeout: 3s
       retries: 10
@@ -121,6 +124,5 @@ services:
 
 volumes:
   db-data:
-  radius-config:
   radius-logs:
   app-logs:

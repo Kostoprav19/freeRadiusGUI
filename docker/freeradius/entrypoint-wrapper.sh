@@ -1,9 +1,11 @@
 #!/bin/sh
 # Wrapper around the upstream freeradius image entrypoint.
 #
-#   1. Seeds /data/radius-config with default clients.conf and users on first
-#      boot (when the shared volume is empty). Existing files are left alone,
-#      so UI edits and lab bind-mounts are never clobbered.
+#   1. Refuses to start unless clients.conf and users have been supplied in
+#      /data/radius-config (bind-mounted from the host). The image ships no
+#      placeholder seeds: prod copies real files from the RADIUS server, lab
+#      copies lab/radius-config.example/*. Booting with an implicit/empty
+#      config would silently reject every device, so fail loudly instead.
 #   2. Fixes ownership of the radacct log dir so the freerad user the daemon
 #      drops to can write auth-detail-YYYYMMDD files (compose named volumes
 #      are root-owned on first creation, otherwise reply_log fails with EACCES).
@@ -12,16 +14,18 @@
 # receives signals directly.
 set -e
 
-mkdir -p /data/radius-config
+CONFIG_DIR=/data/radius-config
 
-if [ ! -f /data/radius-config/clients.conf ]; then
-    cp /usr/local/share/freeradius-seed/clients.conf /data/radius-config/clients.conf
-    chmod 0644 /data/radius-config/clients.conf
-fi
-
-if [ ! -f /data/radius-config/users ]; then
-    cp /usr/local/share/freeradius-seed/users /data/radius-config/users
-    chmod 0644 /data/radius-config/users
+missing=
+for f in clients.conf users; do
+    [ -s "$CONFIG_DIR/$f" ] || missing="$missing $f"
+done
+if [ -n "$missing" ]; then
+    echo "FATAL: missing required RADIUS config in $CONFIG_DIR:$missing" >&2
+    echo "Supply clients.conf and users via a host bind mount at $CONFIG_DIR:" >&2
+    echo "  prod: cp <server>/{clients.conf,users} deploy/radius-config/" >&2
+    echo "  lab:  cp lab/radius-config.example/{clients.conf,users} lab/radius-config/" >&2
+    exit 1
 fi
 
 mkdir -p /var/log/freeradius/radacct

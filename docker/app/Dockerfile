@@ -32,7 +32,7 @@ RUN chmod 755 /usr/local/bin/entrypoint-tomcat.sh
 LABEL org.opencontainers.image.title="freeRadiusGui" \
       org.opencontainers.image.description="FreeRADIUS admin UI; requires external mounts for RADIUS data and log dirs. See docker/README.md in the source tree." \
       lv.freeradiusgui.recommended.volumes="/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties, /etc/freeradius/clients.conf, /etc/freeradius/users, /var/log/freeradius/radacct, /var/log/freeradiusgui" \
-      lv.freeradiusgui.strict_mounted_startup="set FREERADIUSGUI_REQUIRE_MOUNTS=1; see entrypoint and docker/README.md"
+      lv.freeradiusgui.strict_mounted_startup="always on; set FREERADIUSGUI_CLIENTS_FILE/USERS_FILE/RADACCT_DIR/LOGBACK_DIR; see entrypoint and docker/README.md"
 
 ENV JAVA_OPTS="-Xms256m -Xmx512m -Duser.timezone=UTC"
 

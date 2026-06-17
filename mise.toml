@@ -5,12 +5,14 @@ maven = "3.9.9"
 [env]
 # Keep Maven output quiet(ish) and avoid interactive prompts in CI.
 MAVEN_OPTS = "-Xmx1g"
-# Image identity used by docker:* tasks. Override IMAGE_REPO to a
-# registry-qualified name (e.g. ghcr.io/<owner>/freeradiusgui) for
-# docker:push to be more than a no-op; see prod-05 plan.
-IMAGE_REPO = "danielsatkacuns/freeradiusgui"
-IMAGE_TAG  = "latest"
-IMAGE      = "{{env.IMAGE_REPO}}:{{env.IMAGE_TAG}}"
+# Image identity used by docker:* tasks. Override the *_REPO vars with
+# registry-qualified names (e.g. ghcr.io/<owner>/...) for docker:push to be
+# more than a no-op; see prod-05 plan.
+IMAGE_REPO        = "danielsatkacuns/freeradiusgui"
+RADIUS_IMAGE_REPO = "danielsatkacuns/freeradiusgui-radius"
+IMAGE_TAG         = "latest"
+IMAGE             = "{{env.IMAGE_REPO}}:{{env.IMAGE_TAG}}"
+RADIUS_IMAGE      = "{{env.RADIUS_IMAGE_REPO}}:{{env.IMAGE_TAG}}"
 
 # ---------- Maven / Java -----------------------------------------------------
 
@@ -45,24 +47,32 @@ run = "mvn -B -ntp spotless:apply"
 # ---------- Docker -----------------------------------------------------------
 
 [tasks."docker:build"]
-description = "Build the Docker image ($IMAGE)"
+description = "Build + tag the app and freeradius images ($IMAGE, $RADIUS_IMAGE)"
 run = '''
 set -e
-docker build -t $IMAGE -f docker/app/Dockerfile .
 version=$(mvn -B -ntp -q -DforceStdout=true help:evaluate -Dexpression=project.version 2>/dev/null)
 if [ -z "$version" ]; then
   echo "error: could not resolve project.version from pom.xml" >&2
   exit 1
 fi
-src="${IMAGE_REPO}:${IMAGE_TAG}"
-docker tag "$src" "${IMAGE_REPO}:${version}"
-docker tag "$src" "${IMAGE_REPO}:latest"
+
+# App image (multi-stage build from repo root).
+docker build -t "$IMAGE" -f docker/app/Dockerfile .
+docker tag "$IMAGE" "${IMAGE_REPO}:${version}"
+docker tag "$IMAGE" "${IMAGE_REPO}:latest"
 echo "tagged: ${IMAGE_REPO}:${version}"
 echo "tagged: ${IMAGE_REPO}:latest"
+
+# FreeRADIUS image (context is its own dir).
+docker build -t "$RADIUS_IMAGE" docker/freeradius
+docker tag "$RADIUS_IMAGE" "${RADIUS_IMAGE_REPO}:${version}"
+docker tag "$RADIUS_IMAGE" "${RADIUS_IMAGE_REPO}:latest"
+echo "tagged: ${RADIUS_IMAGE_REPO}:${version}"
+echo "tagged: ${RADIUS_IMAGE_REPO}:latest"
 '''
 
 [tasks."docker:push"]
-description = "Push ${IMAGE_REPO}:<version> + ${IMAGE_REPO}:latest to the registry (no-op if IMAGE_REPO is unqualified)"
+description = "Push app + freeradius images (:<version> and :latest) to the registry (no-op if *_REPO are unqualified)"
 run = '''
 set -e
 version=$(mvn -B -ntp -q -DforceStdout=true help:evaluate -Dexpression=project.version 2>/dev/null)
@@ -72,6 +82,8 @@ if [ -z "$version" ]; then
 fi
 docker push "${IMAGE_REPO}:${version}"
 docker push "${IMAGE_REPO}:latest"
+docker push "${RADIUS_IMAGE_REPO}:${version}"
+docker push "${RADIUS_IMAGE_REPO}:latest"
 '''
 
 # ---------- Docker Compose (MySQL + optional app) ---------------------------
@@ -94,7 +106,14 @@ run = "docker compose down -v"
 [tasks."compose:up"]
 description = "Run full stack (app + DB + FreeRADIUS + radclient) via compose"
 dir = "lab"
-run = "docker compose --profile app up --build"
+run = '''
+# freeradius refuses to start without clients.conf + users; seed the bind-mount
+# dir from the tracked example on first run (never clobbers existing edits).
+mkdir -p radius-config
+[ -s radius-config/clients.conf ] || cp radius-config.example/clients.conf radius-config/clients.conf
+[ -s radius-config/users ] || cp radius-config.example/users radius-config/users
+docker compose --profile app up --build
+'''
 
 [tasks."compose:down"]
 description = "Stop the full compose stack"

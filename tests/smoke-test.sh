@@ -127,13 +127,26 @@ section "Stack lifecycle"
 
 info "db:reset — wiping volumes"
 # --profile app is required: without it `down` leaves the app/freeradius/
-# radclient containers running, so their radius-config/logs volumes survive
-# `-v`. A stale radius-config then gets re-imported into the fresh DB on the
-# next startup (StartupListener.reloadFromConfig), resurrecting prior-run
-# devices/switches and breaking the add probes with duplicate-validation 200s.
+# radclient containers running, so their named db-data/logs volumes survive
+# `-v`. A stale config/DB then gets re-imported on the next startup
+# (StartupListener.reloadFromConfig), resurrecting prior-run devices/switches
+# and breaking the add probes with duplicate-validation 200s.
 (cd "$LAB_DIR" && docker compose --profile app down -v) >/dev/null 2>&1 \
     && record PASS "db-reset" "volumes wiped" \
     || { record FAIL "db-reset" "docker compose down -v failed"; exit 1; }
+
+# radius-config is now a host bind mount (not a named volume), so `down -v`
+# does not reset it and the app mutates it on "Apply changes". Re-seed a
+# pristine copy from the tracked example so each run starts clean.
+info "radius-config — reset bind mount from lab/radius-config.example"
+if rm -rf "$LAB_DIR/radius-config" \
+    && mkdir -p "$LAB_DIR/radius-config" \
+    && cp "$LAB_DIR/radius-config.example/clients.conf" "$LAB_DIR/radius-config/clients.conf" \
+    && cp "$LAB_DIR/radius-config.example/users" "$LAB_DIR/radius-config/users"; then
+    record PASS "radius-config-reset" "seeded lab/radius-config from example"
+else
+    record FAIL "radius-config-reset" "could not seed lab/radius-config"; exit 1
+fi
 
 info "compose:up — starting db + app + freeradius + radclient (detached, with build)"
 (cd "$LAB_DIR" && docker compose --profile app up -d --build) >/dev/null 2>&1 \

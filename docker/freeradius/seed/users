@@ -1,9 +1,0 @@
-# Default users file seeded into the radius-config volume on first boot.
-# Add your real MAC-based entries via the web UI. The sample below shows the
-# Reply-Message format the app expects; delete or replace it as needed.
-
-001122334455 Auth-Type := Accept
-        Reply-Message = "seed-sample-device, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
-
-DEFAULT Auth-Type := Reject
-        Reply-Message = "Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"

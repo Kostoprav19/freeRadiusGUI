@@ -1,0 +1,13 @@
+# Example users file for production.
+#
+# Copy your real file into deploy/radius-config/users (git-ignored) before
+# starting the stack, e.g.
+#   cp /path/to/configs_from_server/users deploy/radius-config/users
+#
+# The sample below shows the Reply-Message format the GUI log viewer parses.
+
+001122334455 Auth-Type := Accept
+        Reply-Message = "sample-device, Access-Accept, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
+
+DEFAULT Auth-Type := Reject
+        Reply-Message = "Access-Reject, MAC:%{User-Name}, Connection: %{Connect-Info}, Port: %{NAS-Port}, Switch IP: %{NAS-IP-Address}, Switch Name: %{NAS-Identifier}"
