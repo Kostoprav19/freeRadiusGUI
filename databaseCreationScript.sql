@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS `freeradiusgui`.`logs` ;
 CREATE TABLE IF NOT EXISTS `freeradiusgui`.`logs` (
   `log_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mac` VARCHAR(12) NOT NULL,
-  `switch_id` INT UNSIGNED NOT NULL,
+  `switch_id` INT UNSIGNED NULL,
   `port` INT NOT NULL,
   `speed` INT NOT NULL,
   `duplex` INT NOT NULL,

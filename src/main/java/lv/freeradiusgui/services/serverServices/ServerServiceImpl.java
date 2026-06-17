@@ -28,14 +28,10 @@ public class ServerServiceImpl implements ServerService {
         String result = shellExecutor.executeCommand(shellCommands.getPgrepFreeradius());
         server.setStatus(Server.FREERADIUS, !result.isEmpty());
 
-        result = shellExecutor.executeCommand(shellCommands.getPgrepTomcat());
-        server.setStatus(Server.TOMCAT, !result.isEmpty());
-
         result = shellExecutor.executeCommand(shellCommands.getPgrepMysql());
         server.setStatus(Server.MYSQL, !result.isEmpty());
 
         logger.info("Freeradius status: " + (server.getStatus(Server.FREERADIUS) ? "UP" : "DOWN"));
-        logger.info("Tomcat status: " + (server.getStatus(Server.TOMCAT) ? "UP" : "DOWN"));
         logger.info("Mysql status: " + (server.getStatus(Server.MYSQL) ? "UP" : "DOWN"));
     }
 
@@ -43,31 +39,25 @@ public class ServerServiceImpl implements ServerService {
         return server.getRejectedLogsListToday().size();
     }
 
+    // Restarts the freeradius sibling container via the Docker API, which
+    // re-reads clients.conf and users. Polls status (up to ~10s) until the
+    // container reports running again.
     public boolean restartFreeradius() {
-        shellExecutor.executeCommand(shellCommands.getStopFreeradius());
-        shellExecutor.executeCommand(shellCommands.getStartFreeradius());
-        updateStatuses();
-        if (server.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
-            server.setLastServiceReboot(LocalDateTime.now());
-            return true;
-        } else return false;
-    }
-
-    public boolean startFreeradius() {
-        shellExecutor.executeCommand(shellCommands.getStartFreeradius());
-        updateStatuses();
-        if (server.getStatus(server.FREERADIUS) == server.SERVER_STATUS_UP) {
-            server.setLastServiceReboot(LocalDateTime.now());
-            return true;
-        } else return false;
-    }
-
-    public boolean stopFreeradius() {
-        shellExecutor.executeCommand(shellCommands.getStopFreeradius());
-        updateStatuses();
-        if (server.getStatus(server.FREERADIUS) == server.SERVER_STATUS_DOWN) {
-            return true;
-        } else return false;
+        shellExecutor.executeCommand(shellCommands.getRestartFreeradius());
+        for (int attempt = 0; attempt < 10; attempt++) {
+            updateStatuses();
+            if (server.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
+                server.setLastServiceReboot(LocalDateTime.now());
+                return true;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+        return false;
     }
 
     @Override

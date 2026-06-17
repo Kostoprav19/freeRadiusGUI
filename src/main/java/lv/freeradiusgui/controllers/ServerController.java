@@ -26,7 +26,6 @@ public class ServerController {
     public String home(Model model) {
         serverService.updateStatuses();
         model.addAttribute("lastServiceReboot", serverService.getLastServiceReboot());
-        model.addAttribute("tomcatStatus", serverService.getStatus(Server.TOMCAT));
         model.addAttribute("mysqlStatus", serverService.getStatus(Server.MYSQL));
         model.addAttribute("usersFilePath", appConfig.getPathToUsersFile());
         model.addAttribute("clientsFilePath", appConfig.getPathToClientsConfFile());
@@ -34,40 +33,12 @@ public class ServerController {
         return Views.SERVER;
     }
 
-    @RequestMapping(Views.SERVER + "/start")
-    public String startService(final RedirectAttributes redirectAttributes) {
-        serverService.startFreeradius();
-        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
-            redirectAttributes.addFlashAttribute(
-                    "msg", "Service 'freeradius' successfully started.");
-            redirectAttributes.addFlashAttribute("msgType", "success");
-        } else {
-            redirectAttributes.addFlashAttribute("msg", "Failed to start service 'freeradius'.");
-            redirectAttributes.addFlashAttribute("msgType", "danger");
-        }
-        return "redirect:/" + Views.SERVER;
-    }
-
-    @RequestMapping(Views.SERVER + "/stop")
-    public String stopService(final RedirectAttributes redirectAttributes) {
-        serverService.stopFreeradius();
-        if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_DOWN) {
-            redirectAttributes.addFlashAttribute(
-                    "msg", "Service 'freeradius' successfully stopped.");
-            redirectAttributes.addFlashAttribute("msgType", "success");
-        } else {
-            redirectAttributes.addFlashAttribute("msg", "Failed to stop service 'freeradius'.");
-            redirectAttributes.addFlashAttribute("msgType", "danger");
-        }
-        return "redirect:/" + Views.SERVER;
-    }
-
     @RequestMapping(Views.SERVER + "/restart")
     public String restartService(final RedirectAttributes redirectAttributes) {
         serverService.restartFreeradius();
         if (serverService.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
             redirectAttributes.addFlashAttribute(
-                    "msg", "Service 'freeradius' successfully restarted.");
+                    "msg", "Service 'freeradius' restarted; changes applied.");
             redirectAttributes.addFlashAttribute("msgType", "success");
         } else {
             redirectAttributes.addFlashAttribute("msg", "Failed to restart service 'freeradius'.");

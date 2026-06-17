@@ -70,6 +70,7 @@ public class DevicesController {
         Device device = deviceService.getById(deviceId);
 
         if (deviceService.delete(device)) {
+            serverService.setDbChangesFlag();
             redirectAttributes.addFlashAttribute(
                     "msg", "Device '" + device.getName() + "' successfully deleted.");
             redirectAttributes.addFlashAttribute("msgType", "success");

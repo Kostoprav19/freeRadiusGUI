@@ -48,7 +48,7 @@ run = "mvn -B -ntp spotless:apply"
 description = "Build the Docker image ($IMAGE)"
 run = '''
 set -e
-docker build -t $IMAGE -f docker/Dockerfile .
+docker build -t $IMAGE -f docker/app/Dockerfile .
 version=$(mvn -B -ntp -q -DforceStdout=true help:evaluate -Dexpression=project.version 2>/dev/null)
 if [ -z "$version" ]; then
   echo "error: could not resolve project.version from pom.xml" >&2

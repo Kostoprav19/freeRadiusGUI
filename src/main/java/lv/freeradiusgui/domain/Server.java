@@ -14,7 +14,6 @@ public class Server {
     public static final boolean SERVER_STATUS_DOWN = false;
 
     public static final String FREERADIUS = "freeradius";
-    public static final String TOMCAT = "tomcat";
     public static final String MYSQL = "mysql";
 
     private Map<String, Boolean> statuses;
@@ -26,7 +25,6 @@ public class Server {
     public Server() {
         statuses = new HashMap<>();
         statuses.put(FREERADIUS, false);
-        statuses.put(TOMCAT, false);
         statuses.put(MYSQL, false);
         this.rejectedLogsListToday = new ArrayList<>();
         this.lastServiceReboot = null;

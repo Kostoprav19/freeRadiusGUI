@@ -17,7 +17,10 @@ public class ShellExecutorImpl implements ShellExecutor {
 
         Process p;
         try {
-            p = Runtime.getRuntime().exec(command);
+            // Run via a shell so command strings may use pipes/redirection
+            // (e.g. curl ... | grep). Commands come from config.properties,
+            // never from user input.
+            p = Runtime.getRuntime().exec(new String[] {"/bin/sh", "-c", command});
             p.waitFor();
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 

@@ -9,33 +9,32 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class ShellCommandsTest {
 
     @Test
-    public void getStartFreeradius_readsValueFromAppConfig() {
+    public void getRestartFreeradius_readsValueFromAppConfig() {
         var shellCommands = shellCommandsWith(new AppConfig());
-        assertEquals("freeradius", shellCommands.getStartFreeradius());
-    }
-
-    @Test
-    public void getStopFreeradius_readsValueFromAppConfig() {
-        var shellCommands = shellCommandsWith(new AppConfig());
-        assertEquals("killall freeradius", shellCommands.getStopFreeradius());
+        assertEquals(
+                "curl -s -X POST --unix-socket /var/run/docker.sock"
+                        + " http://localhost/containers/freeradiusgui-radius/restart",
+                shellCommands.getRestartFreeradius());
     }
 
     @Test
     public void getPgrepFreeradius_readsValueFromAppConfig() {
         var shellCommands = shellCommandsWith(new AppConfig());
-        assertEquals("pgrep -fl freeradius", shellCommands.getPgrepFreeradius());
-    }
-
-    @Test
-    public void getPgrepTomcat_readsValueFromAppConfig() {
-        var shellCommands = shellCommandsWith(new AppConfig());
-        assertEquals("pgrep -fl tomcat", shellCommands.getPgrepTomcat());
+        assertEquals(
+                "curl -s --unix-socket /var/run/docker.sock"
+                        + " http://localhost/containers/freeradiusgui-radius/json | grep -oE"
+                        + " '\"Running\": *true'",
+                shellCommands.getPgrepFreeradius());
     }
 
     @Test
     public void getPgrepMysql_readsValueFromAppConfig() {
         var shellCommands = shellCommandsWith(new AppConfig());
-        assertEquals("pgrep -fl mysqld", shellCommands.getPgrepMysql());
+        assertEquals(
+                "curl -s --unix-socket /var/run/docker.sock"
+                        + " http://localhost/containers/freeradiusgui-db/json | grep -oE"
+                        + " '\"Running\": *true'",
+                shellCommands.getPgrepMysql());
     }
 
     private ShellCommands shellCommandsWith(AppConfig appConfig) {

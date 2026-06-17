@@ -63,9 +63,30 @@ public class LogServiceImpl implements LogService {
             logger.info("Successfully written log records to database.");
             return true;
         } catch (Exception e) {
-            logger.error("Failed to write log records to database.", e);
-            return false;
+            // A single malformed/unsavable record must not discard the whole
+            // batch: fall back to per-record inserts so the rest still land.
+            logger.warn(
+                    "Batch insert of {} log records failed; retrying per-record.",
+                    listFromFile.size(),
+                    e);
+            return storeEachSkippingFailures(listFromFile);
         }
+    }
+
+    private boolean storeEachSkippingFailures(List<Log> logs) {
+        int saved = 0;
+        int skipped = 0;
+        for (Log log : logs) {
+            try {
+                logRepository.save(log);
+                saved++;
+            } catch (Exception e) {
+                skipped++;
+                logger.error("Skipping log record that could not be persisted: {}", log, e);
+            }
+        }
+        logger.info("Stored {} log records ({} skipped).", saved, skipped);
+        return skipped == 0;
     }
 
     @Override

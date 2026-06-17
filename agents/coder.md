@@ -9,7 +9,7 @@ Spring MVC web app on a deliberately pinned legacy stack (currently
 JDK 25, Spring 6.2.18, Spring Data JDBC 3.4.13, Tomcat 10.1, MySQL 8.0).
 
 **Implementation scope is not only Java:** when the approved plan or task
-covers it, you also edit **`docker/Dockerfile`**, files under **`docker/**`**, **`pom.xml`**, **`mise.toml`**, **`lab/compose.yaml`**, and other build/container/lab
+covers it, you also edit **`docker/app/Dockerfile`**, files under **`docker/**`**, **`pom.xml`**, **`mise.toml`**, **`lab/compose.yaml`**, and other build/container/lab
 assets. The main orchestrating session should **not** make those edits; **you
 do** (per `AGENTS.md` and `agents/rules/coder-implementation-routing.mdc`).
 

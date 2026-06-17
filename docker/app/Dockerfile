@@ -15,16 +15,17 @@ RUN mkdir -p /build/ROOT \
 # ---------- Runtime stage ----------------------------------------------------
 FROM tomcat:10.1-jre25-temurin
 
-# Tools the app shells out to (pgrep -> procps, killall -> psmisc).
+# Tools the app shells out to: pgrep (procps) for local status checks, and
+# curl to drive the freeradius sibling container via the Docker API.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends procps psmisc curl \
+ && apt-get install -y --no-install-recommends procps curl \
  && rm -rf /var/lib/apt/lists/*
 
 # Drop Tomcat's sample webapps and the default ROOT, then install ours as ROOT
 RUN rm -rf "$CATALINA_HOME/webapps/"* "$CATALINA_HOME/webapps.dist"
 
 COPY --from=build /build/ROOT/ "$CATALINA_HOME/webapps/ROOT/"
-COPY docker/entrypoint-tomcat.sh /usr/local/bin/entrypoint-tomcat.sh
+COPY docker/app/entrypoint-tomcat.sh /usr/local/bin/entrypoint-tomcat.sh
 RUN chmod 755 /usr/local/bin/entrypoint-tomcat.sh
 
 # OCI labels: "docker inspect …Labels" and registry UIs.

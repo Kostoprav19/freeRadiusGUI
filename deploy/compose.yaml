@@ -40,7 +40,7 @@ services:
   freeradius:
     build:
       context: ../docker/freeradius
-      dockerfile: Dockerfile.freeradius
+      dockerfile: Dockerfile
     image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
     container_name: freeradiusgui-radius
     restart: unless-stopped
@@ -51,6 +51,16 @@ services:
     volumes:
       - radius-config:/data/radius-config
       - radius-logs:/var/log/freeradius/radacct
+    # Healthy once the config volume is seeded, so the app's REQUIRE_MOUNTS
+    # gate passes when it starts after this service.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - test -f /data/radius-config/clients.conf && test -f /data/radius-config/users
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
     logging:
       driver: json-file
       options:
@@ -66,10 +76,9 @@ services:
       db:
         condition: service_healthy
       freeradius:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "${APP_PORT:-8080}:8080"
-    pid: "service:freeradius"
     environment:
       FREERADIUSGUI_REQUIRE_MOUNTS: "1"
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
@@ -81,6 +90,9 @@ services:
       - radius-config:/etc/freeradius
       - radius-logs:/var/log/freeradius/radacct:ro
       - app-logs:/var/log/freeradiusgui
+      # Lets the app restart/inspect the freeradius container via the Docker
+      # API. Grants root-on-host access; acceptable for this single-host deploy.
+      - /var/run/docker.sock:/var/run/docker.sock
     logging:
       driver: json-file
       options:

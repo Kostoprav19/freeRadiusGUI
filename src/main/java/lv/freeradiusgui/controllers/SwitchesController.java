@@ -58,6 +58,7 @@ public class SwitchesController {
             @PathVariable("id") Integer aSwitchId, final RedirectAttributes redirectAttributes) {
         Switch aSwitch = switchService.getById(aSwitchId);
         if (switchService.delete(aSwitch)) {
+            serverService.setDbChangesFlag();
             redirectAttributes.addFlashAttribute(
                     "msg", "Switch '" + aSwitch.getName() + "' successfully deleted.");
             redirectAttributes.addFlashAttribute("msgType", "success");

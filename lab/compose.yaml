@@ -39,11 +39,13 @@ services:
     profiles: ["app"]
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/app/Dockerfile
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
     container_name: freeradiusgui-app
     depends_on:
       db:
+        condition: service_healthy
+      freeradius:
         condition: service_healthy
     ports:
       - "${APP_PORT:-8080}:8080"
@@ -54,15 +56,23 @@ services:
       FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      - ./freeradius/raddb/clients.conf:/etc/freeradius/clients.conf:ro
-      - ./freeradius/raddb/mods-config/files/authorize:/etc/freeradius/users:ro
+      # Shared writable config volume (same model as prod): the app rewrites
+      # clients.conf/users here on "Apply changes" and freeradius reads them
+      # back via /data/radius-config after a restart.
+      - radius-config:/etc/freeradius
       - radius-logs:/var/log/freeradius/radacct
       - app-logs:/var/log/freeradiusgui
+      # Lets the app restart/inspect the freeradius container via the Docker API.
+      - /var/run/docker.sock:/var/run/docker.sock
 
-  # FreeRADIUS service (dev only).
+  # FreeRADIUS service (dev only). Uses the same image as prod (../docker/freeradius)
+  # so reply_log, the auth-detail config, and the radacct chown all match.
   freeradius:
     profiles: ["app"]
-    image: freeradius/freeradius-server:latest-3.2
+    build:
+      context: ../docker/freeradius
+      dockerfile: Dockerfile
+    image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
     container_name: freeradiusgui-radius
     restart: unless-stopped
     command: ["-X"]
@@ -70,10 +80,25 @@ services:
       - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
       - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
     volumes:
-      - ./freeradius/raddb/clients.conf:/etc/raddb/clients.conf:ro
-      - ./freeradius/raddb/mods-config/files/authorize:/etc/raddb/mods-config/files/authorize:ro
-      - ./freeradius/raddb/mods-enabled/detail.log:/etc/raddb/mods-enabled/detail.log:ro
+      # Shared writable config volume (same one the app mounts at
+      # /etc/freeradius). Seeded on first boot from the lab repo files below,
+      # which carry the dockernet client + dev MAC entries the radclient loop
+      # relies on. After the app's "Apply changes" rewrites the volume, a
+      # restart makes freeradius pick up the new config.
+      - radius-config:/data/radius-config
+      - ./freeradius/raddb/clients.conf:/usr/local/share/freeradius-seed/clients.conf:ro
+      - ./freeradius/raddb/mods-config/files/authorize:/usr/local/share/freeradius-seed/users:ro
       - radius-logs:/var/log/freeradius/radacct
+    # Healthy once the config volume is seeded, so the app waits for the files
+    # to exist before it starts (mirrors prod).
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - test -f /data/radius-config/clients.conf && test -f /data/radius-config/users
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
 
   # Radclient service (dev only).
   radclient:
@@ -96,5 +121,6 @@ services:
 
 volumes:
   db-data:
+  radius-config:
   radius-logs:
   app-logs:

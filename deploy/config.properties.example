@@ -26,10 +26,11 @@ mailTo = ops@example.com
 mailSmtpServer = smtp.example.com
 
 #----- SHELL COMMANDS -----
-# App shares PID namespace with FreeRADIUS container, so these commands
-# work directly without nsenter or host-level access.
-shellPgrepFreeradius = pgrep -fl freeradius
-shellPgrepTomcat = pgrep -fl tomcat
-shellPgrepMysql = pgrep -fl mysqld
-shellStartFreeradius = freeradius
-shellStopFreeradius = killall freeradius
+# freeradius runs in a sibling container. Its status and restart go through the
+# Docker API over the mounted /var/run/docker.sock (see compose.yaml). This
+# needs no shared PID namespace; restarting freeradius does not affect the app.
+# (Requires the docker.sock mount; that grants root-on-host access.)
+shellPgrepFreeradius = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-radius/json | grep -oE '"Running": *true'
+shellPgrepMysql = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-db/json | grep -oE '"Running": *true'
+# Restart applies both users and clients.conf changes (full daemon restart).
+shellRestartFreeradius = curl -s -X POST --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-radius/restart

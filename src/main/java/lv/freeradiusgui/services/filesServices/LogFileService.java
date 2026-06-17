@@ -109,10 +109,10 @@ public class LogFileService extends AbstractFileServices implements FileService<
 
                 newLog.setDevice(deviceService.getByMac(newLog.getMac(), deviceList));
 
-                newLog.setSwitchPort(Integer.parseInt(parseValue(list.get(index), PORT_PATTERN)));
+                newLog.setSwitchPort(parseIntOrDefault(parseValue(list.get(index), PORT_PATTERN)));
 
                 newLog.setPortSpeed(
-                        Integer.parseInt(parseValue(list.get(index), PORTSPEED_PATTERN)));
+                        parseIntOrDefault(parseValue(list.get(index), PORTSPEED_PATTERN)));
 
                 if (string.contains("Full duplex")) newLog.setDuplex(1);
                 else newLog.setDuplex(0);
@@ -129,6 +129,18 @@ public class LogFileService extends AbstractFileServices implements FileService<
             }
         }
         return newLog;
+    }
+
+    // Handles partial records while logs are being written concurrently.
+    private int parseIntOrDefault(String value) {
+        if (value == null || value.isBlank()) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     private List<String> findSubList(List<String> list, Integer index) {
