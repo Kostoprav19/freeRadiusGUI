@@ -26,12 +26,11 @@ mailTo = ops@example.com
 mailSmtpServer = smtp.example.com
 
 #----- SHELL COMMANDS -----
-# Status pgreps see the host PID namespace because of pid: host.
-shellPgrepFreeradius = pgrep -fl freeradius
-shellPgrepTomcat = pgrep -fl tomcat
-shellPgrepMysql = pgrep -fl mysqld
-
-# Recommended recipe: nsenter into PID 1's namespaces to talk to the
-# host systemd. Adjust to your host systemd unit name.
-shellStartFreeradius = nsenter --target 1 --mount --uts --ipc --net --pid systemctl start freeradius
-shellStopFreeradius = nsenter --target 1 --mount --uts --ipc --net --pid systemctl stop freeradius
+# freeradius runs in a sibling container. Its status and restart go through the
+# Docker API over the mounted /var/run/docker.sock (see compose.yaml). This
+# needs no shared PID namespace; restarting freeradius does not affect the app.
+# (Requires the docker.sock mount; that grants root-on-host access.)
+shellPgrepFreeradius = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-radius/json | grep -oE '"Running": *true'
+shellPgrepMysql = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-db/json | grep -oE '"Running": *true'
+# Restart applies both users and clients.conf changes (full daemon restart).
+shellRestartFreeradius = curl -s -X POST --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-radius/restart

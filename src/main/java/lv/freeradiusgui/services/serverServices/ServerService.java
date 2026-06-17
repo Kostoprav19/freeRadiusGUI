@@ -9,10 +9,6 @@ public interface ServerService {
 
     boolean restartFreeradius();
 
-    boolean startFreeradius();
-
-    boolean stopFreeradius();
-
     boolean getStatus(String key);
 
     LocalDateTime getLastServiceReboot();

@@ -18,3 +18,8 @@ target/
 # Production deploy overrides (operator-local; .example siblings tracked)
 deploy/.env
 deploy/config.properties
+
+# Operator/dev-supplied RADIUS config, bind-mounted into freeradius + app.
+# Holds real shared secrets and is rewritten by the app on "Apply changes".
+# (deploy/radius-config/ is kept via its own .gitignore; lab/ is fully ignored.)
+lab/radius-config/

@@ -39,33 +39,44 @@ services:
     profiles: ["app"]
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/app/Dockerfile
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
     container_name: freeradiusgui-app
     depends_on:
       db:
         condition: service_healthy
+      freeradius:
+        condition: service_healthy
     ports:
       - "${APP_PORT:-8080}:8080"
     environment:
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
-      FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
-      FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
-      FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
+      # Startup mount checks always run; these paths must be set explicitly
+      # (the entrypoint assumes no defaults) and must match the mounts below.
+      FREERADIUSGUI_CLIENTS_FILE: /etc/freeradius/clients.conf
+      FREERADIUSGUI_USERS_FILE: /etc/freeradius/users
+      FREERADIUSGUI_RADACCT_DIR: /var/log/freeradius/radacct
+      FREERADIUSGUI_LOGBACK_DIR: /var/log/freeradiusgui
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      - ./freeradius/clients.conf:/etc/freeradius/clients.conf:ro
-      - ./freeradius/users:/etc/freeradius/users:ro
+      # Shared host config dir (same model as prod): the app rewrites
+      # clients.conf/users here on "Apply changes" and freeradius reads them
+      # back via /data/radius-config after a restart. Populated from
+      # lab/radius-config.example/ (see tests/smoke-test.sh / README).
+      - ./radius-config:/etc/freeradius
       - radius-logs:/var/log/freeradius/radacct
       - app-logs:/var/log/freeradiusgui
+      # Lets the app restart/inspect the freeradius container via the Docker API.
+      - /var/run/docker.sock:/var/run/docker.sock
 
-  # FreeRADIUS service (dev only).
+  # FreeRADIUS service (dev only). Uses the same image as prod (../docker/freeradius)
+  # so reply_log, the auth-detail config, and the radacct chown all match.
   freeradius:
     profiles: ["app"]
     build:
-      context: ./freeradius
-      dockerfile: Dockerfile.freeradius
-    image: freeradiusgui-radius:latest
+      context: ../docker/freeradius
+      dockerfile: Dockerfile
+    image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
     container_name: freeradiusgui-radius
     restart: unless-stopped
     command: ["-X"]
@@ -73,9 +84,24 @@ services:
       - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
       - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
     volumes:
-      - ./freeradius/clients.conf:/etc/raddb/clients.conf:ro
-      - ./freeradius/users:/etc/raddb/mods-config/files/authorize:ro
+      # Shared host config dir (same one the app mounts at /etc/freeradius).
+      # Holds clients.conf + users with the dockernet client + dev MAC entries
+      # the radclient loop relies on; populated from lab/radius-config.example/.
+      # The container refuses to start if the files are missing (mirrors prod).
+      - ./radius-config:/data/radius-config
       - radius-logs:/var/log/freeradius/radacct
+    # "Port up and listening": healthy once the auth socket (1812/udp) is bound,
+    # so the app waits for the daemon to be ready (mirrors prod). 0714 is 1812 in
+    # hex as it appears in /proc/net/udp{,6}; checked this way because the image
+    # ships no ss/netstat/nc.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - grep -qE ':0714 ' /proc/net/udp /proc/net/udp6 2>/dev/null
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
 
   # Radclient service (dev only).
   radclient:

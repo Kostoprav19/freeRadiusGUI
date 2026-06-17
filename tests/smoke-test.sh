@@ -125,10 +125,28 @@ record PASS "template-hygiene" "no banned \$\{session.*\} / \$\{param.*\} / #req
 
 section "Stack lifecycle"
 
-info "db:reset — wiping volume"
-(cd "$LAB_DIR" && docker compose down -v) >/dev/null 2>&1 \
-    && record PASS "db-reset" "volume wiped" \
+info "db:reset — wiping volumes"
+# --profile app is required: without it `down` leaves the app/freeradius/
+# radclient containers running, so their named db-data/logs volumes survive
+# `-v`. A stale config/DB then gets re-imported on the next startup
+# (StartupListener.reloadFromConfig), resurrecting prior-run devices/switches
+# and breaking the add probes with duplicate-validation 200s.
+(cd "$LAB_DIR" && docker compose --profile app down -v) >/dev/null 2>&1 \
+    && record PASS "db-reset" "volumes wiped" \
     || { record FAIL "db-reset" "docker compose down -v failed"; exit 1; }
+
+# radius-config is now a host bind mount (not a named volume), so `down -v`
+# does not reset it and the app mutates it on "Apply changes". Re-seed a
+# pristine copy from the tracked example so each run starts clean.
+info "radius-config — reset bind mount from lab/radius-config.example"
+if rm -rf "$LAB_DIR/radius-config" \
+    && mkdir -p "$LAB_DIR/radius-config" \
+    && cp "$LAB_DIR/radius-config.example/clients.conf" "$LAB_DIR/radius-config/clients.conf" \
+    && cp "$LAB_DIR/radius-config.example/users" "$LAB_DIR/radius-config/users"; then
+    record PASS "radius-config-reset" "seeded lab/radius-config from example"
+else
+    record FAIL "radius-config-reset" "could not seed lab/radius-config"; exit 1
+fi
 
 info "compose:up — starting db + app + freeradius + radclient (detached, with build)"
 (cd "$LAB_DIR" && docker compose --profile app up -d --build) >/dev/null 2>&1 \
@@ -263,6 +281,340 @@ if (( rows >= 5 )); then
     record PASS "radclient-traffic" "$rows log rows rendered"
 else
     record FAIL "radclient-traffic" "only $rows log rows — radclient loop not producing, or LogFileService failed to parse"
+fi
+
+# ---------- lifecycle: add via UI -> apply -> verify ------------------------
+#
+# Drives the full write path purely through the web UI: add a device/switch,
+# click "Apply changes" (which rewrites the shared radius-config volume and
+# restarts freeradius over the Docker socket), then prove the change is live
+# in the daemon. Runs last so the earlier radclient-traffic probe sees the
+# pristine seeded config first.
+
+RADIUS_CONTAINER="freeradiusgui-radius"
+SEED_ACCEPT_MAC="001122334455" # seeded Accept entry, present before and after writes
+
+# get_csrf <path> — pull a fresh CSRF token from an authenticated form page.
+# The token rotates on login, so the one scraped from /login is already stale;
+# the device/switch forms carry an auto-injected _csrf hidden field.
+get_csrf() {
+    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}$1" \
+        | grep -oE 'name="_csrf"[^>]*value="[^"]+"' | head -1 \
+        | sed -E 's/.*value="([^"]+)".*/\1/'
+}
+
+# get_delete_id <list-path> <entity> <name> — return the numeric id from the
+# /<entity>/delete/<id> link in the table row whose text contains <name>. Rows
+# span multiple lines, so newlines are collapsed and the page is split on
+# </tr> before matching, to avoid grabbing another row's delete link.
+get_delete_id() {
+    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}$1" \
+        | tr '\n' ' ' \
+        | awk -v RS='</tr>' -v name="$3" -v ent="$2" \
+            '$0 ~ name {
+                 if (match($0, "/" ent "/delete/[0-9]+")) {
+                     s = substr($0, RSTART, RLENGTH); gsub(/[^0-9]/, "", s);
+                     print s; exit
+                 }
+             }'
+}
+
+# radclient_accepts <mac> — true if freeradius returns Access-Accept for the
+# MAC over localhost (the always-present localhost client, secret testing123).
+# Retries to absorb the brief window while freeradius reloads after a restart.
+radclient_accepts() {
+    local mac="$1" i out
+    for ((i = 1; i <= 15; i++)); do
+        out=$(docker exec "$RADIUS_CONTAINER" sh -c \
+              "echo 'User-Name = \"${mac}\"' | radclient -c 1 -r 1 -t 2 127.0.0.1:1812 auth testing123" \
+              2>/dev/null || true)
+        grep -q 'Access-Accept' <<<"$out" && return 0
+        sleep 1
+    done
+    return 1
+}
+
+section "Lifecycle: add user via UI -> restart -> verify"
+
+NEW_DEVICE_MAC="0123456789ab"
+NEW_DEVICE_NAME="smoke-new-device"
+
+csrf=$(get_csrf "/device/add") # also seeds the session-scoped form object
+if [[ -z "${csrf:-}" ]]; then
+    record FAIL "device-add-csrf" "no _csrf on /device/add"
+else
+    record PASS "device-add-csrf" "token extracted"
+
+    code=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -o /dev/null -w '%{http_code}' -X POST \
+           -d "id=" -d "mac=${NEW_DEVICE_MAC}" -d "name=${NEW_DEVICE_NAME}" \
+           -d "description=added by smoke test" -d "access=1" -d "type=Computer" \
+           -d "_csrf=${csrf}" "${BASE_URL}/device/submit")
+    if [[ "$code" == 302 ]]; then
+        record PASS "device-add" "POST /device/submit -> HTTP 302"
+    else
+        record FAIL "device-add" "POST /device/submit -> HTTP $code (wanted 302)"
+    fi
+
+    if curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/device/list" | grep -q "$NEW_DEVICE_NAME"; then
+        record PASS "device-in-db" "$NEW_DEVICE_NAME visible on /device/list"
+    else
+        record FAIL "device-in-db" "$NEW_DEVICE_NAME missing from /device/list"
+    fi
+
+    # Apply: writes the users file from the DB and restarts freeradius.
+    # The hard gate is that the file write itself succeeded ("Error writing"
+    # would mean the read-only-mount regression is back). Whether the app
+    # could *confirm* the restart in time is timing-sensitive, so the actual
+    # restart outcome is gated by device-verify (radclient) below.
+    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeUsers")
+    if grep -q 'Error writing' <<<"$apply_resp"; then
+        record FAIL "device-apply" "writeUsers could not write the users file"
+    elif grep -q 'Successfully applied' <<<"$apply_resp"; then
+        record PASS "device-apply" "users file written + restart confirmed"
+    else
+        record PASS "device-apply" "users file written (restart confirmation pending; see device-verify)"
+    fi
+
+    if radclient_accepts "$NEW_DEVICE_MAC"; then
+        record PASS "device-verify" "Access-Accept for $NEW_DEVICE_MAC from live daemon"
+    else
+        record FAIL "device-verify" "no Access-Accept for $NEW_DEVICE_MAC after restart"
+    fi
+fi
+
+section "Lifecycle: add client via UI -> restart -> verify"
+
+NEW_SWITCH_IP="10.0.0.99"
+NEW_SWITCH_SECRET="smokesecret123"
+NEW_SWITCH_NAME="smoke-new-switch"
+
+csrf=$(get_csrf "/switch/add")
+if [[ -z "${csrf:-}" ]]; then
+    record FAIL "switch-add-csrf" "no _csrf on /switch/add"
+else
+    record PASS "switch-add-csrf" "token extracted"
+
+    code=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -o /dev/null -w '%{http_code}' -X POST \
+           -d "id=" -d "name=${NEW_SWITCH_NAME}" -d "ip=${NEW_SWITCH_IP}" -d "mac=" \
+           -d "secret=${NEW_SWITCH_SECRET}" -d "description=added by smoke test" \
+           -d "_csrf=${csrf}" "${BASE_URL}/switch/submit")
+    if [[ "$code" == 302 ]]; then
+        record PASS "switch-add" "POST /switch/submit -> HTTP 302"
+    else
+        record FAIL "switch-add" "POST /switch/submit -> HTTP $code (wanted 302)"
+    fi
+
+    if curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/switch/list" | grep -q "$NEW_SWITCH_NAME"; then
+        record PASS "switch-in-db" "$NEW_SWITCH_NAME visible on /switch/list"
+    else
+        record FAIL "switch-in-db" "$NEW_SWITCH_NAME missing from /switch/list"
+    fi
+
+    # Apply: writes clients.conf from the DB and restarts freeradius. As with
+    # the user flow, the hard gate is the file write; the restart outcome is
+    # gated by switch-verify-config / switch-verify-daemon below.
+    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeClients")
+    if grep -q 'Error writing' <<<"$apply_resp"; then
+        record FAIL "switch-apply" "writeClients could not write clients.conf"
+    elif grep -q 'Successfully applied' <<<"$apply_resp"; then
+        record PASS "switch-apply" "clients.conf written + restart confirmed"
+    else
+        record PASS "switch-apply" "clients.conf written (restart confirmation pending; see switch-verify)"
+    fi
+
+    # The new client must be present in the clients.conf the daemon reloaded.
+    live_clients=$(docker exec "$RADIUS_CONTAINER" cat /etc/raddb/clients.conf 2>/dev/null || true)
+    if grep -q "client ${NEW_SWITCH_IP} " <<<"$live_clients" \
+       && grep -q "secret = ${NEW_SWITCH_SECRET}" <<<"$live_clients"; then
+        record PASS "switch-verify-config" "client ${NEW_SWITCH_IP} live in clients.conf"
+    else
+        record FAIL "switch-verify-config" "client ${NEW_SWITCH_IP} not in live clients.conf"
+    fi
+
+    # A malformed clients.conf would crash freeradius on restart; confirm the
+    # daemon still answers auth requests afterwards.
+    if radclient_accepts "$SEED_ACCEPT_MAC"; then
+        record PASS "switch-verify-daemon" "freeradius answering after clients.conf restart"
+    else
+        record FAIL "switch-verify-daemon" "freeradius not answering after clients.conf restart"
+    fi
+fi
+
+# ---------- lifecycle: delete via UI -> apply -> verify --------------------
+#
+# Deletes the device/switch added above purely through the web UI, then proves
+# the deletion is durable: the "Apply changes" button must surface (delete has
+# to set the db-changes flag, same as add — otherwise the removal can never be
+# pushed to the config files), the apply must scrub the entry from the live
+# config the daemon reads, and a subsequent "Reload from file" must NOT
+# resurrect the record (the file is the source of truth after apply).
+
+section "Lifecycle: delete user via UI -> apply -> verify"
+
+dev_id=$(get_delete_id "/device/list" "device" "$NEW_DEVICE_NAME")
+if [[ -z "${dev_id:-}" ]]; then
+    record FAIL "device-delete-id" "could not resolve delete id for $NEW_DEVICE_NAME"
+else
+    record PASS "device-delete-id" "$NEW_DEVICE_NAME has id $dev_id"
+
+    code=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -o /dev/null -w '%{http_code}' \
+           "${BASE_URL}/device/delete/${dev_id}")
+    if [[ "$code" == 302 ]]; then
+        record PASS "device-delete" "GET /device/delete/${dev_id} -> HTTP 302"
+    else
+        record FAIL "device-delete" "GET /device/delete/${dev_id} -> HTTP $code (wanted 302)"
+    fi
+
+    # List should no longer show the device, and the "Apply changes" button
+    # (links to /admin/writeUsers) must appear — proof that delete set the
+    # db-changes flag, the regression this guards against.
+    list_html=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/device/list")
+    if grep -q "$NEW_DEVICE_NAME" <<<"$list_html"; then
+        record FAIL "device-delete-gone" "$NEW_DEVICE_NAME still on /device/list after delete"
+    else
+        record PASS "device-delete-gone" "$NEW_DEVICE_NAME removed from /device/list"
+    fi
+    if grep -q '/admin/writeUsers' <<<"$list_html"; then
+        record PASS "device-delete-flag" "Apply-changes button present (delete set dbChangesFlag)"
+    else
+        record FAIL "device-delete-flag" "no Apply-changes button — delete did not set dbChangesFlag"
+    fi
+
+    # Apply: rewrites the users file from the (now smaller) DB and restarts.
+    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeUsers")
+    if grep -q 'Error writing' <<<"$apply_resp"; then
+        record FAIL "device-delete-apply" "writeUsers could not write the users file"
+    else
+        record PASS "device-delete-apply" "users file rewritten after delete"
+    fi
+
+    # The deleted MAC must be gone from the live users file the daemon reads.
+    live_users=$(docker exec "$RADIUS_CONTAINER" cat /data/radius-config/users 2>/dev/null || true)
+    if grep -q "$NEW_DEVICE_MAC" <<<"$live_users"; then
+        record FAIL "device-delete-verify" "$NEW_DEVICE_MAC still in live users file after apply"
+    else
+        record PASS "device-delete-verify" "$NEW_DEVICE_MAC scrubbed from live users file"
+    fi
+
+    # Reload re-imports the file into the DB; it must not bring the device back.
+    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o /dev/null "${BASE_URL}/device/reload"
+    if curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/device/list" | grep -q "$NEW_DEVICE_NAME"; then
+        record FAIL "device-delete-reload" "$NEW_DEVICE_NAME reappeared after Reload"
+    else
+        record PASS "device-delete-reload" "$NEW_DEVICE_NAME stayed deleted after Reload"
+    fi
+fi
+
+section "Lifecycle: delete client via UI -> apply -> verify"
+
+sw_id=$(get_delete_id "/switch/list" "switch" "$NEW_SWITCH_NAME")
+if [[ -z "${sw_id:-}" ]]; then
+    record FAIL "switch-delete-id" "could not resolve delete id for $NEW_SWITCH_NAME"
+else
+    record PASS "switch-delete-id" "$NEW_SWITCH_NAME has id $sw_id"
+
+    code=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -o /dev/null -w '%{http_code}' \
+           "${BASE_URL}/switch/delete/${sw_id}")
+    if [[ "$code" == 302 ]]; then
+        record PASS "switch-delete" "GET /switch/delete/${sw_id} -> HTTP 302"
+    else
+        record FAIL "switch-delete" "GET /switch/delete/${sw_id} -> HTTP $code (wanted 302)"
+    fi
+
+    list_html=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/switch/list")
+    if grep -q "$NEW_SWITCH_NAME" <<<"$list_html"; then
+        record FAIL "switch-delete-gone" "$NEW_SWITCH_NAME still on /switch/list after delete"
+    else
+        record PASS "switch-delete-gone" "$NEW_SWITCH_NAME removed from /switch/list"
+    fi
+    if grep -q '/admin/writeClients' <<<"$list_html"; then
+        record PASS "switch-delete-flag" "Apply-changes button present (delete set dbChangesFlag)"
+    else
+        record FAIL "switch-delete-flag" "no Apply-changes button — delete did not set dbChangesFlag"
+    fi
+
+    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeClients")
+    if grep -q 'Error writing' <<<"$apply_resp"; then
+        record FAIL "switch-delete-apply" "writeClients could not write clients.conf"
+    else
+        record PASS "switch-delete-apply" "clients.conf rewritten after delete"
+    fi
+
+    # The deleted client must be gone from the clients.conf the daemon reloaded.
+    live_clients=$(docker exec "$RADIUS_CONTAINER" cat /etc/raddb/clients.conf 2>/dev/null || true)
+    if grep -q "client ${NEW_SWITCH_IP} " <<<"$live_clients"; then
+        record FAIL "switch-delete-verify" "client ${NEW_SWITCH_IP} still in live clients.conf after apply"
+    else
+        record PASS "switch-delete-verify" "client ${NEW_SWITCH_IP} scrubbed from live clients.conf"
+    fi
+
+    # The seeded client must survive (a botched rewrite would drop everything);
+    # confirm the daemon still answers after the restart.
+    if radclient_accepts "$SEED_ACCEPT_MAC"; then
+        record PASS "switch-delete-daemon" "freeradius answering after clients.conf restart"
+    else
+        record FAIL "switch-delete-daemon" "freeradius not answering after clients.conf restart"
+    fi
+
+    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o /dev/null "${BASE_URL}/switch/reload"
+    if curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/switch/list" | grep -q "$NEW_SWITCH_NAME"; then
+        record FAIL "switch-delete-reload" "$NEW_SWITCH_NAME reappeared after Reload"
+    else
+        record PASS "switch-delete-reload" "$NEW_SWITCH_NAME stayed deleted after Reload"
+    fi
+fi
+
+# ---------- force a log reload --------------------------------------------
+#
+# The localhost radclient probes above (device-verify / switch-verify-daemon)
+# authenticate over 127.0.0.1, which FreeRADIUS logs as "Switch IP: 127.0.0.1"
+# — an address that is the localhost RADIUS *client* but not a Switch row in
+# the DB. Force the app to re-ingest today's auth-detail file now, while those
+# records exist, so any failure to persist them surfaces in the log scan below
+# (rather than only when the 5-minute scheduled reload happens to run).
+
+section "Force log reload"
+
+refresh_code=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o /dev/null -w '%{http_code}' \
+               "${BASE_URL}/logs/refresh/$(date +%d%m%Y)")
+if [[ "$refresh_code" == 200 ]]; then
+    record PASS "logs-refresh" "re-ingested today's auth-detail file (HTTP 200)"
+else
+    record FAIL "logs-refresh" "GET /logs/refresh -> HTTP $refresh_code (wanted 200)"
+fi
+
+# ---------- catalina / app error-log scan ----------------------------------
+#
+# Last gate: scan Tomcat's catalina logs and the container console (catalina
+# `run` stdout, which also carries the app's logback STDOUT appender) for
+# ERROR/SEVERE-level lines. Catches failures that never surface as a non-200
+# response — scheduled/async DB writes, startup wiring, the freeradius-restart
+# plumbing, uncaught handler exceptions, etc. Runs after every other probe so
+# the whole lifecycle's output is in scope.
+#
+# Only level-marker header lines are matched (logback '%-5level' -> ' ERROR ',
+# juli -> 'SEVERE:'); stack-trace continuation lines carry no level token, so
+# each failure is counted once. No allowlist — every error must be a clean run
+# or a tracked bug; the scan surfaces all of them.
+
+section "Catalina / app error-log scan"
+
+app_logs=$(
+    {
+        docker logs "${APP_CONTAINER:-freeradiusgui-app}" 2>&1
+        docker exec "${APP_CONTAINER:-freeradiusgui-app}" \
+            sh -c 'cat /usr/local/tomcat/logs/catalina*.log 2>/dev/null'
+    } 2>/dev/null
+)
+
+err_hits=$(grep -aE '(\bERROR\b|\bSEVERE\b)' <<<"$app_logs" || true)
+
+if [[ -z "$err_hits" ]]; then
+    record PASS "catalina-errors" "no ERROR/SEVERE lines in catalina/app logs"
+else
+    n=$(printf '%s\n' "$err_hits" | grep -c .)
+    record FAIL "catalina-errors" "$n error line(s) in catalina/app logs:"
+    printf '%s\n' "$err_hits" | head -10 | sed 's/^/      /'
 fi
 
 # success — teardown happens in the EXIT trap

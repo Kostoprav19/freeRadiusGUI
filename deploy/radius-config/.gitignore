@@ -1,0 +1,5 @@
+# Operator-supplied RADIUS config (clients.conf, users) is bind-mounted from
+# this directory into the freeradius + app containers. The files hold real
+# shared secrets, so keep the directory tracked but ignore its contents.
+*
+!.gitignore

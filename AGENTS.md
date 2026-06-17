@@ -16,7 +16,7 @@ AI guidance for `freeRadiusGui`.
   - `mise run compose:up` / `db:up` / `db:reset`
 
 ## Infrastructure
-- **Container:** Multi-stage `docker/Dockerfile` (Maven 3.9/JDK 25 → Tomcat 10.1/JRE 25). No `VOLUME`s. Shell ops require `--pid=host`.
+- **Container:** Multi-stage `docker/app/Dockerfile` (Maven 3.9/JDK 25 → Tomcat 10.1/JRE 25). No `VOLUME`s. Shell ops require `--pid=host`. FreeRADIUS image lives in `docker/freeradius/Dockerfile`.
 - **Compose (`lab/compose.yaml`):** `db` (mysql:8.0, seeds via `databaseCreationScript.sql` into empty dir), `app` (mounts local `config.properties`, radacct, logs).
 - **Bootstrap DB:** admin/123456, user/123456.
 
@@ -43,7 +43,7 @@ AI guidance for `freeRadiusGui`.
 ## Agent Workflow (3-Agent)
 Use `architect` → `coder` → `reviewer`. Canonical prompts in `agents/`.
 1. **`architect`:** Sole writer of `.cursor/plans/` (ROADMAP, plans, todos). Cannot edit app code/config.
-2. **`coder`:** Implements one phase. Edits `src/`, `pom.xml`, `docker/Dockerfile`, `lab/`, etc. Cannot edit plans. Do not commit/push unless asked.
+2. **`coder`:** Implements one phase. Edits `src/`, `pom.xml`, `docker/app/Dockerfile`, `lab/`, etc. Cannot edit plans. Do not commit/push unless asked.
 3. **`reviewer`:** Independent opinion. MUST be invoked after code changes by default.
 - **Routing:** Main session MUST NOT apply app code edits directly; use `coder` (except for user-labeled docs-only one-offs).
 - **"Review" request:** Always invoke `reviewer` subagent on the diff.

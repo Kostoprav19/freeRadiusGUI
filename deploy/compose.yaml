@@ -36,6 +36,39 @@ services:
         max-size: "10m"
         max-file: "5"
 
+  # FreeRADIUS service.
+  freeradius:
+    build:
+      context: ../docker/freeradius
+      dockerfile: Dockerfile
+    image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
+    container_name: freeradiusgui-radius
+    restart: unless-stopped
+    command: ["-f"]
+    ports:
+      - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
+      - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
+    volumes:
+      # Operator-supplied clients.conf + users (see deploy/radius-config/).
+      - ./radius-config:/data/radius-config
+      - radius-logs:/var/log/freeradius/radacct
+    # "Port up and listening": the auth socket (1812/udp) is bound. 0714 is 1812
+    # in hex as it appears in /proc/net/udp{,6}; checked this way because the
+    # image ships no ss/netstat/nc.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - grep -qE ':0714 ' /proc/net/udp /proc/net/udp6 2>/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
   # Role: FreeRADIUSGUI web app.
   app:
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
@@ -44,24 +77,25 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      freeradius:
+        condition: service_healthy
     ports:
       - "${APP_PORT:-8080}:8080"
-    pid: host
-    cap_add:
-      - SYS_ADMIN
-      - SYS_PTRACE
     environment:
-      FREERADIUSGUI_REQUIRE_MOUNTS: "1"
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
-      FREERADIUSGUI_CLIENTS_FILE: ${FREERADIUSGUI_CLIENTS_FILE:-/etc/freeradius/clients.conf}
-      FREERADIUSGUI_USERS_FILE: ${FREERADIUSGUI_USERS_FILE:-/etc/freeradius/users}
-      FREERADIUSGUI_RADACCT_DIR: ${FREERADIUSGUI_RADACCT_DIR:-/var/log/freeradius/radacct}
+      # Startup mount checks always run; these paths must be set explicitly
+      # (the entrypoint assumes no defaults) and must match the mounts below.
+      FREERADIUSGUI_CLIENTS_FILE: /etc/freeradius/clients.conf
+      FREERADIUSGUI_USERS_FILE: /etc/freeradius/users
+      FREERADIUSGUI_RADACCT_DIR: /var/log/freeradius/radacct
+      FREERADIUSGUI_LOGBACK_DIR: /var/log/freeradiusgui
     volumes:
       - ./config.properties:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/config.properties:ro
-      - /etc/freeradius/clients.conf:/etc/freeradius/clients.conf
-      - /etc/freeradius/users:/etc/freeradius/users
-      - /var/log/freeradius/radacct:/var/log/freeradius/radacct:ro
-      - /var/log/freeradiusgui:/var/log/freeradiusgui
+      - ./radius-config:/etc/freeradius
+      - radius-logs:/var/log/freeradius/radacct:ro
+      - app-logs:/var/log/freeradiusgui
+      # Lets the app restart/inspect the freeradius container via the Docker
+      - /var/run/docker.sock:/var/run/docker.sock
     logging:
       driver: json-file
       options:
@@ -70,3 +104,5 @@ services:
 
 volumes:
   db-data:
+  radius-logs:
+  app-logs:

@@ -36,28 +36,27 @@ quick checklist.
 directories for config or RADIUS data; use explicit `-v` / `volumes` in
 compose or Kubernetes with real sources.
 
-## Strict startup check (recommended for production)
+## Startup mount check (always on)
 
-Set on the container:
-
-```text
-FREERADIUSGUI_REQUIRE_MOUNTS=1
-```
-
-The entrypoint exits before Tomcat if defaults are missing, unless you point it
-at your own paths (must stay aligned with `config.properties` and Logback):
+The entrypoint **always** verifies the required paths before starting Tomcat and
+exits if any is missing/unreadable. There is no toggle - the paths are not
+assumed, so they must be set **explicitly** in the environment (the compose
+files do this) and stay aligned with `config.properties` and Logback:
 
 - `FREERADIUSGUI_CLIENTS_FILE`
 - `FREERADIUSGUI_USERS_FILE`
 - `FREERADIUSGUI_RADACCT_DIR`
-- `FREERADIUSGUI_LOGBACK_DIR` (or `LOGBACK_LOG_PATH` as a plain environment
-  variable, same value as in `-DLOGBACK_LOG_PATH=...` if you use a property)
+- `FREERADIUSGUI_LOGBACK_DIR` (same path as `-DLOGBACK_LOG_PATH=...`)
 
 Example `docker run` (minimal illustration only):
 
 ```bash
-docker run -e FREERADIUSGUI_REQUIRE_MOUNTS=1 -e LOGBACK_LOG_PATH=/data/app-logs \
-  -e JAVA_OPTS="-DLOGBACK_LOG_PATH=/data/app-logs <opens flags…>" \
+docker run \
+  -e FREERADIUSGUI_CLIENTS_FILE=/etc/freeradius/clients.conf \
+  -e FREERADIUSGUI_USERS_FILE=/etc/freeradius/users \
+  -e FREERADIUSGUI_RADACCT_DIR=/var/log/freeradius/radacct \
+  -e FREERADIUSGUI_LOGBACK_DIR=/data/app-logs \
+  -e JAVA_OPTS="-DLOGBACK_LOG_PATH=/data/app-logs" \
   -v /srv/fr/clients.conf:/etc/freeradius/clients.conf:ro \
   -v /srv/fr/users:/etc/freeradius/users:ro \
   -v /srv/fr/radacct:/var/log/freeradius/radacct \
@@ -68,14 +67,13 @@ docker run -e FREERADIUSGUI_REQUIRE_MOUNTS=1 -e LOGBACK_LOG_PATH=/data/app-logs 
 ```
 
 The `lab/compose.yaml` profile `app` is a **working reference** of mounts and
-`JAVA_OPTS` for a full local stack; copy patterns, not file contents, for
-production.
+env for a full local stack; copy patterns, not file contents, for production.
 
 ## Lab vs production
 
 - **Unit tests** (`mvn test`): Surefire sets `LOGBACK_LOG_PATH` to
   `target/junit-logs` only for the test JVM. No change needed on your part.
-- **lab compose**: `FREERADIUSGUI_REQUIRE_MOUNTS` is **not** set, so the stack
-  is tolerant of iteration; turn strict mode on in prod-like environments.
+- **lab + prod compose**: both set the `FREERADIUSGUI_*` paths explicitly and
+  run the same always-on startup check.
 
 See also `AGENTS.md` (Containerization and Configuration sections).
