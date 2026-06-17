@@ -7,10 +7,10 @@ services:
     container_name: freeradiusgui-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpw}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-freeradiusgui}
-      MYSQL_USER: ${MYSQL_USER:-freeradius}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-koJasmoJas2}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "${MYSQL_PORT:-3306}:3306"
     command:
@@ -28,7 +28,7 @@ services:
         - -h
         - localhost
         - -uroot
-        - -p${MYSQL_ROOT_PASSWORD:-rootpw}
+        - -p${MYSQL_ROOT_PASSWORD}
       interval: 10s
       timeout: 5s
       retries: 10
@@ -120,7 +120,7 @@ services:
           sleep ${RADCLIENT_INTERVAL:-5}
         done
     volumes:
-      - ./freeradius/requests.txt:/requests.txt:ro
+      - ./radclient/requests.txt:/requests.txt:ro
 
 volumes:
   db-data:
