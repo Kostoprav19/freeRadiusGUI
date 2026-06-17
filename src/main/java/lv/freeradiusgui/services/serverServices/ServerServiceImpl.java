@@ -43,7 +43,11 @@ public class ServerServiceImpl implements ServerService {
     // re-reads clients.conf and users. Polls status (up to ~10s) until the
     // container reports running again.
     public boolean restartFreeradius() {
-        shellExecutor.executeCommand(shellCommands.getRestartFreeradius());
+        String result = shellExecutor.executeCommand(shellCommands.getRestartFreeradius());
+        if (!result.isBlank()) {
+            logger.error("Freeradius restart command failed: " + result.trim());
+            return false;
+        }
         for (int attempt = 0; attempt < 10; attempt++) {
             updateStatuses();
             if (server.getStatus(Server.FREERADIUS) == Server.SERVER_STATUS_UP) {
