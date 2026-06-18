@@ -7,10 +7,10 @@ services:
     container_name: db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD required}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD required}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_0900_ai_ci
@@ -41,10 +41,10 @@ services:
     build:
       context: ../docker/freeradius
       dockerfile: Dockerfile
-    image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
+    image: ${RADIUS_IMAGE_NAME}:${RADIUS_IMAGE_TAG}
     container_name: freeradius
     restart: unless-stopped
-    command: ["-f"]
+    command: ["-X"]
     ports:
       - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
       - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
@@ -71,8 +71,8 @@ services:
 
   # Role: FreeRADIUSGUI web app.
   app:
-    image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
-    container_name: freeradiusgui
+    image: ${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
+    container_name: app
     restart: unless-stopped
     depends_on:
       db:

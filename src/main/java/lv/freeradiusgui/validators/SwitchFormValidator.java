@@ -37,6 +37,10 @@ public class SwitchFormValidator implements Validator {
             errors.rejectValue("ip", "Pattern.switchForm.ip");
         }
 
+        if ((!aSwitch.getName().isEmpty()) && (aSwitch.getName().contains(" "))) {
+            errors.rejectValue("name", "Pattern.switchForm.name");
+        }
+
         if ((aSwitch.getId() == null) && (switchRepository.findByIp(aSwitch.getIp()) != null)) {
             errors.rejectValue("ip", "Exist.switchForm.ip");
         }

@@ -30,7 +30,7 @@ mailSmtpServer = smtp.example.com
 # Docker API over the mounted /var/run/docker.sock (see compose.yaml). This
 # needs no shared PID namespace; restarting freeradius does not affect the app.
 # (Requires the docker.sock mount; that grants root-on-host access.)
-shellPgrepFreeradius = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-radius/json | grep -oE '"Running": *true'
-shellPgrepMysql = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-db/json | grep -oE '"Running": *true'
+shellPgrepFreeradius = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/freeradius/json | grep -oE '"Running": *true'
+shellPgrepMysql = curl -s --unix-socket /var/run/docker.sock http://localhost/containers/db/json | grep -oE '"Running": *true'
 # Restart applies both users and clients.conf changes (full daemon restart).
-shellRestartFreeradius = curl -s -X POST --unix-socket /var/run/docker.sock http://localhost/containers/freeradiusgui-radius/restart
+shellRestartFreeradius = curl -s -X POST --unix-socket /var/run/docker.sock http://localhost/containers/freeradius/restart
