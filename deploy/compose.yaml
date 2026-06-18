@@ -4,7 +4,7 @@ services:
   # MySQL service.
   db:
     image: mysql:8.0
-    container_name: freeradiusgui-db
+    container_name: db
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD required}
@@ -42,7 +42,7 @@ services:
       context: ../docker/freeradius
       dockerfile: Dockerfile
     image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
-    container_name: freeradiusgui-radius
+    container_name: freeradius
     restart: unless-stopped
     command: ["-f"]
     ports:
@@ -72,7 +72,7 @@ services:
   # Role: FreeRADIUSGUI web app.
   app:
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
-    container_name: freeradiusgui-app
+    container_name: freeradiusgui
     restart: unless-stopped
     depends_on:
       db:

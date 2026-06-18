@@ -32,4 +32,10 @@ mkdir -p /var/log/freeradius/radacct
 chown -R freerad:freerad /var/log/freeradius
 chmod 0750 /var/log/freeradius/radacct
 
+chown freerad:freerad "$CONFIG_DIR"/clients.conf "$CONFIG_DIR"/users
+chmod 0640 "$CONFIG_DIR"/clients.conf "$CONFIG_DIR"/users
+
+# Check config and exit early if invalid.
+freeradius -C || exit 1
+
 exec /docker-entrypoint.sh "$@"

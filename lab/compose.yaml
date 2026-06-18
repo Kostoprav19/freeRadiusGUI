@@ -4,7 +4,7 @@ services:
   # MySQL service.
   db:
     image: mysql:8.0
-    container_name: freeradiusgui-db
+    container_name: db
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -41,7 +41,7 @@ services:
       context: ..
       dockerfile: docker/app/Dockerfile
     image: ${APP_IMAGE_NAME:-freeradiusgui}:${APP_IMAGE_TAG:-latest}
-    container_name: freeradiusgui-app
+    container_name: freeradiusgui
     depends_on:
       db:
         condition: service_healthy
@@ -76,13 +76,13 @@ services:
     build:
       context: ../docker/freeradius
       dockerfile: Dockerfile
-    image: ${RADIUS_IMAGE_NAME:-freeradiusgui-radius}:${RADIUS_IMAGE_TAG:-latest}
-    container_name: freeradiusgui-radius
+    image: ${RADIUS_IMAGE_NAME}:${RADIUS_IMAGE_TAG}
+    container_name: freeradius
     restart: unless-stopped
     command: ["-X"]
     ports:
-      - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
-      - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
+      - "${RADIUS_AUTH_PORT}:1812/udp"
+      - "${RADIUS_ACCT_PORT}:1813/udp"
     volumes:
       # Shared host config dir (same one the app mounts at /etc/freeradius).
       # Holds clients.conf + users with the dockernet client + dev MAC entries
@@ -107,7 +107,7 @@ services:
   radclient:
     profiles: ["app"]
     image: freeradius/freeradius-server:latest-3.2
-    container_name: freeradiusgui-radclient
+    container_name: radclient
     restart: unless-stopped
     depends_on:
       - freeradius
