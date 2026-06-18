@@ -34,6 +34,9 @@ public class AppConfig {
     private String mailTo;
     private String mailSmtpServer;
 
+    // APP
+    private String appVersion;
+
     public String getPathToUsersFile() {
         return pathToUsersFile;
     }
@@ -90,6 +93,10 @@ public class AppConfig {
         return mailSmtpServer;
     }
 
+    public String getAppVersion() {
+        return appVersion;
+    }
+
     public AppConfig() {
         super();
         logger.info("---------------- Loading configuration ----------------");
@@ -137,6 +144,9 @@ public class AppConfig {
         mailFrom = getProperty("mailFrom");
         mailTo = getProperty("mailTo");
         mailSmtpServer = getProperty("mailSmtpServer");
+
+        // APP
+        appVersion = getProperty("appVersion");
     }
 
     public String getProperty(String key) {
