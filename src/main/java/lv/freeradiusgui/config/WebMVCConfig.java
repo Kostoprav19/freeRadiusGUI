@@ -53,6 +53,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sessionVariablesInterceptor());
+        registry.addInterceptor(sessionVariablesInterceptor())
+                .excludePathPatterns("/login", "/" , "/resources/**", "/error");
     }
 }

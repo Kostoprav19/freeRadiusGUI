@@ -16,14 +16,14 @@ services:
       - --collation-server=utf8mb4_0900_ai_ci
     volumes:
       - db-data:/var/lib/mysql
-      - ../databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - ./databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
     healthcheck:
       test:
         - CMD
         - mysqladmin
         - ping
         - -h
-        - localhost
+        - 127.0.0.1
         - -uroot
         - -p${MYSQL_ROOT_PASSWORD}
       interval: 10s

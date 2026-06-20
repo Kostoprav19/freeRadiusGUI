@@ -59,7 +59,7 @@ public class SecurityConfig {
                         auth ->
                                 auth.requestMatchers("/resources/**")
                                         .permitAll()
-                                        .requestMatchers("/login")
+                                        .requestMatchers("/login", "/")
                                         .permitAll()
                                         .requestMatchers("/admin/**")
                                         .hasRole("ADMIN")
