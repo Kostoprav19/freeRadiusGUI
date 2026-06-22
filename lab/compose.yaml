@@ -3,7 +3,7 @@ name: freeradiusgui
 services:
   # MySQL service.
   db:
-    image: mysql:8.0
+    image: ${MYSQL_IMAGE_NAME}
     container_name: db
     restart: unless-stopped
     environment:
@@ -111,6 +111,7 @@ services:
     restart: unless-stopped
     depends_on:
       - freeradius
+      - app
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
