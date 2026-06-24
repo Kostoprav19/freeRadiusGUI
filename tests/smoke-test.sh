@@ -176,7 +176,9 @@ $app_ready || { record FAIL "app-health" "timed out after ${APP_TIMEOUT}s"; exit
 # curl_get <path> [extra-curl-args...] — authenticated GET with session cookies.
 # Writes body to $PAGE_DUMP. Usage: curl_get "/device/list"
 curl_get() {
-    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o "$PAGE_DUMP" "${BASE_URL}$@"
+    local path="$1"; shift
+    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o "$PAGE_DUMP" \
+         "${BASE_URL}${path}" "$@"
 }
 
 # curl_get_code <path> — like curl_get but returns the HTTP status code.
