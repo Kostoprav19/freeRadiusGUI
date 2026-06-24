@@ -25,6 +25,9 @@ mailFrom = alerts@example.com
 mailTo = ops@example.com
 mailSmtpServer = smtp.example.com
 
+#----- APP -----
+appVersion = 1.0.3
+
 #----- SHELL COMMANDS -----
 # freeradius runs in a sibling container. Its status and restart go through the
 # Docker API over the mounted /var/run/docker.sock (see compose.yaml). This

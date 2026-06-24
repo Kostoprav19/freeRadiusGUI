@@ -29,7 +29,11 @@ public class SessionVariablesInterceptor implements HandlerInterceptor {
             Object o,
             ModelAndView modelAndView)
             throws Exception {
-        if (serverService != null && modelAndView != null) {
+        if (serverService != null && modelAndView != null && modelAndView.hasView()) {
+            String viewName = modelAndView.getViewName();
+            if (viewName != null && viewName.startsWith("redirect:")) {
+                return;
+            }
             modelAndView.addObject(
                     "todayRejectedCount", serverService.getRejectedLogsTodayCounter());
             modelAndView.addObject("freeradiusStatus", serverService.getStatus(Server.FREERADIUS));

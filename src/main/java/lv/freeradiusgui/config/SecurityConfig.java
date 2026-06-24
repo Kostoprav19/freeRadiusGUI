@@ -59,7 +59,7 @@ public class SecurityConfig {
                         auth ->
                                 auth.requestMatchers("/resources/**")
                                         .permitAll()
-                                        .requestMatchers("/login")
+                                        .requestMatchers("/login", "/")
                                         .permitAll()
                                         .requestMatchers("/admin/**")
                                         .hasRole("ADMIN")
@@ -80,7 +80,7 @@ public class SecurityConfig {
                                 form.loginPage("/login")
                                         .failureUrl("/login?error")
                                         .loginProcessingUrl("/j_spring_security_check")
-                                        .defaultSuccessUrl("/logs")
+                                        .defaultSuccessUrl("/logs", true)
                                         .usernameParameter("j_username")
                                         .passwordParameter("j_password"))
                 .logout(logout -> logout.logoutSuccessUrl("/login?logout"));

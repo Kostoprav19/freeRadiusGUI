@@ -3,7 +3,7 @@ name: freeradiusgui-prod
 services:
   # MySQL service.
   db:
-    image: mysql:8.0
+    image: ${MYSQL_IMAGE_NAME}
     container_name: db
     restart: unless-stopped
     environment:
@@ -16,14 +16,14 @@ services:
       - --collation-server=utf8mb4_0900_ai_ci
     volumes:
       - db-data:/var/lib/mysql
-      - ../databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - ./databaseCreationScript.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
     healthcheck:
       test:
         - CMD
         - mysqladmin
         - ping
         - -h
-        - localhost
+        - 127.0.0.1
         - -uroot
         - -p${MYSQL_ROOT_PASSWORD}
       interval: 10s
@@ -79,8 +79,8 @@ services:
         condition: service_healthy
       freeradius:
         condition: service_healthy
-    ports:
-      - "${APP_PORT:-8080}:8080"
+    expose:
+      - "8080"
     environment:
       JAVA_OPTS: "-Xms256m -Xmx512m -Duser.timezone=UTC -DLOGBACK_LOG_PATH=/var/log/freeradiusgui"
       # Startup mount checks always run; these paths must be set explicitly
@@ -96,6 +96,24 @@ services:
       - app-logs:/var/log/freeradiusgui
       # Lets the app restart/inspect the freeradius container via the Docker
       - /var/run/docker.sock:/var/run/docker.sock
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # HAProxy — TLS termination.
+  haproxy:
+    image: haproxy:3.0-alpine
+    container_name: haproxy
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "${HAPROXY_PORT:-443}:443"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./certs:/certs:ro
     logging:
       driver: json-file
       options:
