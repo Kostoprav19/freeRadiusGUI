@@ -173,6 +173,18 @@ $app_ready || { record FAIL "app-health" "timed out after ${APP_TIMEOUT}s"; exit
 
 # ---------- assertion helpers ----------------------------------------------
 
+# curl_get <path> [extra-curl-args...] — authenticated GET with session cookies.
+# Writes body to $PAGE_DUMP. Usage: curl_get "/device/list"
+curl_get() {
+    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o "$PAGE_DUMP" "${BASE_URL}$@"
+}
+
+# curl_get_code <path> — like curl_get but returns the HTTP status code.
+curl_get_code() {
+    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o "$PAGE_DUMP" \
+         -w '%{http_code}' "${BASE_URL}$1"
+}
+
 # http_get <name> <path> <expected-status> [grep-pattern]
 # Pattern (optional) must match at least once in the response body.
 # Always asserts the page body contains no unresolved Thymeleaf expressions
@@ -181,8 +193,7 @@ $app_ready || { record FAIL "app-health" "timed out after ${APP_TIMEOUT}s"; exit
 http_get() {
     local name="$1" path="$2" want="$3" pattern="${4:-}"
     local code
-    code=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o "$PAGE_DUMP" \
-           -w '%{http_code}' "${BASE_URL}${path}" || echo 000)
+    code=$(curl_get_code "$path" || echo 000)
     if [[ "$code" != "$want" ]]; then
         record FAIL "$name" "GET $path → HTTP $code (wanted $want)"
         return 1
@@ -274,9 +285,7 @@ section "Radclient traffic"
 # /logs body was just captured above. Count table rows — radclient has
 # been emitting packets since the stack came up, so we expect at least a
 # handful.
-rows=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o "$PAGE_DUMP" \
-       -w '%{http_code}' "${BASE_URL}/logs" >/dev/null \
-       && grep -cE '<tr[> ]' "$PAGE_DUMP" || echo 0)
+rows=$(curl_get "/logs" && grep -cE '<tr[> ]' "$PAGE_DUMP" || echo 0)
 if (( rows >= 5 )); then
     record PASS "radclient-traffic" "$rows log rows rendered"
 else
@@ -368,10 +377,10 @@ else
     # would mean the read-only-mount regression is back). Whether the app
     # could *confirm* the restart in time is timing-sensitive, so the actual
     # restart outcome is gated by device-verify (radclient) below.
-    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeUsers")
-    if grep -q 'Error writing' <<<"$apply_resp"; then
+    curl_get "/admin/writeUsers"
+    if grep -q 'Error writing' "$PAGE_DUMP"; then
         record FAIL "device-apply" "writeUsers could not write the users file"
-    elif grep -q 'Successfully applied' <<<"$apply_resp"; then
+    elif grep -q 'Successfully applied' "$PAGE_DUMP"; then
         record PASS "device-apply" "users file written + restart confirmed"
     else
         record PASS "device-apply" "users file written (restart confirmation pending; see device-verify)"
@@ -417,10 +426,10 @@ else
     # Apply: writes clients.conf from the DB and restarts freeradius. As with
     # the user flow, the hard gate is the file write; the restart outcome is
     # gated by switch-verify-config / switch-verify-daemon below.
-    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeClients")
-    if grep -q 'Error writing' <<<"$apply_resp"; then
+    curl_get "/admin/writeClients"
+    if grep -q 'Error writing' "$PAGE_DUMP"; then
         record FAIL "switch-apply" "writeClients could not write clients.conf"
-    elif grep -q 'Successfully applied' <<<"$apply_resp"; then
+    elif grep -q 'Successfully applied' "$PAGE_DUMP"; then
         record PASS "switch-apply" "clients.conf written + restart confirmed"
     else
         record PASS "switch-apply" "clients.conf written (restart confirmation pending; see switch-verify)"
@@ -472,21 +481,21 @@ else
     # List should no longer show the device, and the "Apply changes" button
     # (links to /admin/writeUsers) must appear — proof that delete set the
     # db-changes flag, the regression this guards against.
-    list_html=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/device/list")
-    if grep '<tr[> ]' <<<"$list_html" | grep -q "$NEW_DEVICE_NAME"; then
+    curl_get "/device/list"
+    if grep '<tr[> ]' "$PAGE_DUMP" | grep -q "$NEW_DEVICE_NAME"; then
         record FAIL "device-delete-gone" "$NEW_DEVICE_NAME still on /device/list after delete"
     else
         record PASS "device-delete-gone" "$NEW_DEVICE_NAME removed from /device/list"
     fi
-    if grep -q '/admin/writeUsers' <<<"$list_html"; then
+    if grep -q '/admin/writeUsers' "$PAGE_DUMP"; then
         record PASS "device-delete-flag" "Apply-changes button present (delete set dbChangesFlag)"
     else
         record FAIL "device-delete-flag" "no Apply-changes button — delete did not set dbChangesFlag"
     fi
 
     # Apply: rewrites the users file from the (now smaller) DB and restarts.
-    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeUsers")
-    if grep -q 'Error writing' <<<"$apply_resp"; then
+    curl_get "/admin/writeUsers"
+    if grep -q 'Error writing' "$PAGE_DUMP"; then
         record FAIL "device-delete-apply" "writeUsers could not write the users file"
     else
         record PASS "device-delete-apply" "users file rewritten after delete"
@@ -501,8 +510,9 @@ else
     fi
 
     # Reload re-imports the file into the DB; it must not bring the device back.
-    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o /dev/null "${BASE_URL}/device/reload"
-    if curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/device/list" | grep -q "$NEW_DEVICE_NAME"; then
+    curl_get "/device/reload" >/dev/null
+    curl_get "/device/list"
+    if grep '<tr[> ]' "$PAGE_DUMP" | grep -q "$NEW_DEVICE_NAME"; then
         record FAIL "device-delete-reload" "$NEW_DEVICE_NAME reappeared after Reload"
     else
         record PASS "device-delete-reload" "$NEW_DEVICE_NAME stayed deleted after Reload"
@@ -525,20 +535,20 @@ else
         record FAIL "switch-delete" "GET /switch/delete/${sw_id} -> HTTP $code (wanted 302)"
     fi
 
-    list_html=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/switch/list")
-    if grep '<tr[> ]' <<<"$list_html" | grep -q "$NEW_SWITCH_NAME"; then
+    curl_get "/switch/list"
+    if grep '<tr[> ]' "$PAGE_DUMP" | grep -q "$NEW_SWITCH_NAME"; then
         record FAIL "switch-delete-gone" "$NEW_SWITCH_NAME still on /switch/list after delete"
     else
         record PASS "switch-delete-gone" "$NEW_SWITCH_NAME removed from /switch/list"
     fi
-    if grep -q '/admin/writeClients' <<<"$list_html"; then
+    if grep -q '/admin/writeClients' "$PAGE_DUMP"; then
         record PASS "switch-delete-flag" "Apply-changes button present (delete set dbChangesFlag)"
     else
         record FAIL "switch-delete-flag" "no Apply-changes button — delete did not set dbChangesFlag"
     fi
 
-    apply_resp=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L "${BASE_URL}/admin/writeClients")
-    if grep -q 'Error writing' <<<"$apply_resp"; then
+    curl_get "/admin/writeClients"
+    if grep -q 'Error writing' "$PAGE_DUMP"; then
         record FAIL "switch-delete-apply" "writeClients could not write clients.conf"
     else
         record PASS "switch-delete-apply" "clients.conf rewritten after delete"
@@ -560,8 +570,9 @@ else
         record FAIL "switch-delete-daemon" "freeradius not answering after clients.conf restart"
     fi
 
-    curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o /dev/null "${BASE_URL}/switch/reload"
-    if curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" "${BASE_URL}/switch/list" | grep -q "$NEW_SWITCH_NAME"; then
+    curl_get "/switch/reload" >/dev/null
+    curl_get "/switch/list"
+    if grep '<tr[> ]' "$PAGE_DUMP" | grep -q "$NEW_SWITCH_NAME"; then
         record FAIL "switch-delete-reload" "$NEW_SWITCH_NAME reappeared after Reload"
     else
         record PASS "switch-delete-reload" "$NEW_SWITCH_NAME stayed deleted after Reload"
@@ -579,8 +590,7 @@ fi
 
 section "Force log reload"
 
-refresh_code=$(curl -sS -b "$COOKIEJAR" -c "$COOKIEJAR" -L -o /dev/null -w '%{http_code}' \
-               "${BASE_URL}/logs/refresh/$(date +%d%m%Y)")
+refresh_code=$(curl_get_code "/logs/refresh/$(date +%d%m%Y)")
 if [[ "$refresh_code" == 200 ]]; then
     record PASS "logs-refresh" "re-ingested today's auth-detail file (HTTP 200)"
 else
